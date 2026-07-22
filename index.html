@@ -56,7 +56,6 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-none font-kanit tracking-wide">NER แจ่วฮ้อน</h1>
-                    <span class="text-xs text-gold/80 font-light">PREMIUM ISAN SOUL</span>
                 </div>
             </div>
             
@@ -221,7 +220,7 @@
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // Complete Menu Data from Exact NER Jaew Hon Sheet
+        // Complete Menu Data with explicit badges for Ready-to-Eat items
         const menuData = [
             {
                 cat: "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET",
@@ -230,8 +229,8 @@
                     { id: 's2', name: "ชุดจุ่มเนื้อ", en: "Beef Shabu Set", price: 339 },
                     { id: 's3', name: "ชุดจุ่มหมู", en: "Pork Shabu Set", price: 329 },
                     { id: 's4', name: "ชุดจุ่มเดี่ยวหมู", en: "Single Pork Set", price: 189 },
-                    { id: 's5', name: "อิ่มเดี่ยว ต้มพร้อมทาน (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Normal Set", price: 119 },
-                    { id: 's6', name: "อิ่มเดี่ยว หมูจุกจุก (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Extra Pork Set", price: 159 }
+                    { id: 's5', name: "อิ่มเดี่ยว ต้มพร้อมทาน", en: "Ready to Eat Normal Set", price: 119, badge: "⚠️ ไม่เสิร์ฟหลัง 18:00 น." },
+                    { id: 's6', name: "อิ่มเดี่ยว หมูจุกจุก", en: "Ready to Eat Extra Pork Set", price: 159, badge: "⚠️ ไม่เสิร์ฟหลัง 18:00 น." }
                 ]
             },
             {
@@ -330,7 +329,6 @@
             document.getElementById('date').valueAsDate = new Date();
         }
 
-        // Alternating Mondays calculation starting from 20/07/2026
         function calculateHolidays() {
             const startDay = new Date(2026, 6, 20); // July 20, 2026
             const today = new Date();
@@ -362,6 +360,7 @@
                             <div class="h-[1px] flex-1 bg-gold/20"></div>
                          </div>`;
                 category.items.forEach(item => {
+                    let badgeHtml = item.badge ? `<span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-md mt-1 font-semibold">${item.badge}</span>` : '';
                     html += `
                         <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border border-emerald-800 transition-all shadow-sm" id="card-${item.id}">
                             <div class="flex gap-3.5 items-center">
@@ -372,7 +371,8 @@
                                 <div class="flex-1 min-w-0">
                                     <h4 class="font-semibold text-white text-sm truncate">${item.name}</h4>
                                     <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${item.en}</span>
-                                    <span class="text-gold font-bold text-sm mt-1 block font-kanit">${item.price} ฿</span>
+                                    ${badgeHtml}
+                                    <span class="text-gold font-bold text-sm mt-1.5 block font-kanit">${item.price} ฿</span>
                                     
                                     <input type="text" class="note-input w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 mt-2.5 outline-none focus:border-gold hidden" id="note-${item.id}" placeholder="ระบุความต้องการเพิ่มเติม เช่น ไม่ใส่ผัก...">
                                 </div>
@@ -417,7 +417,6 @@
             document.getElementById('totalPrice').innerText = total.toLocaleString();
         }
 
-        // Modal Controls
         function openSummaryModal() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
@@ -478,16 +477,25 @@
 
             const finalMsg = `🔥 รายการสำรองที่นั่งและพรีออเดอร์ - NER แจ่วฮ้อน\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทรศัพท์: ${phone}\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n*ทางร้านงดรับจองหลัง 18:00 น.\n*ขออนุญาตปล่อยโต๊ะหากมาล่าช้าเกิน 15 นาที`;
 
-            if (liff.isInClient()) {
+            if (typeof liff !== 'undefined' && liff.isInClient()) {
                 liff.sendMessages([{ type: 'text', text: finalMsg }]).then(() => {
                     liff.closeWindow();
                 }).catch(err => {
-                    alert("ขออภัยในความไม่สะดวก เกิดข้อผิดพลาดในการส่งข้อความ: " + err);
+                    fallbackCopyAndOpen(finalMsg);
                 });
             } else {
-                alert("กรุณาส่งรายการผ่านแอปพลิเคชัน LINE ของทางร้านครับ");
-                window.location.href = "https://lin.ee/Oy7FTKX";
+                fallbackCopyAndOpen(finalMsg);
             }
+        }
+
+        function fallbackCopyAndOpen(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("คัดลอกรายละเอียดออเดอร์เรียบร้อยแล้ว!\nระบบกำลังนำท่านเข้าสู่ LINE OA ของร้าน กรุณาวาง (Paste) ส่งข้อความในแชทได้เลยครับ");
+                window.location.href = "https://lin.ee/Oy7FTKX";
+            }).catch(err => {
+                alert("กรุณาคัดลอกข้อมูลและส่งเข้า LINE OA ของทางร้านครับ");
+                window.location.href = "https://lin.ee/Oy7FTKX";
+            });
         }
 
         init();
