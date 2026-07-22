@@ -3,688 +3,563 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NER แจ่วฮ้อน - Pre-order & Reservation</title>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>NER แจ่วฮ้อน - Modern Order & LINE OA System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Prompt & Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Kanit:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#e11d48',
+                            600: '#be123c',
+                            700: '#9f1239',
+                        },
+                        line: {
+                            green: '#06C755',
+                            dark: '#00B900',
+                            bg: '#8492a6'
+                        }
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        kanit: ['Kanit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-color: #0c0c0c;
-            --card-bg: #161616;
-            --card-border: #262626;
-            --accent-color: #d9381e;
-            --accent-hover: #b82813;
-            --gold-color: #e5a93b;
-            --text-main: #f5f5f5;
-            --text-sub: #a0a0a0;
-            --warning-bg: #221408;
-            --warning-border: #7a460e;
+        body { font-family: 'Prompt', sans-serif; background-color: #f1f5f9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 110px;
-        }
-
-        .header {
-            background: linear-gradient(180deg, #380803 0%, #0c0c0c 100%);
-            padding: 26px 20px 18px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 4px 20px rgba(217, 56, 30, 0.2);
-        }
-
-        .header h1 {
-            color: var(--text-main);
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .header h1 span {
-            color: var(--accent-color);
-        }
-
-        .header p {
-            color: var(--gold-color);
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 16px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 20px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .card-title {
-            color: var(--gold-color);
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #242424;
-            padding-bottom: 10px;
-        }
-
-        .card-title .en-sub {
-            font-size: 12px;
-            color: var(--text-sub);
-            font-weight: normal;
-        }
-
-        .notice-box {
-            background: var(--warning-bg);
-            border: 1px solid var(--warning-border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 14px;
-            font-size: 12px;
-            color: #f7d0a1;
-            line-height: 1.5;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-        }
-
-        label span.en {
-            font-size: 11px;
-            color: #777;
-        }
-
-        input[type="text"], input[type="tel"], input[type="date"], select {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #202020;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 6px rgba(217, 56, 30, 0.4);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .time-picker-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-        }
-
-        .category-title {
-            color: var(--gold-color);
-            font-size: 15px;
-            font-weight: 700;
-            margin: 22px 0 12px 4px;
-            display: flex;
-            align-items: center;
-            border-left: 3px solid var(--accent-color);
-            padding-left: 10px;
-        }
-
-        .menu-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .menu-card.selected {
-            border-color: var(--accent-color);
-            background: #1e1110;
-        }
-
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .menu-info {
-            flex: 1;
-            padding-right: 12px;
-        }
-
-        .menu-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .menu-en {
-            font-size: 11px;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .menu-price {
-            font-size: 14px;
-            color: var(--gold-color);
-            font-weight: 700;
-        }
-
-        .qty-control {
-            display: flex;
-            align-items: center;
-            background: #222;
-            border-radius: 8px;
-            border: 1px solid #333;
-            overflow: hidden;
-        }
-
-        .btn-qty {
-            width: 34px;
-            height: 34px;
-            background: #2c2c2c;
-            color: #fff;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .btn-qty:active {
-            background: var(--accent-color);
-        }
-
-        .qty-val {
-            width: 36px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .item-note-box {
-            display: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed #333;
-        }
-
-        .item-note-box input {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: 6px;
-            border: 1px solid #3a3a3a;
-            background: #101010;
-            color: #f7d0a1;
-            font-size: 12px;
-            outline: none;
-        }
-
-        .item-note-box input::placeholder {
-            color: #666;
-        }
-
-        .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #121212;
-            border-top: 1px solid #282828;
-            padding: 12px 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-        }
-
-        .total-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .total-label {
-            font-size: 12px;
-            color: var(--text-sub);
-        }
-
-        .total-amount {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--gold-color);
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--accent-color) 0%, #b82813 100%);
-            color: white;
-            border: none;
-            padding: 12px 26px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(217, 56, 30, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: scale(0.98);
+        .chat-bubble-tail::after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 12px;
+            border-width: 6px 8px 6px 0;
+            border-style: solid;
+            border-color: transparent #ffffff transparent transparent;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen">
 
-    <div class="header">
-        <h1><span>NER</span> แจ่วฮ้อน</h1>
-        <p>Pre-Order & Table Reservation</p>
-    </div>
-
-    <div class="container">
-        <!-- 1. ข้อมูลการจอง -->
-        <div class="card">
-            <div class="card-title">
-                📌 ข้อมูลการสั่งจอง <span class="en-sub">/ Booking Details</span>
-            </div>
-
-            <div class="notice-box">
-                ⚠️ <b>เงื่อนไขการจอง / Reservation Policy:</b>
-                <ul style="margin-left: 18px; margin-top: 4px;">
-                    <li>รับจองถึง 18:00 น. เท่านั้น / Reservations accepted until 6:00 PM only.</li>
-                    <li>หากมาเกินเวลาจอง <b>15 นาที</b> ทางร้านขออนุญาตปล่อยโต๊ะ / Tables will be released if late by more than <b>15 minutes</b>.</li>
-                </ul>
-            </div>
-
-            <div class="form-group">
-                <label>ชื่อผู้จอง <span class="en">/ Name</span> *</label>
-                <input type="text" id="custName" placeholder="ระบุชื่อของคุณ / Your name">
-            </div>
-
-            <div class="form-row form-group">
-                <div>
-                    <label>เบอร์โทรศัพท์ <span class="en">/ Phone</span> *</label>
-                    <input type="tel" id="custPhone" placeholder="08X-XXX-XXXX">
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-brand-600/30">
+                    🔥
                 </div>
                 <div>
-                    <label>จำนวนลูกค้า <span class="en">/ Guests</span> *</label>
-                    <select id="custGuests">
-                        <option value="1 ท่าน / 1 Person">1 ท่าน / 1 Person</option>
-                        <option value="2 ท่าน / 2 People" selected>2 ท่าน / 2 People</option>
-                        <option value="3 ท่าน / 3 People">3 ท่าน / 3 People</option>
-                        <option value="4 ท่าน / 4 People">4 ท่าน / 4 People</option>
-                        <option value="5 ท่าน / 5 People">5 ท่าน / 5 People</option>
-                        <option value="6 ท่าน / 6 People">6 ท่าน / 6 People</option>
-                        <option value="7-8 ท่าน / 7-8 People">7-8 ท่าน / 7-8 People</option>
-                        <option value="9+ ท่าน / 9+ People">9+ ท่าน / 9+ People</option>
-                    </select>
+                    <h1 class="font-bold text-lg leading-none font-kanit">NER แจ่วฮ้อน</h1>
+                    <span class="text-xs text-slate-400">ระบบสั่งอาหารและสรุปรายการผ่าน LINE OA</span>
                 </div>
             </div>
+            
+            <!-- Navigation Tabs -->
+            <nav class="hidden md:flex gap-1 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+                <button onclick="switchTab('ordering')" id="nav-ordering" class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all bg-brand-600 text-white shadow">
+                    <i class="fa-solid fa-utensils mr-2"></i>1. หน้าเลือกออเดอร์
+                </button>
+                <button onclick="switchTab('summary')" id="nav-summary" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-file-invoice-dollar mr-2"></i>2. หน้าสรุปรายการดิจิทัล
+                </button>
+                <button onclick="switchTab('lineflex')" id="nav-lineflex" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white">
+                    <i class="fa-brands fa-line mr-2 text-line-green"></i>3. ตัวอย่าง Flex ใน LINE OA
+                </button>
+                <button onclick="switchTab('solution')" id="nav-solution" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-code mr-2 text-amber-400"></i>4. วิธีตั้งค่าแก้ปัญหา (ข้อ 1)
+                </button>
+            </nav>
+        </div>
 
-            <div class="form-group">
-                <label>วันที่ทาน <span class="en">/ Date</span></label>
-                <input type="date" id="custDate">
-            </div>
+        <!-- Mobile Navigation Tabs -->
+        <div class="flex md:hidden bg-slate-800 p-1 overflow-x-auto no-scrollbar border-t border-slate-700">
+            <button onclick="switchTab('ordering')" id="mob-ordering" class="mob-btn flex-1 min-w-[120px] py-2 text-xs font-medium text-center text-white bg-brand-600 rounded-lg">
+                1. เลือกออเดอร์
+            </button>
+            <button onclick="switchTab('summary')" id="mob-summary" class="mob-btn flex-1 min-w-[120px] py-2 text-xs font-medium text-center text-slate-400">
+                2. สรุปรายการ
+            </button>
+            <button onclick="switchTab('lineflex')" id="mob-lineflex" class="mob-btn flex-1 min-w-[120px] py-2 text-xs font-medium text-center text-slate-400">
+                3. LINE Flex
+            </button>
+            <button onclick="switchTab('solution')" id="mob-solution" class="mob-btn flex-1 min-w-[130px] py-2 text-xs font-medium text-center text-slate-400">
+                4. วิธีแก้ปัญหา
+            </button>
+        </div>
+    </header>
 
-            <div class="form-group">
-                <label>เวลาที่เข้าทาน <span class="en">/ Arrival Time (AM/PM)</span></label>
-                <div class="time-picker-group">
-                    <!-- ช่องชั่วโมง 01-12 ครบถ้วน -->
-                    <select id="timeHour">
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04" selected>04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-                    <!-- ช่องนาที 00-59 Dynamic Dynamic generation -->
-                    <select id="timeMinute"></select>
-                    <select id="timeAmpm">
-                        <option value="AM">AM</option>
-                        <option value="PM" selected>PM</option>
-                    </select>
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto p-4 md:p-6 pb-24">
+
+        <!-- TAB 1: Modern Menu & Order Selection -->
+        <section id="tab-ordering" class="tab-content transition-opacity duration-300">
+            <div class="max-w-md mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+                <!-- Mobile Header -->
+                <div class="bg-gradient-to-r from-slate-900 via-brand-700 to-brand-600 p-5 text-white relative">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium">
+                            <i class="fa-solid fa-fire text-amber-300 mr-1"></i> Pre-order & Reservation
+                        </span>
+                        <span class="text-xs text-white/80"><i class="fa-regular fa-clock mr-1"></i> เปิด 11:00 - 22:00</span>
+                    </div>
+                    <h2 class="text-2xl font-bold font-kanit">🔥 NER แจ่วฮ้อน</h2>
+                    <p class="text-xs text-rose-100 mt-1">เลือกรายการอาหารและสำรองโต๊ะล่วงหน้า</p>
                 </div>
-            </div>
-        </div>
 
-        <!-- 2. รายการอาหาร -->
-        <div id="menuContainer"></div>
-    </div>
+                <!-- Customer Details Input Box -->
+                <div class="p-4 bg-slate-50 border-b border-slate-200">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2 flex items-center">
+                        <i class="fa-solid fa-user-tag text-brand-500 mr-1.5"></i> ข้อมูลการจอง
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px]">ชื่อผู้จอง</span>
+                            <span class="font-medium text-slate-700">คุณ ภพ</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px]">เบอร์โทรศัพท์</span>
+                            <span class="font-medium text-slate-700">092-525-2594</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px]">จำนวนลูกค้า</span>
+                            <span class="font-medium text-slate-700"><i class="fa-solid fa-users text-brand-500 mr-1"></i>2 ท่าน</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                            <span class="text-slate-400 block text-[10px]">วันที่ & เวลา</span>
+                            <span class="font-medium text-slate-700"><i class="fa-solid fa-calendar-day text-brand-500 mr-1"></i>22 ก.ค. | 09:30 น.</span>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- แถบสรุปยอดด้านล่าง -->
-    <div class="bottom-bar">
-        <div class="total-box">
-            <span class="total-label">ราคารวม / Total (<span id="totalItemsCount">0</span>)</span>
-            <span class="total-amount"><span id="totalPrice">0</span> ฿</span>
-        </div>
-        <button class="btn-submit" onclick="submitOrder()">ส่งออเดอร์ / Submit</button>
-    </div>
+                <!-- Food Category Selector -->
+                <div class="px-4 pt-4">
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                        <button class="bg-brand-600 text-white px-4 py-1.5 rounded-full text-xs font-medium shrink-0 shadow-sm">
+                            🍲 ชุดแจ่วฮ้อน
+                        </button>
+                        <button class="bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-1.5 rounded-full text-xs font-medium shrink-0">
+                            🍨 ของหวาน
+                        </button>
+                        <button class="bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-1.5 rounded-full text-xs font-medium shrink-0">
+                            🥤 เครื่องดื่ม
+                        </button>
+                    </div>
+                </div>
 
-    <script>
-        const LIFF_ID = "2010784971-mH3KqiRT";
-
-        // สร้างรายการนาที 00 ถึง 59
-        function initMinutes() {
-            const selectMin = document.getElementById('timeMinute');
-            let options = '';
-            for (let i = 0; i < 60; i++) {
-                const val = i < 10 ? '0' + i : '' + i;
-                options += `<option value="${val}">${val}</option>`;
-            }
-            selectMin.innerHTML = options;
-        }
-
-        const menuData = [
-            // แจ่วฮ้อนชุดจุ่ม
-            {"id": "item_0", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมูทะเล", "en": "SHABU PORK & SEA FOOD SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Fresh Shrimp, Pangasius Dory Fillet, Fresh Squid, Egg, Glass Noodles, Mixed Vegetables)", "price": 429},
-            {"id": "item_1", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มเนื้อ", "en": "SHABU BEEF SET (Sliced Chuck Roll Beef, Sliced Ribeye Beef (AUS), Sliced Brisket Flap (AUS), Egg, Glass Noodles, Mixed Vegetables)", "price": 339},
-            {"id": "item_2", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมู", "en": "SHABU PORK SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Egg, Glass Noodles, Mixed Vegetables)", "price": 329},
-            {"id": "item_3", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มเดี่ยวหมู", "en": "SHABU SINGLE PORKSET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Egg, Glass Noodles, Mixed Vegetables)", "price": 189},
-            
-            // แจ่วฮ้อนพร้อมทาน
-            {"id": "item_4", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว ต้มพร้อมทาน (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT NORMAL SET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Glass Noodles, Mixed Vegetables) - Served 11.00 a.m. - 6.00 p.m. only", "price": 119},
-            {"id": "item_5", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว หมูจุกจุก (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT EXTRA PORK SET (More pork from the Single Set) - Served 11.00 a.m. - 6.00 p.m. only", "price": 159},
-            
-            // เนื้อสัตว์
-            {"id": "item_6", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูล้วน (ไม่มีเครื่องใน)", "en": "Pork Lover (No Offal)", "price": 199},
-            {"id": "item_7", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูหมัก NER", "en": "Marinated Pork", "price": 49},
-            {"id": "item_8", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสามชั้นสไลซ์", "en": "Sliced Pork Belly", "price": 59},
-            {"id": "item_9", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันคอสไลซ์", "en": "Sliced Pork Neck", "price": 59},
-            {"id": "item_10", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันนอกสไลซ์", "en": "Sliced Pork Sirloin", "price": 49},
-            {"id": "item_11", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ตับหมู", "en": "Pork Liver", "price": 39},
-            {"id": "item_12", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เซ่งจี๊", "en": "Pork Kidney", "price": 39},
-            {"id": "item_13", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อรวม", "en": "Beef Lover", "price": 239},
-            {"id": "item_14", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อใบพายสไลซ์", "en": "Sliced Chuck Roll Beef", "price": 89},
-            {"id": "item_15", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อริบอายสไลซ์ (AUS)", "en": "Sliced Ribeye Beef (AUS)", "price": 89},
-            {"id": "item_16", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อเสือร้องไห้สไลซ์ (AUS)", "en": "Sliced Brisket Flap (AUS)", "price": 89},
-            {"id": "item_17", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาดอลลี่", "en": "Dory Fish", "price": 59},
-            {"id": "item_18", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "กุ้ง", "en": "Shrimp", "price": 69},
-            {"id": "item_19", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาหมึก", "en": "Squid", "price": 69},
-            
-            // ผัก & เส้น
-            {"id": "item_20", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ชุดผักรวม", "en": "Vegetable Combo", "price": 69},
-            {"id": "item_21", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "กะหล่ำปลี", "en": "Cabbage", "price": 29},
-            {"id": "item_22", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ผักบุ้ง", "en": "Morning Glory", "price": 19},
-            {"id": "item_23", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ผักชีฝรั่ง", "en": "Culantro", "price": 19},
-            {"id": "item_24", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "โหระพา", "en": "Sweet Basil", "price": 29},
-            {"id": "item_25", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ใบชะพลู", "en": "Wild Betel Leaves", "price": 29},
-            {"id": "item_26", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "วุ้นเส้น", "en": "Glass Noodles", "price": 29},
-            {"id": "item_27", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "มาม่า", "en": "Instant Noodles", "price": 29},
-            {"id": "item_28", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "บะหมี่หยก (สด)", "en": "Fresh Jade Noodles", "price": 29},
-            {"id": "item_29", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "เส้นอุด้ง", "en": "Udon Noodles", "price": 39},
-            
-            // ทานเล่น
-            {"id": "item_30", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไข่ไก่สด", "en": "Fresh Egg", "price": 15},
-            {"id": "item_31", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ปลา", "en": "Fish Tofu", "price": 49},
-            {"id": "item_32", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ไข่", "en": "Egg Tofu", "price": 29},
-            {"id": "item_33", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ชีส", "en": "Cheese Tofu", "price": 49},
-            {"id": "item_34", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้แท่ง", "en": "Bean Curd Stick", "price": 49},
-            {"id": "item_35", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้ทอด", "en": "Fried Tofu Skin Roll", "price": 39},
-            {"id": "item_36", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเปล่า", "en": "Rice", "price": 29},
-            {"id": "item_37", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไก่ป๊อป", "en": "Chicken Pops", "price": 79},
-            {"id": "item_38", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "แฮชบราวน์ เทเทอร์ ทอตส์", "en": "Hash Brown Tater Tots", "price": 69},
-            {"id": "item_39", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเกรียบปลา", "en": "Crispy Fish Crackers", "price": 49},
-            {"id": "item_40", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "คาลามารี", "en": "Calamari", "price": 119},
-            
-            // ของหวาน
-            {"id": "item_41", "category": "เมนูของหวาน / DESSERT", "name": "ซาโมซ่ากล้วย", "en": "Banana Samosa", "price": 79},
-            {"id": "item_42", "category": "เมนูของหวาน / DESSERT", "name": "สละลอยแก้ว", "en": "Chilled Sala Dessert", "price": 59},
-            {"id": "item_43", "category": "เมนูของหวาน / DESSERT", "name": "ลูกตาลลอยแก้ว", "en": "Chilled Toddy Palm Dessert", "price": 59},
-            {"id": "item_44", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ช็อคโกแลต", "en": "Mochi Ice Cream - Chocolate", "price": 39},
-            {"id": "item_45", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - วานิลลา", "en": "Mochi Ice Cream - Vanilla", "price": 39},
-            {"id": "item_46", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - คุกกี้แอนด์ครีม", "en": "Mochi Ice Cream - Cookies & Cream", "price": 39},
-            {"id": "item_47", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มัทฉะ", "en": "Mochi Ice Cream - Matcha", "price": 39},
-            {"id": "item_48", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มะนาว", "en": "Mochi Ice Cream - Lime", "price": 39},
-            {"id": "item_49", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ชาไทย", "en": "Mochi Ice Cream - Thai Tea", "price": 39},
-            
-            // เครื่องดื่ม
-            {"id": "item_50", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำเปล่า", "en": "Drinking Water", "price": 15},
-            {"id": "item_51", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โซดา", "en": "Soda Water", "price": 15},
-            {"id": "item_52", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก original", "en": "Coke Original", "price": 25},
-            {"id": "item_53", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก zero", "en": "Coke Zero", "price": 25},
-            {"id": "item_54", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ original", "en": "Pepsi Original", "price": 25},
-            {"id": "item_55", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ max", "en": "Pepsi Max", "price": 25},
-            {"id": "item_56", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "สิงค์โลม่อนโซดา", "en": "Singha Lemon Soda", "price": 25},
-            {"id": "item_57", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ จิงเจอร์เอล", "en": "Schweppes Ginger Ale", "price": 25},
-            {"id": "item_58", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ มะนาว", "en": "Schweppes Manao Soda", "price": 25},
-            {"id": "item_59", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำแดง", "en": "Fanta Strawberry", "price": 25},
-            {"id": "item_60", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำเขียว", "en": "Fanta Fruit Punch", "price": 25},
-            {"id": "item_61", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำส้ม", "en": "Fanta Orange", "price": 25},
-            {"id": "item_62", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โค้ก original ขวด 1.25 ลิตร", "en": "Coke Original 1.25L Bottle", "price": 40},
-            {"id": "item_63", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", "en": "Bucket of Ice (Refill max 4 guests)", "price": 25},
-            {"id": "item_64", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งแก้ว", "en": "Glass of Ice", "price": 2}
-        ];
-
-        const orderMap = {};
-
-        async function initLiff() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                if (!liff.isInClient() && !liff.isLoggedIn()) {
-                    liff.login();
-                }
-            } catch (err) {
-                console.error("LIFF Init Error:", err);
-            }
-        }
-
-        function renderMenu() {
-            const container = document.getElementById('menuContainer');
-            const categories = {};
-            
-            menuData.forEach(item => {
-                if (!categories[item.category]) {
-                    categories[item.category] = [];
-                }
-                categories[item.category].push(item);
-            });
-
-            let html = '';
-            for (const [catName, items] of Object.entries(categories)) {
-                html += `<div class="category-title">${catName}</div>`;
-                items.forEach(item => {
-                    html += `
-                        <div class="menu-card" id="card_${item.id}">
-                            <div class="menu-header">
-                                <div class="menu-info">
-                                    <div class="menu-name">${item.name}</div>
-                                    <div class="menu-en">${item.en}</div>
-                                    <div class="menu-price">${item.price.toLocaleString()} .-</div>
-                                </div>
-                                <div class="qty-control">
-                                    <button class="btn-qty" onclick="updateQty('${item.id}', -1)">-</button>
-                                    <span class="qty-val" id="qty_${item.id}">0</span>
-                                    <button class="btn-qty" onclick="updateQty('${item.id}', 1)">+</button>
-                                </div>
+                <!-- Food Items List -->
+                <div class="p-4 space-y-3">
+                    <!-- Item 1 -->
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-300 transition-all">
+                        <div class="flex gap-3">
+                            <div class="w-20 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0 relative">
+                                <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=200&q=80" alt="ชุดจุ่มหมูทะเล" class="w-full h-full object-cover">
+                                <span class="absolute top-1 left-1 bg-amber-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md">ยอดฮิต</span>
                             </div>
-                            <div class="item-note-box" id="note_box_${item.id}">
-                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุ / Special Instructions">
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="font-semibold text-slate-800 text-sm">ชุดจุ่มหมูทะเล</h4>
+                                        <span class="font-bold text-brand-600 text-sm">429.-</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 line-clamp-1 mt-0.5">รวมหมูสไลด์ หมึก กุ้ง สดใหม่ พร้อมชุดผักสด</p>
+                                </div>
+                                <div class="mt-2">
+                                    <input type="text" id="note-1" value="ไม่เอาหมู ไม่เอาผัก ไม่เอาทะเล" placeholder="ระบุหมายเหตุ เช่น ไม่ใส่ผัก..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-600 focus:outline-none focus:border-brand-500">
+                                </div>
                             </div>
                         </div>
-                    `;
-                });
+                        <div class="flex justify-end items-center mt-2 pt-2 border-t border-slate-100 gap-2">
+                            <span class="text-xs text-slate-400 mr-auto">จำนวน:</span>
+                            <button onclick="updateQty(1, -1)" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 font-bold flex items-center justify-center hover:bg-slate-200">-</button>
+                            <span id="qty-1" class="w-6 text-center text-sm font-semibold">1</span>
+                            <button onclick="updateQty(1, 1)" class="w-7 h-7 rounded-lg bg-brand-600 text-white font-bold flex items-center justify-center hover:bg-brand-700 shadow-sm">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-300 transition-all">
+                        <div class="flex gap-3">
+                            <div class="w-20 h-20 bg-slate-100 rounded-xl overflow-hidden shrink-0">
+                                <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=200&q=80" alt="โมจิไอศครีม" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <h4 class="font-semibold text-slate-800 text-sm">โมจิไอศครีม - ชาไทย</h4>
+                                        <span class="font-bold text-brand-600 text-sm">39.-</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 line-clamp-1 mt-0.5">แป้งโมจิเหนียวนุ่ม ไส้ไอศครีมชาไทยเข้มข้น</p>
+                                </div>
+                                <div class="mt-2">
+                                    <input type="text" id="note-2" value="ไม่เอาไอติม" placeholder="ระบุหมายเหตุ..." class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-600 focus:outline-none focus:border-brand-500">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end items-center mt-2 pt-2 border-t border-slate-100 gap-2">
+                            <span class="text-xs text-slate-400 mr-auto">จำนวน:</span>
+                            <button onclick="updateQty(2, -1)" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 font-bold flex items-center justify-center hover:bg-slate-200">-</button>
+                            <span id="qty-2" class="w-6 text-center text-sm font-semibold">1</span>
+                            <button onclick="updateQty(2, 1)" class="w-7 h-7 rounded-lg bg-brand-600 text-white font-bold flex items-center justify-center hover:bg-brand-700 shadow-sm">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button Bar -->
+                <div class="p-4 bg-white border-t border-slate-200 shadow-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs text-slate-500">ยอดรวมทั้งหมด (2 รายการ):</span>
+                        <span class="text-xl font-bold text-brand-600 font-kanit">468 THB</span>
+                    </div>
+                    <button onclick="switchTab('summary')" class="w-full bg-gradient-to-r from-line-green to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white py-3.5 rounded-2xl font-semibold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-brands fa-line text-xl"></i>
+                        <span>ยืนยันออเดอร์ (ส่งเข้า LINE OA ร้าน)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: Modern Digital Order Summary / Receipt -->
+        <section id="tab-summary" class="tab-content hidden transition-opacity duration-300">
+            <div class="max-w-md mx-auto">
+                <!-- Action Header -->
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i> ใบเสร็จดิจิทัลแบบตรวจสอบได้
+                    </span>
+                    <button onclick="window.print()" class="text-xs bg-white border border-slate-300 hover:bg-slate-50 px-3 py-1.5 rounded-lg text-slate-700 shadow-sm">
+                        <i class="fa-solid fa-print mr-1"></i> พิมพ์ / บันทึกรูป
+                    </button>
+                </div>
+
+                <!-- Modern E-Receipt Card -->
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200 relative">
+                    <!-- Top Receipt Accent -->
+                    <div class="bg-slate-900 text-white p-6 text-center relative overflow-hidden">
+                        <div class="absolute -right-6 -top-6 w-24 h-24 bg-brand-600/30 rounded-full blur-xl"></div>
+                        <div class="w-12 h-12 bg-emerald-500/20 border border-emerald-400 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-2 text-xl">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h3 class="text-lg font-bold font-kanit">ส่งคำสั่งซื้อสำเร็จแล้ว!</h3>
+                        <p class="text-xs text-slate-400 mt-1">ออเดอร์ของคุณถูกส่งไปยัง LINE OA ร้าน NER แจ่วฮ้อน เรียบร้อยแล้ว</p>
+                        <div class="inline-block bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-[11px] text-amber-400 mt-3">
+                            หมายเลขออเดอร์ #NER-20260722-09
+                        </div>
+                    </div>
+
+                    <!-- Receipt Details Body -->
+                    <div class="p-5 space-y-4">
+                        <!-- Info Grid -->
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 text-xs space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400"><i class="fa-solid fa-user mr-1.5 text-slate-400"></i>ชื่อผู้สั่ง:</span>
+                                <span class="font-medium text-slate-700">ภพ (092-525-2594)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400"><i class="fa-solid fa-users mr-1.5 text-slate-400"></i>จำนวน:</span>
+                                <span class="font-medium text-slate-700">2 ท่าน</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400"><i class="fa-solid fa-calendar mr-1.5 text-slate-400"></i>วันที่ & เวลา:</span>
+                                <span class="font-medium text-slate-700">22 ก.ค. 2026 | 09:30 น.</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400"><i class="fa-solid fa-store mr-1.5 text-slate-400"></i>สถานะ:</span>
+                                <span class="bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-md text-[10px]">ยืนยันการรับออเดอร์</span>
+                            </div>
+                        </div>
+
+                        <!-- Order Items Table -->
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-list-check text-brand-600 mr-1.5"></i> รายการอาหารที่สั่ง (Order Items)
+                            </h4>
+                            <div class="divide-y divide-slate-100 text-xs">
+                                <!-- Item 1 -->
+                                <div class="py-2.5">
+                                    <div class="flex justify-between font-semibold text-slate-800">
+                                        <span>• ชุดจุ่มหมูทะเล <span class="text-brand-600 font-bold">x1</span></span>
+                                        <span>429.-</span>
+                                    </div>
+                                    <div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                        <i class="fa-solid fa-pen-to-square text-amber-600"></i>
+                                        <span><strong>Note:</strong> ไม่เอาหมู ไม่เอาผัก ไม่เอาทะเล</span>
+                                    </div>
+                                </div>
+
+                                <!-- Item 2 -->
+                                <div class="py-2.5">
+                                    <div class="flex justify-between font-semibold text-slate-800">
+                                        <span>• โมจิไอศครีม - ชาไทย <span class="text-brand-600 font-bold">x1</span></span>
+                                        <span>39.-</span>
+                                    </div>
+                                    <div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1">
+                                        <i class="fa-solid fa-pen-to-square text-amber-600"></i>
+                                        <span><strong>Note:</strong> ไม่เอาไอติม</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Calculation -->
+                        <div class="border-t-2 border-dashed border-slate-200 pt-3 space-y-1.5 text-xs">
+                            <div class="flex justify-between text-slate-500">
+                                <span>รวมค่าอาหาร:</span>
+                                <span>468 THB</span>
+                            </div>
+                            <div class="flex justify-between text-slate-500">
+                                <span>ค่าบริการ / มัดจำ:</span>
+                                <span class="text-emerald-600">0 THB</span>
+                            </div>
+                            <div class="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-100 font-kanit">
+                                <span>ยอดรวมสุทธิ (Total):</span>
+                                <span class="text-brand-600 text-lg">468 THB</span>
+                            </div>
+                        </div>
+
+                        <!-- Barcode Simulation -->
+                        <div class="pt-2 text-center">
+                            <div class="bg-slate-100 p-3 rounded-2xl inline-block border border-slate-200">
+                                <i class="fa-solid fa-qrcode text-5xl text-slate-800"></i>
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1">แสดง QR Code นี้ให้พนักงานหน้าร้านเมื่อมาถึง</p>
+                        </div>
+                    </div>
+
+                    <!-- Receipt Footer Button -->
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex gap-2">
+                        <button onclick="switchTab('lineflex')" class="flex-1 bg-line-green hover:bg-emerald-600 text-white text-xs py-3 rounded-xl font-medium flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-brands fa-line text-base"></i> ดูข้อความใน LINE OA
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: LINE Flex Message Simulation -->
+        <section id="tab-lineflex" class="tab-content hidden transition-opacity duration-300">
+            <div class="max-w-md mx-auto">
+                <div class="bg-[#7494C0] rounded-3xl p-4 shadow-2xl min-h-[580px] border-4 border-slate-800 relative flex flex-col justify-between">
+                    <!-- LINE App Top Bar -->
+                    <div class="bg-slate-900/80 backdrop-blur-md text-white px-3 py-2 rounded-2xl flex justify-between items-center text-xs mb-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-chevron-left"></i>
+                            <div class="w-6 h-6 rounded-full bg-brand-600 flex items-center justify-center text-[10px] font-bold">NER</div>
+                            <span class="font-semibold">NER แจ่วฮ้อน (LINE OA)</span>
+                            <i class="fa-solid fa-circle-check text-line-green text-[10px]"></i>
+                        </div>
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+
+                    <!-- Chat Message Area -->
+                    <div class="space-y-3 flex-1 overflow-y-auto">
+                        <div class="text-center text-[10px] text-white/70 my-2">วันนี้ 09:30 น.</div>
+
+                        <!-- Flex Message Bubble from LINE OA -->
+                        <div class="flex items-start gap-2 max-w-[90%]">
+                            <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow">
+                                🔥
+                            </div>
+                            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 text-xs">
+                                <!-- Flex Header -->
+                                <div class="bg-gradient-to-r from-brand-600 to-rose-600 text-white p-3.5">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded">Pre-order Received</span>
+                                        <span class="text-[10px] opacity-80">22 ก.ค. 09:30</span>
+                                    </div>
+                                    <h4 class="font-bold text-sm mt-1 font-kanit">🔥 NER แจ่วฮ้อน - ยืนยันการสั่งซื้อ</h4>
+                                </div>
+
+                                <!-- Flex Content -->
+                                <div class="p-3.5 space-y-2.5">
+                                    <div class="text-[11px] space-y-1 text-slate-600">
+                                        <p>👤 <strong>ชื่อ / Name:</strong> คุณ ภพ</p>
+                                        <p>📞 <strong>เบอร์ / Phone:</strong> 092-525-2594</p>
+                                        <p>👥 <strong>จำนวน / Guests:</strong> 2 ท่าน</p>
+                                        <p>📅 <strong>วันที่ / Date:</strong> 2026-07-22 | 09:30 น.</p>
+                                    </div>
+
+                                    <hr class="border-slate-100">
+
+                                    <div>
+                                        <p class="font-semibold text-slate-800 mb-1">📋 รายการอาหาร / Order Items:</p>
+                                        <div class="space-y-1.5 pl-1">
+                                            <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                                                <p class="font-medium text-slate-800">• ชุดจุ่มหมูทะเล x1 <span class="text-brand-600 font-bold">[429.-]</span></p>
+                                                <p class="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded mt-0.5">📝 Note: ไม่เอาหมู ไม่เอาผัก ไม่เอาทะเล</p>
+                                            </div>
+                                            <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">
+                                                <p class="font-medium text-slate-800">• โมจิไอศครีม - ชาไทย x1 <span class="text-brand-600 font-bold">[39.-]</span></p>
+                                                <p class="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded mt-0.5">📝 Note: ไม่เอาไอติม</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-rose-50 p-2 rounded-xl border border-rose-100 flex justify-between items-center text-rose-900 font-bold">
+                                        <span>💰 ยอดรวม / Total:</span>
+                                        <span class="text-sm text-brand-600">468 THB</span>
+                                    </div>
+                                </div>
+
+                                <!-- Flex Action Buttons -->
+                                <div class="p-2 bg-slate-50 border-t border-slate-100 grid grid-cols-2 gap-1.5">
+                                    <button onclick="switchTab('summary')" class="bg-brand-600 hover:bg-brand-700 text-white py-2 rounded-xl text-[11px] font-semibold text-center transition-all">
+                                        <i class="fa-solid fa-file-invoice mr-1"></i> ดูใบเสร็จดิจิทัล
+                                    </button>
+                                    <a href="tel:0925252594" class="bg-white border border-slate-300 text-slate-700 py-2 rounded-xl text-[11px] font-semibold text-center hover:bg-slate-100 transition-all">
+                                        <i class="fa-solid fa-phone text-emerald-600 mr-1"></i> โทรติดต่อร้าน
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LINE Bottom Input Bar Mockup -->
+                    <div class="mt-3 bg-white p-2 rounded-2xl flex items-center gap-2 text-slate-400 text-xs">
+                        <i class="fa-solid fa-circle-plus text-base"></i>
+                        <i class="fa-solid fa-camera text-base"></i>
+                        <input type="text" placeholder="พิมพ์ข้อความ..." class="flex-1 bg-slate-100 px-3 py-1.5 rounded-full text-xs text-slate-700 focus:outline-none" disabled>
+                        <i class="fa-solid fa-microphone text-base"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: Technical Solution Guide for Issue #1 -->
+        <section id="tab-solution" class="tab-content hidden transition-opacity duration-300">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- Overview Header -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 font-kanit flex items-center gap-2">
+                        <i class="fa-solid fa-wrench text-amber-500"></i> แนวทางแก้ไขปัญหาข้อความเด้งผิดช่องแชท (ข้อ 1)
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        เดิมทีถ้าใช้โค้ด <code class="bg-slate-100 text-rose-600 px-1.5 py-0.5 rounded font-mono">liff.sendMessages()</code> ข้อความจะถูกส่งลงในช่องแชทที่ลูกค้ากดลิงค์ขึ้นมาเท่านั้น (เช่น แชทส่วนตัวหรือแชทกลุ่ม) วิธีที่ถูกต้องเพื่อส่งออเดอร์ตรงเข้า **LINE OA ของร้านเสมอ** มีดังนี้:
+                    </p>
+                </div>
+
+                <!-- Step 1: System Architecture Solution -->
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold mb-3 text-lg">1</div>
+                        <h4 class="font-bold text-sm text-slate-800">ส่งข้อมูลเข้า Backend</h4>
+                        <p class="text-xs text-slate-500 mt-1">แทนที่จะให้ LIFF ส่งแชทเอง ให้กดส่งข้อมูลออเดอร์พร้อม <code class="text-brand-600">userId</code> ไปยัง Server ของร้าน</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold mb-3 text-lg">2</div>
+                        <h4 class="font-bold text-sm text-slate-800">ใช้ Messaging API Push</h4>
+                        <p class="text-xs text-slate-500 mt-1">Server ใช้ **LINE Messaging API (Push Message)** ยิง Flex Message เข้าหาลูกค้าใน LINE OA โดยตรง</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+                        <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center font-bold mb-3 text-lg">3</div>
+                        <h4 class="font-bold text-sm text-slate-800">Auto-Open LINE OA</h4>
+                        <p class="text-xs text-slate-500 mt-1">หลังสั่งซื้อสำเร็จ ให้หน้าเว็บ redirect ไปยัง URL Scheme: <code class="text-line-green font-mono">line://ti/p/@your_line_id</code> เพื่อเปิด LINE OA ทันที</p>
+                    </div>
+                </div>
+
+                <!-- Code Example Box -->
+                <div class="bg-slate-900 text-slate-200 p-6 rounded-3xl shadow-xl overflow-x-auto text-xs font-mono space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <span class="text-amber-400 font-bold"><i class="fa-solid fa-code mr-2"></i>ตัวอย่างโค้ด JavaScript (LIFF Frontend)</span>
+                        <span class="text-slate-500 text-[10px]">main.js</span>
+                    </div>
+
+<pre class="text-slate-300">
+<span class="text-slate-500">// 1. ดึง Profile เพื่อเอา userId ของลูกค้า</span>
+<span class="text-purple-400">const</span> profile = <span class="text-purple-400">await</span> liff.<span class="text-blue-400">getProfile</span>();
+<span class="text-purple-400">const</span> customerUserId = profile.userId;
+
+<span class="text-slate-500">// 2. ส่งข้อมูลออเดอร์ไปยัง Backend Server ของร้าน</span>
+<span class="text-purple-400">const</span> orderData = {
+    userId: customerUserId,
+    name: <span class="text-emerald-400">"คุณ ภพ"</span>,
+    phone: <span class="text-emerald-400">"092-525-2594"</span>,
+    items: [
+        { name: <span class="text-emerald-400">"ชุดจุ่มหมูทะเล"</span>, qty: 1, price: 429, note: <span class="text-emerald-400">"ไม่เอาหมู ไม่เอาผัก ไม่เอาทะเล"</span> },
+        { name: <span class="text-emerald-400">"โมจิไอศครีม - ชาไทย"</span>, qty: 1, price: 39, note: <span class="text-emerald-400">"ไม่เอาไอติม"</span> }
+    ],
+    totalPrice: 468
+};
+
+<span class="text-purple-400">await</span> <span class="text-blue-400">fetch</span>(<span class="text-emerald-400">'https://your-api.com/api/create-order'</span>, {
+    method: <span class="text-emerald-400">'POST'</span>,
+    headers: { <span class="text-emerald-400">'Content-Type'</span>: <span class="text-emerald-400">'application/json'</span> },
+    body: JSON.<span class="text-blue-400">stringify</span>(orderData)
+});
+
+<span class="text-slate-500">// 3. Redirect ลูกค้าเปิดเข้าแชท LINE OA ของร้านโดยอัตโนมัติ</span>
+liff.<span class="text-blue-400">openWindow</span>({
+    url: <span class="text-emerald-400">"https://line.me/R/oaMessage/@your_line_oa_id/"</span>,
+    external: <span class="text-amber-400">false</span>
+});
+</pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Simple JS Script for Switching Tabs and Quantities -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected tab
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) targetTab.classList.remove('hidden');
+
+            // Reset Desktop Nav Active Style
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow');
+                btn.classList.add('text-slate-300');
+            });
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('bg-brand-600', 'text-white', 'shadow');
+                activeNav.classList.remove('text-slate-300');
             }
-            container.innerHTML = html;
+
+            // Reset Mobile Nav Active Style
+            document.querySelectorAll('.mob-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('text-slate-400');
+            });
+            const activeMob = document.getElementById('mob-' + tabId);
+            if (activeMob) {
+                activeMob.classList.add('bg-brand-600', 'text-white');
+                activeMob.classList.remove('text-slate-400');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function updateQty(itemId, change) {
-            const current = orderMap[itemId] || 0;
-            const newQty = Math.max(0, current + change);
-            
-            if (newQty === 0) {
-                delete orderMap[itemId];
-                document.getElementById(`note_box_${itemId}`).style.display = 'none';
-                document.getElementById(`note_input_${itemId}`).value = '';
-                document.getElementById(`card_${itemId}`).classList.remove('selected');
-            } else {
-                orderMap[itemId] = newQty;
-                document.getElementById(`note_box_${itemId}`).style.display = 'block';
-                document.getElementById(`card_${itemId}`).classList.add('selected');
-            }
-            
-            document.getElementById(`qty_${itemId}`).innerText = newQty;
-            calculateTotal();
+            const qtyEl = document.getElementById('qty-' + itemId);
+            if (!qtyEl) return;
+            let qty = parseInt(qtyEl.innerText) + change;
+            if (qty < 0) qty = 0;
+            qtyEl.innerText = qty;
         }
-
-        function calculateTotal() {
-            let total = 0;
-            let count = 0;
-            menuData.forEach(item => {
-                const qty = orderMap[item.id] || 0;
-                if (qty > 0) {
-                    total += item.price * qty;
-                    count += qty;
-                }
-            });
-            document.getElementById('totalPrice').innerText = total.toLocaleString();
-            document.getElementById('totalItemsCount').innerText = count;
-        }
-
-        function fallbackCopyToClipboard(msg) {
-            navigator.clipboard.writeText(msg).then(() => {
-                alert('📋 คัดลอกรายละเอียดออเดอร์ให้แล้วครับ!\n\n(เนื่องจากสิทธิ์ Scope LINE ยังไม่ได้เปิดใช้งาน) กรุณากด OK แล้วกด "วาง (Paste)" ข้อความลงในแชท LINE ร้านได้เลยครับ');
-                if (liff.isInClient()) {
-                    liff.closeWindow();
-                }
-            }).catch(err => {
-                alert('ออเดอร์ของคุณ:\n\n' + msg);
-            });
-        }
-
-        function submitOrder() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const guests = document.getElementById('custGuests').value;
-            const date = document.getElementById('custDate').value;
-            
-            const hour = document.getElementById('timeHour').value;
-            const min = document.getElementById('timeMinute').value;
-            const ampm = document.getElementById('timeAmpm').value;
-            
-            const fullTimeStr = `${hour}:${min} ${ampm}`;
-
-            let hour24 = parseInt(hour, 10);
-            if (ampm === 'PM' && hour24 !== 12) hour24 += 12;
-            if (ampm === 'AM' && hour24 === 12) hour24 = 0;
-
-            if (hour24 > 18 || (hour24 === 18 && parseInt(min, 10) > 0)) {
-                alert('⚠️ ทางร้านรับจองคิวถึง 18:00 น. (6:00 PM) เท่านั้นครับ\nReservations are accepted until 6:00 PM only.');
-                return;
-            }
-
-            if (!name || !phone) {
-                alert('กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์ / Please enter your name and phone number');
-                return;
-            }
-
-            const selectedItems = [];
-            let grandTotal = 0;
-
-            menuData.forEach(item => {
-                const qty = orderMap[item.id] || 0;
-                if (qty > 0) {
-                    const itemTotal = item.price * qty;
-                    grandTotal += itemTotal;
-                    
-                    const noteInput = document.getElementById(`note_input_${item.id}`);
-                    const noteText = noteInput ? noteInput.value.trim() : '';
-
-                    let itemLine = `• ${item.name} x${qty} [${itemTotal.toLocaleString()}.-]`;
-                    if (noteText) {
-                        itemLine += `\n  └ 📝 Note: ${noteText}`;
-                    }
-                    selectedItems.push(itemLine);
-                }
-            });
-
-            if (selectedItems.length === 0) {
-                alert('กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการ / Please select at least 1 menu item');
-                return;
-            }
-
-            let msg = `🔥 พรีออเดอร์ - NER แจ่วฮ้อน\n`;
-            msg += `(Pre-order & Table Reservation)\n`;
-            msg += `------------------------\n`;
-            msg += `👤 ชื่อ / Name: ${name}\n`;
-            msg += `📞 เบอร์ / Phone: ${phone}\n`;
-            msg += `👥 จำนวน / Guests: ${guests}\n`;
-            if (date) msg += `📅 วันที่ / Date: ${date}\n`;
-            msg += `⏰ เวลาเข้าทาน / Time: ${fullTimeStr}\n`;
-            msg += `------------------------\n`;
-            msg += `📋 รายการอาหาร / Order Items:\n`;
-            msg += selectedItems.join('\n');
-            msg += `\n------------------------\n`;
-            msg += `💰 ยอดรวม / Total: ${grandTotal.toLocaleString()} THB`;
-
-            if (liff.isLoggedIn()) {
-                liff.sendMessages([{
-                    type: 'text',
-                    text: msg
-                }]).then(() => {
-                    alert('ส่งออเดอร์เรียบร้อยแล้ว ขอบคุณครับ!\nOrder submitted successfully!');
-                    liff.closeWindow();
-                }).catch((err) => {
-                    console.error("LIFF Send Error:", err);
-                    fallbackCopyToClipboard(msg);
-                });
-            } else {
-                fallbackCopyToClipboard(msg);
-            }
-        }
-
-        document.getElementById('custDate').valueAsDate = new Date();
-
-        initMinutes();
-        renderMenu();
-        initLiff();
     </script>
 </body>
 </html>
+
