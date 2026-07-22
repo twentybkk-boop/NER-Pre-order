@@ -469,11 +469,11 @@
             for (let id in orderMap) {
                 const noteVal = document.getElementById(`note-${id}`).value;
                 const itemTotal = orderMap[id].qty * orderMap[id].price;
-                itemText += `• ${orderMap[id].name} x${orderMap[id].qty}  [${itemTotal.toLocaleString()}.-]\n`;
+                itemText += `• ${orderMap[id].name} x${orderMap[id].qty} [${itemTotal.toLocaleString()}.-]\n`;
                 if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
             }
 
-            const finalMsg = `===========================\n      NER JAEW HON\n  DIGITAL PRE-ORDER RECEIPT\n===========================\nชื่อผู้จอง: ${name}\nเบอร์โทร: ${phone}\nจำนวน: ${document.getElementById('guests').value} ท่าน\nวันที่: ${document.getElementById('date').value}\nเวลา: ${time}\n---------------------------\n📋 รายการอาหาร (ORDER SUMMARY)\n---------------------------\n${itemText}---------------------------\nยอดรวมสุทธิ (TOTAL): ${document.getElementById('totalPrice').innerText} ฿\n===========================\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
+            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> กำลังส่งออเดอร์...`;
