@@ -193,9 +193,9 @@
             </div>
 
             <div class="space-y-2 pt-2 font-sans">
-                <button onclick="submitFinalOrder()" class="w-full bg-line-green hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+                <button id="submitBtn" onclick="submitFinalOrder()" class="w-full bg-line-green hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
                     <i class="fa-brands fa-line text-xl"></i>
-                    <span>ส่งออเดอร์เข้า LINE OA ร้านหลัก</span>
+                    <span>ส่งออเดอร์เข้า LINE OA ร้านทันที</span>
                 </button>
                 <button onclick="closeSummaryModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-2xl text-xs font-medium transition-all">
                     <i class="fa-solid fa-pen-to-square mr-1"></i> กลับไปแก้ไขรายการ
@@ -207,7 +207,7 @@
     <!-- JavaScript Application Logic -->
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
-        // ลิงก์ตรงเปิดแชท LINE OA ของร้านโดยเฉพาะ (บังคับเข้าแชทร้าน 100%)
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyJ7kkpxjdma4VeN4AE8p2YI9mYiop5prON_5x0eX247n170mWm6eIQeLtUziGE1lwdZg/exec";
         const LINE_OA_URL = "https://lin.ee/Oy7FTKX";
 
         const menuData = [
@@ -465,13 +465,22 @@
 
             const finalMsg = `🔥 รายการสำรองที่นั่งและพรีออเดอร์ - NER แจ่วฮ้อน\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทรศัพท์: ${phone}\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n*ทางร้านงดรับจองหลัง 18:00 น.\n*ขออนุญาตปล่อยโต๊ะหากมาล่าช้าเกิน 15 นาที`;
 
-            // บังคับคัดลอกข้อความและเปิดหน้า LINE OA ของร้านโดยตรง ชัวร์ที่สุด ไม่หลุดไปแชทอื่น
-            navigator.clipboard.writeText(finalMsg).then(() => {
-                alert("คัดลอกรายละเอียดออเดอร์เรียบร้อยแล้ว!\nระบบจะนำท่านเข้าสู่แชท LINE OA ของร้าน กรุณาวาง (Paste) ส่งข้อความได้เลยครับ");
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> กำลังส่งออเดอร์...`;
+            btn.disabled = true;
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: finalMsg })
+            }).then(() => {
+                alert("ส่งออเดอร์เข้า LINE OA ของร้านเรียบร้อยแล้วครับ!");
                 window.location.href = LINE_OA_URL;
             }).catch(err => {
-                alert("กรุณาคัดลอกข้อมูลและส่งเข้า LINE OA ของทางร้านครับ");
-                window.location.href = LINE_OA_URL;
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + err);
+                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ส่งออเดอร์เข้า LINE OA ร้านทันที`;
+                btn.disabled = false;
             });
         }
 
