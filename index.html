@@ -3,244 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NER แจ่วฮ้อน - Modern Reservation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>NER แจ่วฮ้อน - Pre-Order & Reservation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Prompt & Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            950: '#0c1811',
+                            900: '#14241b',
+                            800: '#1b3325',
+                            700: '#233d2e',
+                        },
+                        gold: {
+                            DEFAULT: '#c59b27',
+                            light: '#e5a93b',
+                            dark: '#a07d1a'
+                        },
+                        line: {
+                            green: '#06C755'
+                        }
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        kanit: ['Kanit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --primary-bg: #0c1811;
-            --card-bg: #14241b;
-            --card-border: #233d2e;
-            --accent-gold: #c59b27;
-            --accent-red: #d9381e;
-            --text-white: #f5f5f0;
-            --text-dim: #a5b5ab;
-            --input-bg: #09130e;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background-color: var(--primary-bg); 
-            color: var(--text-white); 
-            font-family: 'Prompt', sans-serif; 
-            margin: 0; padding-bottom: 120px;
-            line-height: 1.5;
-        }
-
-        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
-
-        .premium-header {
-            background: linear-gradient(180deg, #1b3325 0%, var(--primary-bg) 100%);
-            padding: 45px 20px 30px;
-            text-align: center;
-            border-bottom: 1px solid rgba(197, 155, 39, 0.3);
-        }
-        .premium-header h1 { font-size: 2.8rem; margin: 0; letter-spacing: 3px; line-height: 1; font-weight: 700; }
-        .premium-header h1 span { color: var(--accent-gold); }
-        .premium-header p { font-size: 0.8rem; color: var(--accent-gold); margin-top: 8px; letter-spacing: 2px; font-weight: 500; }
-
-        .info-pills { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
-        .pill { 
-            background: rgba(197, 155, 39, 0.1); 
-            border: 1px solid var(--accent-gold); 
-            color: var(--accent-gold);
-            padding: 6px 14px; border-radius: 50px; font-size: 11px; text-decoration: none;
-            display: flex; align-items: center; gap: 6px; transition: 0.3s;
-        }
-
-        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
-
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 22px;
-            margin-bottom: 20px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-        }
-        .card-header { 
-            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-            border-bottom: 1px solid rgba(197, 155, 39, 0.15); padding-bottom: 12px;
-        }
-        .card-header i { color: var(--accent-gold); font-size: 1.3rem; }
-        .card-header span { font-weight: 600; font-size: 17px; color: var(--accent-gold); letter-spacing: 0.5px; }
-
-        .alert-box {
-            background: rgba(197, 155, 39, 0.07);
-            border: 1px dashed var(--accent-gold);
-            padding: 14px; border-radius: 15px; margin-bottom: 18px; font-size: 12px;
-            line-height: 1.6;
-        }
-
-        .input-group { margin-bottom: 18px; }
-        label { display: block; font-size: 12px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        label span { font-size: 10px; color: var(--text-dim); font-weight: normal; margin-left: 4px; }
-        
-        input, select {
-            width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
-            padding: 14px 16px; border-radius: 14px; color: #fff; font-size: 15px; outline: none; transition: 0.3s;
-        }
-        input:focus, select:focus { border-color: var(--accent-gold); background: #0e1a14; }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-
-        .category-title { 
-            font-size: 1.2rem; color: var(--accent-gold); margin: 35px 0 18px;
-            display: flex; align-items: center; gap: 12px; font-weight: 700;
-        }
-        .category-title::after { content: ""; flex: 1; height: 1px; background: rgba(197, 155, 39, 0.2); }
-
-        .menu-item {
-            background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 14px;
-            display: flex; gap: 16px; align-items: center; border: 1px solid var(--card-border); transition: 0.3s;
-        }
-        .menu-item.selected { border-color: var(--accent-gold); background: #1b3325; }
-
-        .img-box {
-            width: 85px; height: 85px; background: var(--input-bg); border-radius: 15px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 9px; color: #405d4b; text-align: center; flex-shrink: 0;
-            border: 1px solid var(--card-border);
-            line-height: 1.2;
-        }
-
-        .menu-details { flex: 1; }
-        .menu-name { font-weight: 600; font-size: 15px; color: #fff; display: block; line-height: 1.3; }
-        .menu-en { font-size: 11px; color: var(--text-dim); line-height: 1.2; display: block; margin-top: 4px; }
-        .menu-price { color: var(--accent-gold); font-weight: 700; margin-top: 6px; display: block; font-size: 14px; }
-
-        .qty-controls { display: flex; align-items: center; background: var(--input-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); }
-        .btn-q { width: 34px; height: 34px; border: none; background: transparent; color: #fff; font-weight: bold; cursor: pointer; font-size: 18px; }
-        .btn-q:active { background: var(--accent-gold); color: #000; }
-        .qty-val { width: 32px; text-align: center; font-size: 15px; font-weight: 700; color: #fff; }
-
-        .note-input {
-            width: 100%; background: #070d09; border: 1px solid #1a2f23; border-radius: 10px;
-            padding: 10px 14px; color: #e5a93b; font-size: 12px; margin-top: 12px; display: none; outline: none;
-        }
-
-        .bottom-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(12, 24, 17, 0.95); backdrop-filter: blur(20px);
-            padding: 20px 25px; border-top: 1px solid rgba(197, 155, 39, 0.25);
-            display: flex; justify-content: space-between; align-items: center; z-index: 100;
-        }
-        .total-info h4 { margin: 0; font-size: 11px; color: var(--text-dim); font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
-        .total-info p { margin: 0; font-size: 24px; font-weight: 800; color: var(--accent-gold); line-height: 1; }
-
-        .btn-order {
-            background: linear-gradient(135deg, var(--accent-gold) 0%, #a07d1a 100%);
-            color: #0c1811; border: none; padding: 14px 28px; border-radius: 14px;
-            font-weight: 700; font-size: 15px; box-shadow: 0 8px 20px rgba(197,155,39,0.35);
-            cursor: pointer; font-family: 'Prompt', sans-serif;
-        }
+        body { font-family: 'Prompt', sans-serif; background-color: #0c1811; color: #f5f5f0; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
+<body class="bg-emerald-950 text-slate-100 antialiased min-h-screen pb-28">
 
-    <header class="premium-header">
-        <h1><span>NER</span> JAEW HON</h1>
-        <p>PREMIUM ISAN SOUL</p>
-        <div class="info-pills">
-            <a href="https://lin.ee/Oy7FTKX" target="_blank" class="pill"><i class="fa-brands fa-line"></i> LINE OA</a>
-            <a href="https://maps.app.goo.gl/3guLLbPHzDHTCiDy9?g_st=ic" target="_blank" class="pill"><i class="fa-solid fa-location-dot"></i> MAPS</a>
-            <a href="tel:0988799171" class="pill"><i class="fa-solid fa-phone"></i> 098-879-9171</a>
+    <!-- Top Navigation Bar -->
+    <header class="bg-emerald-900/90 backdrop-blur-md text-white sticky top-0 z-50 border-b border-gold/20 shadow-lg">
+        <div class="max-w-xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gold text-emerald-950 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg">
+                    🔥
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none font-kanit tracking-wide">NER แจ่วฮ้อน</h1>
+                    <span class="text-xs text-gold/80 font-light">PREMIUM ISAN SOUL</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <a href="https://lin.ee/Oy7FTKX" target="_blank" class="bg-gold/10 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all">
+                    <i class="fa-brands fa-line text-sm"></i> LINE OA
+                </a>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="section-card">
-            <div class="card-header"><i class="fa-solid fa-calendar-check"></i> <span>RESERVATION | ข้อมูลการจอง</span></div>
-            
-            <div class="alert-box" id="holidayBox">
-                <i class="fa-solid fa-calendar-day" style="color:var(--accent-gold); margin-right:5px;"></i>
-                <span id="holidayNotice">กำลังคำนวณวันหยุด...</span><br>
-                <small style="opacity: 0.7;">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามได้ที่ IG: <a href="https://instagram.com/ner.bkk" target="_blank" style="color:var(--accent-gold)">ner.bkk</a></small>
+    <!-- Main Container -->
+    <main class="max-w-xl mx-auto p-4 space-y-6">
+
+        <!-- Section 1: Reservation Details Card -->
+        <div class="bg-emerald-900 rounded-3xl p-5 border border-gold/20 shadow-xl relative overflow-hidden">
+            <div class="flex items-center gap-2.5 pb-3 mb-4 border-b border-gold/15 text-gold font-semibold text-sm">
+                <i class="fa-solid fa-calendar-check text-base"></i>
+                <span class="font-kanit tracking-wide">ข้อมูลการสำรองที่นั่ง (Reservation Details)</span>
             </div>
 
-            <div class="alert-box" style="background: rgba(217, 56, 30, 0.05); border-color: var(--accent-red);">
-                <i class="fa-solid fa-circle-exclamation" style="color:var(--accent-red); margin-right:5px;"></i>
-                <b style="color:var(--text-white)">นโยบายเวลา / Policy:</b><br>
-                - ไม่รับจองหลัง 18:00 น. (No reservation after 6 PM)<br>
-                - มาเลทเกิน 15 นาที ขออนุญาตปล่อยโต๊ะครับ
-            </div>
-
-            <div class="input-group">
-                <label>ชื่อผู้จอง <span>/ Customer Name</span></label>
-                <input type="text" id="name" placeholder="ระบุชื่อของคุณ">
-            </div>
-
-            <div class="grid-2">
-                <div class="input-group">
-                    <label>เบอร์โทรศัพท์ <span>/ Phone</span></label>
-                    <input type="tel" id="phone" placeholder="08x-xxx-xxxx">
-                </div>
-                <div class="input-group">
-                    <label>จำนวนท่าน <span>/ Guests</span></label>
-                    <select id="guests">
-                        <option value="1">1 ท่าน / 1 Person</option>
-                        <option value="2" selected>2 ท่าน / 2 People</option>
-                        <option value="3">3 ท่าน / 3 People</option>
-                        <option value="4">4 ท่าน / 4 People</option>
-                        <option value="5">5 ท่าน / 5 People</option>
-                        <option value="6">6 ท่าน / 6 People</option>
-                        <option value="7+">7 ท่านขึ้นไป / 7+ People</option>
-                    </select>
+            <!-- Holiday Notice Box -->
+            <div id="holidayBox" class="bg-emerald-950/60 border border-dashed border-gold/40 p-3.5 rounded-2xl mb-4 text-xs text-slate-200">
+                <div class="flex items-start gap-2">
+                    <i class="fa-solid fa-calendar-day text-gold mt-0.5"></i>
+                    <div>
+                        <span id="holidayNotice" class="font-medium text-gold">กำลังตรวจสอบวันหยุด...</span>
+                        <p class="text-[11px] text-slate-400 mt-0.5">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram: <a href="https://instagram.com/ner.bkk" target="_blank" class="text-gold underline">ner.bkk</a></p>
+                    </div>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>วันที่ทาน <span>/ Date</span></label>
-                <input type="date" id="date">
+            <!-- Time Policy Box -->
+            <div class="bg-rose-950/30 border border-rose-500/30 p-3.5 rounded-2xl mb-4 text-xs text-rose-200">
+                <div class="flex items-start gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-rose-400 mt-0.5"></i>
+                    <div class="space-y-0.5">
+                        <strong class="text-white font-kanit">นโยบายและเงื่อนไขเวลา (Policy):</strong>
+                        <p>• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น.</p>
+                        <p>• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="input-group">
-                <label>เวลาที่เข้าทาน <span>/ Arrival Time</span></label>
-                <div class="time-row">
-                    <select id="hour"></select>
-                    <select id="minute"></select>
-                    <select id="ampm">
-                        <option value="AM">AM</option>
-                        <option value="PM" selected>PM</option>
-                    </select>
+            <!-- Form Inputs -->
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">ชื่อผู้จอง <span class="text-slate-400 font-normal">/ Customer Name</span></label>
+                    <input type="text" id="name" placeholder="กรุณาระบุชื่อของท่าน" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">เบอร์โทรศัพท์ <span class="text-slate-400 font-normal">/ Phone</span></label>
+                        <input type="tel" id="phone" placeholder="08x-xxx-xxxx" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">จำนวนท่าน <span class="text-slate-400 font-normal">/ Guests</span></label>
+                        <select id="guests" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
+                            <option value="1">1 ท่าน / 1 Person</option>
+                            <option value="2" selected>2 ท่าน / 2 People</option>
+                            <option value="3">3 ท่าน / 3 People</option>
+                            <option value="4">4 ท่าน / 4 People</option>
+                            <option value="5">5 ท่าน / 5 People</option>
+                            <option value="6">6 ท่าน / 6 People</option>
+                            <option value="7+">7 ท่านขึ้นไป / 7+ People</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">วันที่ต้องการเข้าใช้บริการ <span class="text-slate-400 font-normal">/ Date of Visit</span></label>
+                    <input type="date" id="date" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">เวลาที่ต้องการเข้าใช้บริการ <span class="text-slate-400 font-normal">/ Arrival Time</span></label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <select id="hour" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
+                        <select id="minute" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
+                        <select id="ampm" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm">
+                            <option value="AM">AM</option>
+                            <option value="PM" selected>PM</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="menuContainer"></div>
-    </div>
-
-    <div class="bottom-bar">
-        <div class="total-info">
-            <h4>Estimated Total</h4>
-            <p><span id="totalPrice">0</span> ฿</p>
+        <!-- Section 2: Menu Items Container -->
+        <div id="menuContainer" class="space-y-6">
+            <!-- Dynamic Menu Rendered by JavaScript -->
         </div>
-        <button class="btn-order" onclick="submitOrderDirectly()">สรุปรายการสั่ง</button>
+
+    </main>
+
+    <!-- Bottom Sticky Order Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-gold/20 p-4 z-40 shadow-2xl">
+        <div class="max-w-xl mx-auto flex justify-between items-center">
+            <div>
+                <span class="text-[11px] text-slate-400 uppercase tracking-wider block">Estimated Total</span>
+                <span class="text-2xl font-bold text-gold font-kanit"><span id="totalPrice">0</span> ฿</span>
+            </div>
+            <button onclick="openSummaryModal()" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-emerald-950 px-6 py-3.5 rounded-2xl font-bold shadow-lg shadow-gold/20 flex items-center gap-2 transition-all font-kanit">
+                <i class="fa-solid fa-file-invoice-dollar text-base"></i>
+                <span>สรุปรายการสั่งซื้อ</span>
+            </button>
+        </div>
     </div>
 
+    <!-- Modern Digital Receipt Modal -->
+    <div id="summaryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white text-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-slate-100 font-mono">
+            <!-- Receipt Header -->
+            <div class="text-center pb-4 border-b-2 border-dashed border-slate-200">
+                <div class="w-12 h-12 bg-emerald-900 text-gold rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl shadow">
+                    🔥
+                </div>
+                <h3 class="text-xl font-bold font-kanit text-emerald-950">NER JAEW HON</h3>
+                <p class="text-[11px] text-slate-400 tracking-widest mt-0.5 font-sans">DIGITAL PRE-ORDER RECEIPT</p>
+            </div>
+
+            <!-- Receipt Metadata -->
+            <div id="receiptMeta" class="py-4 border-b border-slate-200 text-xs space-y-1.5 text-slate-600 font-sans">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Receipt Items List -->
+            <div class="py-4 border-b border-slate-200">
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit">📋 รายการอาหาร (Order Summary)</h4>
+                <div id="receiptItems" class="space-y-2 text-xs font-sans">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Receipt Total -->
+            <div class="py-4 border-b-2 border-dashed border-slate-200 flex justify-between items-center font-kanit">
+                <span class="text-sm font-bold text-slate-700">ยอดรวมสุทธิ (TOTAL)</span>
+                <span id="receiptTotalAmount" class="text-xl font-bold text-rose-600">0 ฿</span>
+            </div>
+
+            <!-- Receipt Footer Note -->
+            <div class="text-center py-3 text-[10px] text-slate-400 space-y-1 font-sans">
+                <p>* ทางร้านไม่มีการเก็บมัดจำการจอง</p>
+                <p>THANK YOU FOR YOUR RESERVATION</p>
+            </div>
+
+            <!-- Modal Action Buttons -->
+            <div class="space-y-2 pt-2 font-sans">
+                <button onclick="submitFinalOrder()" class="w-full bg-line-green hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-brands fa-line text-xl"></i>
+                    <span>ยืนยันและส่งเข้า LINE OA ร้านทันที</span>
+                </button>
+                <button onclick="closeSummaryModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-2xl text-xs font-medium transition-all">
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> กลับไปแก้ไขรายการ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // --- FULL MENU FROM EXCEL (COMPLETE) ---
+        // Complete Menu Data from Exact NER Jaew Hon Sheet
         const menuData = [
             {
-                cat: "เมนูแบบชุด / SET MENU",
+                cat: "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET",
                 items: [
                     { id: 's1', name: "ชุดจุ่มหมูทะเล", en: "Pork & Sea Food Set", price: 429 },
                     { id: 's2', name: "ชุดจุ่มเนื้อ", en: "Beef Shabu Set", price: 339 },
                     { id: 's3', name: "ชุดจุ่มหมู", en: "Pork Shabu Set", price: 329 },
-                    { id: 's4', name: "ชุดจุ่มเดี่ยว", en: "Single Set", price: 189 },
-                    { id: 's5', name: "อิ่มเดี่ยวต้มพร้อมทาน (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Normal Set", price: 119 },
-                    { id: 's6', name: "อิ่มเดี่ยวหมูจุกๆ (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Extra Pork Set", price: 159 }
+                    { id: 's4', name: "ชุดจุ่มเดี่ยวหมู", en: "Single Pork Set", price: 189 },
+                    { id: 's5', name: "อิ่มเดี่ยว ต้มพร้อมทาน (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Normal Set", price: 119 },
+                    { id: 's6', name: "อิ่มเดี่ยว หมูจุกจุก (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Extra Pork Set", price: 159 }
                 ]
             },
             {
-                cat: "เนื้อสัตว์เพิ่มเติม / MEAT",
+                cat: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT",
                 items: [
                     { id: 'm1', name: "หมูล้วน (ไม่มีเครื่องใน)", en: "Pork Lover (No Offal)", price: 199 },
                     { id: 'm2', name: "หมูหมัก NER", en: "Marinated Pork", price: 49 },
@@ -249,75 +244,78 @@
                     { id: 'm5', name: "หมูสันนอกสไลซ์", en: "Sliced Pork Sirloin", price: 49 },
                     { id: 'm6', name: "ตับหมู", en: "Pork Liver", price: 39 },
                     { id: 'm7', name: "เซ่งจี๊", en: "Pork Kidney", price: 39 },
-                    { id: 'm8', name: "เนื้อรวม", en: "Beef Lover Platter", price: 239 },
+                    { id: 'm8', name: "เนื้อรวม", en: "Beef Lover", price: 239 },
                     { id: 'm9', name: "เนื้อใบพายสไลซ์", en: "Sliced Chuck Roll Beef", price: 89 },
-                    { id: 'm10', name: "เนื้อริบอายสไลซ์", en: "Sliced Ribeye Beef", price: 89 },
-                    { id: 'm11', name: "เนื้อเสือร้องไห้สไลซ์", en: "Sliced Brisket Flap", price: 89 },
+                    { id: 'm10', name: "เนื้อริบอายสไลซ์ (AUS)", en: "Sliced Ribeye Beef (AUS)", price: 89 },
+                    { id: 'm11', name: "เนื้อเสือร้องไห้สไลซ์ (AUS)", en: "Sliced Brisket Flap (AUS)", price: 89 },
                     { id: 'm12', name: "ปลาดอลลี่", en: "Dory Fish", price: 59 },
-                    { id: 'm13', name: "กุ้ง", en: "Fresh Prawns", price: 69 },
+                    { id: 'm13', name: "กุ้ง", en: "Shrimp", price: 69 },
                     { id: 'm14', name: "ปลาหมึก", en: "Squid", price: 69 }
                 ]
             },
             {
-                cat: "ผักเพิ่มเติม / VEGETABLES",
+                cat: "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES",
                 items: [
-                    { id: 'v1', name: "ชุดผักรวม", en: "Mixed Vegetable Set", price: 69 },
+                    { id: 'v1', name: "ชุดผักรวม", en: "Vegetable Combo", price: 69 },
                     { id: 'v2', name: "กะหล่ำปลี", en: "Cabbage", price: 29 },
-                    { id: 'v3', name: "ผักบุ้ง", en: "Water Spinach", price: 19 },
-                    { id: 'v4', name: "ผักชีฝรั่ง", en: "Sawtooth Coriander", price: 19 },
-                    { id: 'v5', name: "โหระพา", en: "Thai Basil", price: 29 },
-                    { id: 'v6', name: "ใบชะพลู", en: "Wildbetel Leafbush", price: 29 }
-                ]
-            },
-            {
-                cat: "เส้น / NOODLES",
-                items: [
+                    { id: 'v3', name: "ผักบุ้ง", en: "Morning Glory", price: 19 },
+                    { id: 'v4', name: "ผักชีฝรั่ง", en: "Culantro", price: 19 },
+                    { id: 'v5', name: "โหระพา", en: "Sweet Basil", price: 29 },
+                    { id: 'v6', name: "ใบชะพลู", en: "Wild Betel Leaves", price: 29 },
                     { id: 'n1', name: "วุ้นเส้น", en: "Glass Noodles", price: 29 },
                     { id: 'n2', name: "มาม่า", en: "Instant Noodles", price: 29 },
-                    { id: 'n3', name: "หมี่หยก (สด)", en: "Fresh Jade Noodles", price: 29 },
+                    { id: 'n3', name: "บะหมี่หยก (สด)", en: "Fresh Jade Noodles", price: 29 },
                     { id: 'n4', name: "เส้นอุด้ง", en: "Udon Noodles", price: 39 }
                 ]
             },
             {
-                cat: "เมนูเพิ่มเติม / EXTRAS",
+                cat: "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE",
                 items: [
-                    { id: 'e1', name: "ไข่ไก่", en: "Fresh Egg", price: 15 },
+                    { id: 'e1', name: "ไข่ไก่สด", en: "Fresh Egg", price: 15 },
                     { id: 'e2', name: "เต้าหู้ปลา", en: "Fish Tofu", price: 49 },
                     { id: 'e3', name: "เต้าหู้ไข่", en: "Egg Tofu", price: 29 },
                     { id: 'e4', name: "เต้าหู้ชีส", en: "Cheese Tofu", price: 49 },
                     { id: 'e5', name: "ฟองเต้าหู้แท่ง", en: "Bean Curd Stick", price: 49 },
-                    { id: 'e6', name: "ฟองเต้าหู้ทอด", en: "Fried Bean Curd", price: 39 },
-                    { id: 'e7', name: "ข้าวเปล่า", en: "Steamed Rice", price: 29 }
-                ]
-            },
-            {
-                cat: "ของทานเล่น / APPETIZERS",
-                items: [
-                    { id: 'a1', name: "ไก่ป๊อป", en: "Popcorn Chicken", price: 79 },
-                    { id: 'a2', name: "แฮชบราวน์ เทเทอร์ ทอตส์", en: "Tater Tots Hashbrown", price: 69 },
-                    { id: 'a3', name: "ข้าวเกรียบปลา", en: "Fish Crackers", price: 49 },
+                    { id: 'e6', name: "ฟองเต้าหู้ทอด", en: "Fried Tofu Skin Roll", price: 39 },
+                    { id: 'e7', name: "ข้าวเปล่า", en: "Rice", price: 29 },
+                    { id: 'a1', name: "ไก่ป๊อป", en: "Chicken Pops", price: 79 },
+                    { id: 'a2', name: "แฮชบราวน์ เทเทอร์ ทอตส์", en: "Hash Brown Tater Tots", price: 69 },
+                    { id: 'a3', name: "ข้าวเกรียบปลา", en: "Crispy Fish Crackers", price: 49 },
                     { id: 'a4', name: "คาลามารี", en: "Calamari", price: 119 }
                 ]
             },
             {
-                cat: "ของหวาน / DESSERTS",
+                cat: "เมนูของหวาน / DESSERT",
                 items: [
                     { id: 'd1', name: "ซาโมซ่ากล้วย", en: "Banana Samosa", price: 79 },
-                    { id: 'd2', name: "สละลอยแก้ว", en: "Salak in Syrup", price: 59 },
-                    { id: 'd3', name: "ลูกตาลลอยแก้ว", en: "Toddy Palm in Syrup", price: 59 },
+                    { id: 'd2', name: "สละลอยแก้ว", en: "Chilled Sala Dessert", price: 59 },
+                    { id: 'd3', name: "ลูกตาลลอยแก้ว", en: "Chilled Toddy Palm Dessert", price: 59 },
                     { id: 'mj1', name: "โมจิไอศครีม - ช็อคโกแลต", en: "Mochi Ice Cream - Chocolate", price: 39 },
-                    { id: 'mj2', name: "โมจิไอศครีม - ชาไทย", en: "Mochi Ice Cream - Thai Tea", price: 39 },
-                    { id: 'mj3', name: "โมจิไอศครีม - มัทฉะ", en: "Mochi Ice Cream - Matcha", price: 39 }
+                    { id: 'mj2', name: "โมจิไอศครีม - วานิลลา", en: "Mochi Ice Cream - Vanilla", price: 39 },
+                    { id: 'mj3', name: "โมจิไอศครีม - คุกกี้แอนด์ครีม", en: "Mochi Ice Cream - Cookies & Cream", price: 39 },
+                    { id: 'mj4', name: "โมจิไอศครีม - มัทฉะ", en: "Mochi Ice Cream - Matcha", price: 39 },
+                    { id: 'mj5', name: "โมจิไอศครีม - มะนาว", en: "Mochi Ice Cream - Lime", price: 39 },
+                    { id: 'mj6', name: "โมจิไอศครีม - ชาไทย", en: "Mochi Ice Cream - Thai Tea", price: 39 }
                 ]
             },
             {
-                cat: "เครื่องดื่ม / BEVERAGES",
+                cat: "เมนูเครื่องดื่ม / BEVERAGE",
                 items: [
-                    { id: 'dr1', name: "น้ำโค้ก Original", en: "Coke Original", price: 25 },
-                    { id: 'dr2', name: "น้ำโค้ก Zero", en: "Coke Zero", price: 25 },
-                    { id: 'dr3', name: "น้ำแป๊ปซี่ Original", en: "Pepsi Original", price: 25 },
-                    { id: 'dr4', name: "สิงห์เลมอนโซดา", en: "Singha Lemon Soda", price: 25 },
-                    { id: 'dr5', name: "น้ำแข็งถัง (รีฟิล)", en: "Ice Bucket (Refill)", price: 25 }
+                    { id: 'dr1', name: "น้ำเปล่า", en: "Drinking Water", price: 15 },
+                    { id: 'dr2', name: "โซดา", en: "Soda Water", price: 15 },
+                    { id: 'dr3', name: "น้ำโค้ก original", en: "Coke Original", price: 25 },
+                    { id: 'dr4', name: "น้ำโค้ก zero", en: "Coke Zero", price: 25 },
+                    { id: 'dr5', name: "น้ำแป๊ปซี่ original", en: "Pepsi Original", price: 25 },
+                    { id: 'dr6', name: "น้ำแป๊ปซี่ max", en: "Pepsi Max", price: 25 },
+                    { id: 'dr7', name: "สิงค์เลม่อนโซดา", en: "Singha Lemon Soda", price: 25 },
+                    { id: 'dr8', name: "ชเวปส์ จิงเจอร์เอล", en: "Schweppes Ginger Ale", price: 25 },
+                    { id: 'dr9', name: "ชเวปส์ มะนาว", en: "Schweppes Manao Soda", price: 25 },
+                    { id: 'dr10', name: "แฟนต้า น้ำแดง", en: "Fanta Strawberry", price: 25 },
+                    { id: 'dr11', name: "แฟนต้า น้ำเขียว", en: "Fanta Fruit Punch", price: 25 },
+                    { id: 'dr12', name: "แฟนต้า น้ำส้ม", en: "Fanta Orange", price: 25 },
+                    { id: 'dr13', name: "โค้ก original ขวด 1.25 ลิตร", en: "Coke Original 1.25L Bottle", price: 40 },
+                    { id: 'dr14', name: "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", en: "Bucket of Ice (Refill max 4 guests)", price: 25 },
+                    { id: 'dr15', name: "น้ำแข็งแก้ว", en: "Glass of Ice", price: 2 }
                 ]
             }
         ];
@@ -332,8 +330,9 @@
             document.getElementById('date').valueAsDate = new Date();
         }
 
+        // Alternating Mondays calculation starting from 20/07/2026
         function calculateHolidays() {
-            const startDay = new Date(2026, 6, 20); // 20 July 2026
+            const startDay = new Date(2026, 6, 20); // July 20, 2026
             const today = new Date();
             let holidays = [];
             let check = new Date(startDay);
@@ -344,7 +343,7 @@
                 check.setDate(check.getDate() + 14);
                 if (holidays.length >= 4) break;
             }
-            document.getElementById('holidayNotice').innerText = "ร้านหยุดจันทร์ที่: " + holidays.join(', ');
+            document.getElementById('holidayNotice').innerHTML = `<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b> ${holidays.join(', ')}`;
         }
 
         function initTimeSelectors() {
@@ -358,21 +357,32 @@
         function renderMenu() {
             let html = "";
             menuData.forEach(category => {
-                html += `<div class="category-title">${category.cat}</div>`;
+                html += `<div class="font-kanit font-bold text-gold text-lg mt-8 mb-4 flex items-center gap-3">
+                            <span>${category.cat}</span>
+                            <div class="h-[1px] flex-1 bg-gold/20"></div>
+                         </div>`;
                 category.items.forEach(item => {
                     html += `
-                        <div class="menu-item" id="card-${item.id}">
-                            <div class="img-box">Image<br>coming soon</div>
-                            <div class="menu-details">
-                                <span class="menu-name">${item.name}</span>
-                                <span class="menu-en">${item.en}</span>
-                                <span class="menu-price">${item.price} ฿</span>
-                                <input type="text" class="note-input" id="note-${item.id}" placeholder="ระบุหมายเหตุ เช่น ไม่ใส่พริก...">
-                            </div>
-                            <div class="qty-controls">
-                                <button class="btn-q" onclick="updateQty('${item.id}', -1, ${item.price})">-</button>
-                                <span class="qty-val" id="qty-${item.id}">0</span>
-                                <button class="btn-q" onclick="updateQty('${item.id}', 1, ${item.price})">+</button>
+                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border border-emerald-800 transition-all shadow-sm" id="card-${item.id}">
+                            <div class="flex gap-3.5 items-center">
+                                <div class="w-20 h-20 bg-emerald-950 rounded-xl border border-gold/20 flex flex-col items-center justify-center text-[10px] text-slate-400 text-center shrink-0 p-1">
+                                    <i class="fa-solid fa-image text-gold/60 text-base mb-1"></i>
+                                    <span>Image coming soon</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-semibold text-white text-sm truncate">${item.name}</h4>
+                                    <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${item.en}</span>
+                                    <span class="text-gold font-bold text-sm mt-1 block font-kanit">${item.price} ฿</span>
+                                    
+                                    <input type="text" class="note-input w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 mt-2.5 outline-none focus:border-gold hidden" id="note-${item.id}" placeholder="ระบุความต้องการเพิ่มเติม เช่น ไม่ใส่ผัก...">
+                                </div>
+                                <div class="flex flex-col items-end justify-between self-stretch shrink-0">
+                                    <div class="flex items-center bg-emerald-950 border border-gold/30 rounded-xl overflow-hidden shadow-inner">
+                                        <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', -1, ${item.price})">-</button>
+                                        <span class="w-8 text-center text-sm font-bold text-white" id="qty-${item.id}">0</span>
+                                        <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', 1, ${item.price})">+</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -390,12 +400,12 @@
             if (newVal > 0) {
                 const itemData = menuData.flatMap(c => c.items).find(i => i.id === id);
                 orderMap[id] = { qty: newVal, price: price, name: itemData.name };
-                card.classList.add('selected');
-                note.style.display = 'block';
+                card.classList.add('border-gold', 'bg-emerald-800/80');
+                note.classList.remove('hidden');
             } else {
                 delete orderMap[id];
-                card.classList.remove('selected');
-                note.style.display = 'none';
+                card.classList.remove('border-gold', 'bg-emerald-800/80');
+                note.classList.add('hidden');
             }
             document.getElementById(`qty-${id}`).innerText = newVal;
             calculateTotal();
@@ -407,31 +417,75 @@
             document.getElementById('totalPrice').innerText = total.toLocaleString();
         }
 
-        function submitOrderDirectly() {
+        // Modal Controls
+        function openSummaryModal() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const hr = parseInt(document.getElementById('hour').value);
+            const ampm = document.getElementById('ampm').value;
+
+            if(!name || !phone) return alert("กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ");
+            if(ampm === "PM" && hr > 6 && hr !== 12) return alert("ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น.");
+            if(Object.keys(orderMap).length === 0) return alert("กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ");
+
+            let itemsHtml = "";
+            let grandTotal = 0;
+            for (let id in orderMap) {
+                const itemTotal = orderMap[id].qty * orderMap[id].price;
+                grandTotal += itemTotal;
+                const noteVal = document.getElementById(`note-${id}`).value;
+                
+                itemsHtml += `
+                    <div class="py-2 border-b border-slate-100">
+                        <div class="flex justify-between font-bold text-slate-800">
+                            <span>• ${orderMap[id].name} x${orderMap[id].qty}</span>
+                            <span class="text-rose-600">${itemTotal.toLocaleString()}.-</span>
+                        </div>
+                `;
+                if(noteVal) {
+                    itemsHtml += `<div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2 py-0.5 rounded-lg"><strong>Note:</strong> ${noteVal}</div>`;
+                }
+                itemsHtml += `</div>`;
+            }
+
+            document.getElementById('receiptMeta').innerHTML = `
+                <p><b>ชื่อผู้จอง:</b> ${name}</p>
+                <p><b>เบอร์โทร:</b> ${phone}</p>
+                <p><b>จำนวน:</b> ${document.getElementById('guests').value}</p>
+                <p><b>วันที่:</b> ${document.getElementById('date').value}</p>
+                <p><b>เวลา:</b> ${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${ampm}</p>
+            `;
+            document.getElementById('receiptItems').innerHTML = itemsHtml;
+            document.getElementById('receiptTotalAmount').innerText = grandTotal.toLocaleString() + " ฿";
+            document.getElementById('summaryModal').classList.remove('hidden');
+        }
+
+        function closeSummaryModal() {
+            document.getElementById('summaryModal').classList.add('hidden');
+        }
+
+        function submitFinalOrder() {
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const time = `${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${document.getElementById('ampm').value}`;
             
-            if(!name || !phone) return alert("กรุณาระบุชื่อและเบอร์โทรศัพท์");
-            if(Object.keys(orderMap).length === 0) return alert("กรุณาเลือกรายการอาหารอย่างน้อย 1 อย่าง");
-
             let itemText = "";
             for (let id in orderMap) {
                 const noteVal = document.getElementById(`note-${id}`).value;
                 itemText += `• ${orderMap[id].name} x${orderMap[id].qty} [${(orderMap[id].qty * orderMap[id].price).toLocaleString()}.-]\n`;
-                if(noteVal) itemText += `  └ Note: ${noteVal}\n`;
+                if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
             }
 
-            const finalMsg = `🔥 ออเดอร์ร้าน NER แจ่วฮ้อน\n------------------\n👤 คุณ: ${name}\n📞: ${phone}\n📅: ${document.getElementById('date').value}\n⏰: ${time}\n------------------\n📋 รายการอาหาร:\n${itemText}\n💰 รวม: ${document.getElementById('totalPrice').innerText} บาท\n------------------\n*ไม่รับจองหลัง 18.00 น.\n*มาเลทเกิน 15 นาทีขออนุญาตปล่อยโต๊ะ`;
+            const finalMsg = `🔥 รายการสำรองที่นั่งและพรีออเดอร์ - NER แจ่วฮ้อน\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทรศัพท์: ${phone}\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n*ทางร้านงดรับจองหลัง 18:00 น.\n*ขออนุญาตปล่อยโต๊ะหากมาล่าช้าเกิน 15 นาที`;
 
             if (liff.isInClient()) {
                 liff.sendMessages([{ type: 'text', text: finalMsg }]).then(() => {
                     liff.closeWindow();
                 }).catch(err => {
-                    alert("เกิดข้อผิดพลาดในการส่งข้อความ: " + err);
+                    alert("ขออภัยในความไม่สะดวก เกิดข้อผิดพลาดในการส่งข้อความ: " + err);
                 });
             } else {
-                alert("กรุณาส่งออเดอร์ผ่านแอปพลิเคชัน LINE ครับ");
+                alert("กรุณาส่งรายการผ่านแอปพลิเคชัน LINE ของทางร้านครับ");
                 window.location.href = "https://lin.ee/Oy7FTKX";
             }
         }
