@@ -27,7 +27,7 @@
             background-color: var(--primary-bg); 
             color: var(--text-white); 
             font-family: 'Prompt', sans-serif; 
-            margin: 0; padding-bottom: 110px;
+            margin: 0; padding-bottom: 120px;
             line-height: 1.5;
         }
 
@@ -67,7 +67,7 @@
             border-bottom: 1px solid rgba(197, 155, 39, 0.15); padding-bottom: 12px;
         }
         .card-header i { color: var(--accent-gold); font-size: 1.3rem; }
-        .card-header span { font-weight: 600; font-size: 17px; color: var(--accent-gold); }
+        .card-header span { font-weight: 600; font-size: 17px; color: var(--accent-gold); letter-spacing: 0.5px; }
 
         .alert-box {
             background: rgba(197, 155, 39, 0.07);
@@ -77,33 +77,36 @@
         }
 
         .input-group { margin-bottom: 18px; }
-        label { display: block; font-size: 12px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        label { display: block; font-size: 12px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        label span { font-size: 10px; color: var(--text-dim); font-weight: normal; margin-left: 4px; }
+        
         input, select {
             width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
             padding: 14px 16px; border-radius: 14px; color: #fff; font-size: 15px; outline: none; transition: 0.3s;
         }
-        input:focus { border-color: var(--accent-gold); background: #0e1a14; }
+        input:focus, select:focus { border-color: var(--accent-gold); background: #0e1a14; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 
         .category-title { 
-            font-size: 1.3rem; color: var(--accent-gold); margin: 35px 0 18px;
+            font-size: 1.2rem; color: var(--accent-gold); margin: 35px 0 18px;
             display: flex; align-items: center; gap: 12px; font-weight: 700;
         }
         .category-title::after { content: ""; flex: 1; height: 1px; background: rgba(197, 155, 39, 0.2); }
 
         .menu-item {
             background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 14px;
-            display: flex; gap: 16px; align-items: center; border: 1px solid transparent; transition: 0.3s;
+            display: flex; gap: 16px; align-items: center; border: 1px solid var(--card-border); transition: 0.3s;
         }
         .menu-item.selected { border-color: var(--accent-gold); background: #1b3325; }
 
         .img-box {
             width: 85px; height: 85px; background: var(--input-bg); border-radius: 15px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             font-size: 9px; color: #405d4b; text-align: center; flex-shrink: 0;
             border: 1px solid var(--card-border);
+            line-height: 1.2;
         }
 
         .menu-details { flex: 1; }
@@ -123,18 +126,18 @@
 
         .bottom-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
-            background: rgba(12, 24, 17, 0.92); backdrop-filter: blur(20px);
+            background: rgba(12, 24, 17, 0.95); backdrop-filter: blur(20px);
             padding: 20px 25px; border-top: 1px solid rgba(197, 155, 39, 0.25);
             display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
-        .total-info h4 { margin: 0; font-size: 11px; color: var(--text-dim); font-weight: 400; text-transform: uppercase; }
+        .total-info h4 { margin: 0; font-size: 11px; color: var(--text-dim); font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
         .total-info p { margin: 0; font-size: 24px; font-weight: 800; color: var(--accent-gold); line-height: 1; }
 
         .btn-order {
             background: linear-gradient(135deg, var(--accent-gold) 0%, #a07d1a 100%);
-            color: #0c1811; border: none; padding: 14px 32px; border-radius: 14px;
-            font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(197,155,39,0.35);
-            cursor: pointer;
+            color: #0c1811; border: none; padding: 14px 28px; border-radius: 14px;
+            font-weight: 700; font-size: 15px; box-shadow: 0 8px 20px rgba(197,155,39,0.35);
+            cursor: pointer; font-family: 'Prompt', sans-serif;
         }
     </style>
 </head>
@@ -145,6 +148,7 @@
         <p>PREMIUM ISAN SOUL</p>
         <div class="info-pills">
             <a href="https://lin.ee/Oy7FTKX" target="_blank" class="pill"><i class="fa-brands fa-line"></i> LINE OA</a>
+            <a href="https://maps.app.goo.gl/3guLLbPHzDHTCiDy9?g_st=ic" target="_blank" class="pill"><i class="fa-solid fa-location-dot"></i> MAPS</a>
             <a href="tel:0988799171" class="pill"><i class="fa-solid fa-phone"></i> 098-879-9171</a>
         </div>
     </header>
@@ -155,47 +159,48 @@
             
             <div class="alert-box" id="holidayBox">
                 <i class="fa-solid fa-calendar-day" style="color:var(--accent-gold); margin-right:5px;"></i>
-                <span id="holidayNotice">กำลังคำนวณวันหยุด...</span>
+                <span id="holidayNotice">กำลังคำนวณวันหยุด...</span><br>
+                <small style="opacity: 0.7;">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามได้ที่ IG: <a href="https://instagram.com/ner.bkk" target="_blank" style="color:var(--accent-gold)">ner.bkk</a></small>
             </div>
 
             <div class="alert-box" style="background: rgba(217, 56, 30, 0.05); border-color: var(--accent-red);">
                 <i class="fa-solid fa-circle-exclamation" style="color:var(--accent-red); margin-right:5px;"></i>
-                <b style="color:var(--text-white)">นโยบายเวลา:</b><br>
-                - ไม่รับจองหลัง 18:00 น.<br>
+                <b style="color:var(--text-white)">นโยบายเวลา / Policy:</b><br>
+                - ไม่รับจองหลัง 18:00 น. (No reservation after 6 PM)<br>
                 - มาเลทเกิน 15 นาที ขออนุญาตปล่อยโต๊ะครับ
             </div>
 
             <div class="input-group">
-                <label>ชื่อผู้จอง (Customer Name)</label>
+                <label>ชื่อผู้จอง <span>/ Customer Name</span></label>
                 <input type="text" id="name" placeholder="ระบุชื่อของคุณ">
             </div>
 
             <div class="grid-2">
                 <div class="input-group">
-                    <label>เบอร์โทรศัพท์</label>
+                    <label>เบอร์โทรศัพท์ <span>/ Phone</span></label>
                     <input type="tel" id="phone" placeholder="08x-xxx-xxxx">
                 </div>
                 <div class="input-group">
-                    <label>จำนวนท่าน</label>
+                    <label>จำนวนท่าน <span>/ Guests</span></label>
                     <select id="guests">
-                        <option value="1">1 ท่าน</option>
-                        <option value="2" selected>2 ท่าน</option>
-                        <option value="3">3 ท่าน</option>
-                        <option value="4">4 ท่าน</option>
-                        <option value="5">5 ท่าน</option>
-                        <option value="6">6 ท่าน</option>
-                        <option value="7+">7 ท่านขึ้นไป</option>
+                        <option value="1">1 ท่าน / 1 Person</option>
+                        <option value="2" selected>2 ท่าน / 2 People</option>
+                        <option value="3">3 ท่าน / 3 People</option>
+                        <option value="4">4 ท่าน / 4 People</option>
+                        <option value="5">5 ท่าน / 5 People</option>
+                        <option value="6">6 ท่าน / 6 People</option>
+                        <option value="7+">7 ท่านขึ้นไป / 7+ People</option>
                     </select>
                 </div>
             </div>
 
             <div class="input-group">
-                <label>วันที่ทาน (Date)</label>
+                <label>วันที่ทาน <span>/ Date</span></label>
                 <input type="date" id="date">
             </div>
 
             <div class="input-group">
-                <label>เวลาที่เข้าทาน (Arrival Time)</label>
+                <label>เวลาที่เข้าทาน <span>/ Arrival Time</span></label>
                 <div class="time-row">
                     <select id="hour"></select>
                     <select id="minute"></select>
@@ -215,13 +220,13 @@
             <h4>Estimated Total</h4>
             <p><span id="totalPrice">0</span> ฿</p>
         </div>
-        <button class="btn-order" onclick="submitOrderDirectly()">ส่งออเดอร์ทันที</button>
+        <button class="btn-order" onclick="submitOrderDirectly()">สรุปรายการสั่ง</button>
     </div>
 
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // --- FULL MENU FROM EXCEL (ALL ITEMS) ---
+        // --- FULL MENU FROM EXCEL (COMPLETE) ---
         const menuData = [
             {
                 cat: "เมนูแบบชุด / SET MENU",
@@ -230,8 +235,8 @@
                     { id: 's2', name: "ชุดจุ่มเนื้อ", en: "Beef Shabu Set", price: 339 },
                     { id: 's3', name: "ชุดจุ่มหมู", en: "Pork Shabu Set", price: 329 },
                     { id: 's4', name: "ชุดจุ่มเดี่ยว", en: "Single Set", price: 189 },
-                    { id: 's5', name: "อิ่มเดี่ยวต้มพร้อมทาน", en: "Ready to Eat (11.00-18.00)", price: 119 },
-                    { id: 's6', name: "อิ่มเดี่ยวหมูจุกๆ", en: "Extra Pork Set (11.00-18.00)", price: 159 }
+                    { id: 's5', name: "อิ่มเดี่ยวต้มพร้อมทาน (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Normal Set", price: 119 },
+                    { id: 's6', name: "อิ่มเดี่ยวหมูจุกๆ (ไม่เสิร์ฟหลัง 18:00 น.)", en: "Ready to Eat Extra Pork Set", price: 159 }
                 ]
             },
             {
@@ -337,7 +342,7 @@
                     holidays.push(check.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit' }));
                 }
                 check.setDate(check.getDate() + 14);
-                if (holidays.length >= 3) break;
+                if (holidays.length >= 4) break;
             }
             document.getElementById('holidayNotice').innerText = "ร้านหยุดจันทร์ที่: " + holidays.join(', ');
         }
