@@ -392,7 +392,8 @@
         async function initLiff() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) {
+                // ป้องกันการล็อกอินซ้ำถ้าเปิดในแอป LINE อยู่แล้ว
+                if (!liff.isInClient() && !liff.isLoggedIn()) {
                     liff.login();
                 }
             } catch (err) {
@@ -491,7 +492,6 @@
                     const itemTotal = item.price * qty;
                     grandTotal += itemTotal;
                     
-                    // ดึงหมายเหตุเฉพาะเมนู
                     const noteInput = document.getElementById(`note_input_${item.id}`);
                     const noteText = noteInput ? noteInput.value.trim() : '';
 
