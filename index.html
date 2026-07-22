@@ -178,7 +178,7 @@
             <div id="receiptMeta" class="py-4 border-b border-slate-200 text-xs space-y-1.5 text-slate-600 font-sans"></div>
 
             <div class="py-4 border-b border-slate-200">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit">📋 รายการอาหาร (Order Summary)</h4>
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit">📋 รายการอาหาร (ORDER SUMMARY)</h4>
                 <div id="receiptItems" class="space-y-2 text-xs font-sans"></div>
             </div>
 
@@ -428,7 +428,7 @@
                         </div>
                 `;
                 if(noteVal) {
-                    itemsHtml += `<div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2 py-0.5 rounded-lg"><strong>Note:</strong> ${noteVal}</div>`;
+                    itemsHtml += `<div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2 py-0.5 rounded-lg"><b>Note:</b> ${noteVal}</div>`;
                 }
                 itemsHtml += `</div>`;
             }
@@ -436,7 +436,7 @@
             document.getElementById('receiptMeta').innerHTML = `
                 <p><b>ชื่อผู้จอง:</b> ${name}</p>
                 <p><b>เบอร์โทร:</b> ${phone}</p>
-                <p><b>จำนวน:</b> ${document.getElementById('guests').value}</p>
+                <p><b>จำนวน:</b> ${document.getElementById('guests').value} ท่าน</p>
                 <p><b>วันที่:</b> ${document.getElementById('date').value}</p>
                 <p><b>เวลา:</b> ${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${ampm}</p>
             `;
@@ -457,11 +457,13 @@
             let itemText = "";
             for (let id in orderMap) {
                 const noteVal = document.getElementById(`note-${id}`).value;
-                itemText += `• ${orderMap[id].name} x${orderMap[id].qty} [${(orderMap[id].qty * orderMap[id].price).toLocaleString()}.-]\n`;
-                if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
+                const itemTotal = orderMap[id].qty * orderMap[id].price;
+                itemText += `• ${orderMap[id].name} x${orderMap[id].qty}    ${itemTotal.toLocaleString()}.-`;
+                if(noteVal) itemText += `\n  (หมายเหตุ: ${noteVal})`;
+                itemText += `\n`;
             }
 
-            const finalMsg = `🔥 รายการสำรองที่นั่งและพรีออเดอร์ - NER แจ่วฮ้อน\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทรศัพท์: ${phone}\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n*ทางร้านงดรับจองหลัง 18:00 น.\n*ขออนุญาตปล่อยโต๊ะหากมาล่าช้าเกิน 15 นาที`;
+            const finalMsg = `🔥 NER JAEW HON - DIGITAL PRE-ORDER RECEIPT\n----------------------------------\nชื่อผู้จอง: ${name}\nเบอร์โทร: ${phone}\nจำนวน: ${document.getElementById('guests').value} ท่าน\nวันที่: ${document.getElementById('date').value}\nเวลา: ${time}\n----------------------------------\n📋 รายการอาหาร (ORDER SUMMARY)\n\n${itemText}----------------------------------\nยอดรวมสุทธิ (TOTAL): ${document.getElementById('totalPrice').innerText} ฿\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> กำลังส่งออเดอร์...`;
