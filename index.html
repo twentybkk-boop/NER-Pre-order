@@ -92,7 +92,7 @@
             margin-bottom: 6px;
         }
 
-        input[type="text"], input[type="tel"], input[type="time"], input[type="date"], textarea {
+        input[type="text"], input[type="tel"], input[type="time"], input[type="date"] {
             width: 100%;
             padding: 12px 14px;
             border-radius: 8px;
@@ -104,7 +104,7 @@
             transition: border-color 0.2s;
         }
 
-        input:focus, textarea:focus {
+        input:focus {
             border-color: var(--accent-color);
         }
 
@@ -124,15 +124,23 @@
             justify-content: space-between;
         }
 
-        .menu-item {
+        .menu-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .menu-card.selected {
+            border-color: var(--accent-color);
+        }
+
+        .menu-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 14px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            margin-bottom: 8px;
         }
 
         .menu-info {
@@ -188,6 +196,28 @@
             font-size: 15px;
             font-weight: bold;
             color: #fff;
+        }
+
+        .item-note-box {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #333;
+        }
+
+        .item-note-box input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #141414;
+            color: #ffb74d;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .item-note-box input::placeholder {
+            color: #666;
         }
 
         .bottom-bar {
@@ -247,6 +277,7 @@
     </div>
 
     <div class="container">
+        <!-- 1. ข้อมูลการจอง -->
         <div class="card">
             <div class="card-title">📌 ข้อมูลการสั่งจอง</div>
             <div class="form-group">
@@ -267,15 +298,13 @@
                     <input type="time" id="custTime">
                 </div>
             </div>
-            <div class="form-group" style="margin-top:12px;">
-                <label>หมายเหตุเพิ่มเติม (ถ้ามี)</label>
-                <textarea id="custNotes" rows="2" placeholder="เช่น ขอโต๊ะริมกระจก / ไม่รับเครื่องใน"></textarea>
-            </div>
         </div>
 
+        <!-- 2. รายการอาหาร -->
         <div id="menuContainer"></div>
     </div>
 
+    <!-- แถบสรุปยอดด้านล่าง -->
     <div class="bottom-bar">
         <div class="total-box">
             <span class="total-label">ราคารวม (<span id="totalItemsCount">0</span> รายการ)</span>
@@ -288,7 +317,7 @@
         // LIFF ID
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // ข้อมูลเมนูอาหารทั้งหมดจาก CSV
+        // ข้อมูลเมนูอาหารทั้งหมด
         const menuData = [
             {"id": "item_0", "category": "เมนูแบบชุด", "name": "ชุดจุ่มหมูทะเล", "price": 429},
             {"id": "item_1", "category": "เมนูแบบชุด", "name": "ชุดจุ่มเนื้อ", "price": 339},
@@ -357,7 +386,7 @@
             {"id": "item_64", "category": "เมนูเครื่องดื่ม", "name": "น้ำแข็งแก้ว", "price": 2}
         ];
 
-        // เก็บจำนวนสั่งซื้อของแต่ละเมนู
+        // เก็บจำนวนสั่งซื้อ
         const orderMap = {};
 
         async function initLiff() {
@@ -374,7 +403,6 @@
         function renderMenu() {
             const container = document.getElementById('menuContainer');
             
-            // จัดกลุ่มตามหมวดหมู่
             const categories = {};
             menuData.forEach(item => {
                 if (!categories[item.category]) {
@@ -388,15 +416,20 @@
                 html += `<div class="category-title">🏷️ ${catName}</div>`;
                 items.forEach(item => {
                     html += `
-                        <div class="menu-item">
-                            <div class="menu-info">
-                                <div class="menu-name">${item.name}</div>
-                                <div class="menu-price">${item.price.toLocaleString()} .-</div>
+                        <div class="menu-card" id="card_${item.id}">
+                            <div class="menu-header">
+                                <div class="menu-info">
+                                    <div class="menu-name">${item.name}</div>
+                                    <div class="menu-price">${item.price.toLocaleString()} .-</div>
+                                </div>
+                                <div class="qty-control">
+                                    <button class="btn-qty" onclick="updateQty('${item.id}', -1)">-</button>
+                                    <span class="qty-val" id="qty_${item.id}">0</span>
+                                    <button class="btn-qty" onclick="updateQty('${item.id}', 1)">+</button>
+                                </div>
                             </div>
-                            <div class="qty-control">
-                                <button class="btn-qty" onclick="updateQty('${item.id}', -1)">-</button>
-                                <span class="qty-val" id="qty_${item.id}">0</span>
-                                <button class="btn-qty" onclick="updateQty('${item.id}', 1)">+</button>
+                            <div class="item-note-box" id="note_box_${item.id}">
+                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุระบุตัวเลือกเมนูนี้ (เช่น ไม่เอาเครื่องใน)">
                             </div>
                         </div>
                     `;
@@ -408,11 +441,18 @@
         function updateQty(itemId, change) {
             const current = orderMap[itemId] || 0;
             const newQty = Math.max(0, current + change);
+            
             if (newQty === 0) {
                 delete orderMap[itemId];
+                document.getElementById(`note_box_${itemId}`).style.display = 'none';
+                document.getElementById(`note_input_${itemId}`).value = '';
+                document.getElementById(`card_${itemId}`).classList.remove('selected');
             } else {
                 orderMap[itemId] = newQty;
+                document.getElementById(`note_box_${itemId}`).style.display = 'block';
+                document.getElementById(`card_${itemId}`).classList.add('selected');
             }
+            
             document.getElementById(`qty_${itemId}`).innerText = newQty;
             calculateTotal();
         }
@@ -436,14 +476,12 @@
             const phone = document.getElementById('custPhone').value.trim();
             const date = document.getElementById('custDate').value;
             const time = document.getElementById('custTime').value;
-            const notes = document.getElementById('custNotes').value.trim();
 
             if (!name || !phone) {
                 alert('กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์ก่อนครับ');
                 return;
             }
 
-            // รวบรวมรายการอาหารที่เลือก
             const selectedItems = [];
             let grandTotal = 0;
 
@@ -452,7 +490,16 @@
                 if (qty > 0) {
                     const itemTotal = item.price * qty;
                     grandTotal += itemTotal;
-                    selectedItems.push(`• ${item.name} x${qty} (${itemTotal.toLocaleString()}.-)`);
+                    
+                    // ดึงหมายเหตุเฉพาะเมนู
+                    const noteInput = document.getElementById(`note_input_${item.id}`);
+                    const noteText = noteInput ? noteInput.value.trim() : '';
+
+                    let itemLine = `• ${item.name} x${qty} (${itemTotal.toLocaleString()}.-)`;
+                    if (noteText) {
+                        itemLine += `\n  └ 📝 ${noteText}`;
+                    }
+                    selectedItems.push(itemLine);
                 }
             });
 
@@ -461,7 +508,6 @@
                 return;
             }
 
-            // จัดรูปแบบข้อความส่งเข้า LINE
             let msg = `📌 พรีออเดอร์ - NER แจ่วฮ้อน\n`;
             msg += `👤 คุณ: ${name}\n`;
             msg += `📞 เบอร์: ${phone}\n`;
@@ -472,11 +518,7 @@
             msg += selectedItems.join('\n');
             msg += `\n------------------------\n`;
             msg += `💰 ยอดรวมทั้งหมด: ${grandTotal.toLocaleString()} บาท`;
-            if (notes) {
-                msg += `\n📝 หมายเหตุ: ${notes}`;
-            }
 
-            // ส่งเข้า LINE Chat
             if (liff.isLoggedIn()) {
                 liff.sendMessages([{
                     type: 'text',
@@ -492,10 +534,8 @@
             }
         }
 
-        // ตั้งค่าเริ่มต้นวันที่เป็นวันปัจจุบัน
         document.getElementById('custDate').valueAsDate = new Date();
 
-        // รันคำสั่งตั้งต้น
         renderMenu();
         initLiff();
     </script>
