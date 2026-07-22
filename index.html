@@ -2,462 +2,257 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NER แจ่วฮ้อน - Pre-order & Reservation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NER แจ่วฮ้อน - Modern Reservation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         :root {
-            --bg-color: #0c1811;        /* เขียวเข้มจัด พื้นหลัง */
-            --card-bg: #14241b;         /* เขียวเข้มสว่างขึ้นสำหรับ Card */
-            --card-border: #233d2e;     /* เส้นขอบสีเขียวทองเข้ม */
-            --accent-color: #c59b27;    /* สีทองพรีเมียมตามใบเมนู */
-            --accent-hover: #b0871d;
-            --red-highlight: #d9381e;   /* สีแดงแจ่วฮ้อน */
-            --text-main: #f5f5f5;
-            --text-sub: #b2c2b9;
-            --warning-bg: #1f1b11;
-            --warning-border: #73591c;
+            --primary-bg: #0c1811;      /* Deep Emerald */
+            --card-bg: #14241b;         /* Emerald Medium */
+            --card-border: #233d2e;
+            --accent-gold: #c59b27;     /* Premium Gold */
+            --accent-red: #d9381e;      /* Jaew Red */
+            --text-white: #f5f5f0;
+            --text-dim: #a5b5ab;
+            --input-bg: #09130e;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding-bottom: 110px;
-        }
-
-        .header {
-            background: linear-gradient(180deg, #1b3325 0%, var(--bg-color) 100%);
-            padding: 28px 20px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 4px 20px rgba(197, 155, 39, 0.2);
-        }
-
-        .header h1 {
-            color: var(--text-main);
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .header h1 span {
-            color: var(--accent-color);
-        }
-
-        .header p {
-            color: var(--accent-color);
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-        }
-
-        .store-info-bar {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .info-pill {
-            background: rgba(197, 155, 39, 0.1);
-            border: 1px solid var(--accent-color);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: var(--accent-color);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 16px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 20px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .card-title {
-            color: var(--accent-color);
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #233d2e;
-            padding-bottom: 10px;
-        }
-
-        .card-title .en-sub {
-            font-size: 12px;
-            color: var(--text-sub);
-            font-weight: normal;
-        }
-
-        .notice-box {
-            background: var(--warning-bg);
-            border: 1px solid var(--warning-border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 14px;
-            font-size: 12px;
-            color: #f7d0a1;
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--primary-bg); 
+            color: var(--text-white); 
+            font-family: 'Prompt', sans-serif; 
+            margin: 0; padding-bottom: 110px;
             line-height: 1.5;
         }
 
-        .holiday-banner {
-            background: #192e22;
-            border: 1px dashed var(--accent-color);
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 14px;
-            font-size: 12px;
-            color: var(--text-main);
+        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
+
+        /* --- Header Section --- */
+        .premium-header {
+            background: linear-gradient(180deg, #1b3325 0%, var(--primary-bg) 100%);
+            padding: 45px 20px 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(197, 155, 39, 0.3);
+        }
+        .premium-header h1 { font-size: 2.8rem; margin: 0; letter-spacing: 3px; line-height: 1; font-weight: 700; }
+        .premium-header h1 span { color: var(--accent-gold); }
+        .premium-header p { font-size: 0.8rem; color: var(--accent-gold); margin-top: 8px; letter-spacing: 2px; font-weight: 500; }
+
+        .info-pills { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+        .pill { 
+            background: rgba(197, 155, 39, 0.1); 
+            border: 1px solid var(--accent-gold); 
+            color: var(--accent-gold);
+            padding: 6px 14px; border-radius: 50px; font-size: 11px; text-decoration: none;
+            display: flex; align-items: center; gap: 6px; transition: 0.3s;
         }
 
-        .holiday-banner a {
-            color: var(--accent-color);
-            text-decoration: underline;
-        }
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
 
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-        }
-
-        label span.en {
-            font-size: 11px;
-            color: #777;
-        }
-
-        input[type="text"], input[type="tel"], input[type="date"], select {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background: #0f1d15;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 6px rgba(197, 155, 39, 0.4);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .time-picker-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-        }
-
-        .category-title {
-            color: var(--accent-color);
-            font-size: 16px;
-            font-weight: 700;
-            margin: 24px 0 12px 4px;
-            display: flex;
-            align-items: center;
-            border-left: 3px solid var(--accent-color);
-            padding-left: 10px;
-        }
-
-        .menu-card {
+        /* --- Form Sections --- */
+        .section-card {
             background: var(--card-bg);
+            border-radius: 24px;
+            padding: 22px;
+            margin-bottom: 20px;
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-            display: flex;
-            gap: 12px;
-            align-items: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .card-header { 
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            border-bottom: 1px solid rgba(197, 155, 39, 0.15); padding-bottom: 12px;
+        }
+        .card-header i { color: var(--accent-gold); font-size: 1.3rem; }
+        .card-header span { font-weight: 600; font-size: 17px; color: var(--accent-gold); }
+
+        .alert-box {
+            background: rgba(197, 155, 39, 0.07);
+            border: 1px dashed var(--accent-gold);
+            padding: 14px; border-radius: 15px; margin-bottom: 18px; font-size: 12px;
+            line-height: 1.6;
         }
 
-        .menu-card.selected {
-            border-color: var(--accent-color);
-            background: #1b3325;
+        .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 12px; color: var(--accent-gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        input, select {
+            width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
+            padding: 14px 16px; border-radius: 14px; color: #fff; font-size: 15px; outline: none; transition: 0.3s;
         }
+        input:focus { border-color: var(--accent-gold); background: #0e1a14; }
 
-        /* ช่องรูปภาพเมนูจำลอง (รออัพเดทรูปจริง) */
-        .menu-img-placeholder {
-            width: 75px;
-            height: 75px;
-            background: #0d1811;
-            border: 1px dashed var(--card-border);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-sub);
-            font-size: 9px;
-            text-align: center;
-            flex-shrink: 0;
-            padding: 4px;
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+        /* --- Menu List --- */
+        .category-title { 
+            font-size: 1.3rem; color: var(--accent-gold); margin: 35px 0 18px;
+            display: flex; align-items: center; gap: 12px; font-weight: 700;
         }
+        .category-title::after { content: ""; flex: 1; height: 1px; background: rgba(197, 155, 39, 0.2); }
 
-        .menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
+        .menu-item {
+            background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 14px;
+            display: flex; gap: 16px; align-items: center; border: 1px solid transparent; transition: 0.3s;
         }
+        .menu-item.selected { border-color: var(--accent-gold); background: #1b3325; }
 
-        .menu-info {
-            flex: 1;
-            padding-right: 8px;
-        }
-
-        .menu-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .menu-en {
-            font-size: 11px;
-            color: var(--text-sub);
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .menu-price {
-            font-size: 14px;
-            color: var(--accent-color);
-            font-weight: 700;
-        }
-
-        .qty-control {
-            display: flex;
-            align-items: center;
-            background: #0f1d15;
-            border-radius: 8px;
+        .img-box {
+            width: 85px; height: 85px; background: var(--input-bg); border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; color: #405d4b; text-align: center; flex-shrink: 0;
             border: 1px solid var(--card-border);
-            overflow: hidden;
-            flex-shrink: 0;
         }
 
-        .btn-qty {
-            width: 34px;
-            height: 34px;
-            background: #192e22;
-            color: #fff;
-            border: none;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        .menu-details { flex: 1; }
+        .menu-name { font-weight: 600; font-size: 15px; color: #fff; display: block; line-height: 1.3; }
+        .menu-en { font-size: 11px; color: var(--text-dim); line-height: 1.2; display: block; margin-top: 4px; }
+        .menu-price { color: var(--accent-gold); font-weight: 700; margin-top: 6px; display: block; font-size: 14px; }
+
+        .qty-controls { display: flex; align-items: center; background: var(--input-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); }
+        .btn-q { width: 34px; height: 34px; border: none; background: transparent; color: #fff; font-weight: bold; cursor: pointer; font-size: 18px; }
+        .btn-q:active { background: var(--accent-gold); color: #000; }
+        .qty-val { width: 32px; text-align: center; font-size: 15px; font-weight: 700; color: #fff; }
+
+        .note-input {
+            width: 100%; background: #070d09; border: 1px solid #1a2f23; border-radius: 10px;
+            padding: 10px 14px; color: #e5a93b; font-size: 12px; margin-top: 12px; display: none; outline: none;
         }
 
-        .btn-qty:active {
-            background: var(--accent-color);
-        }
-
-        .qty-val {
-            width: 34px;
-            text-align: center;
-            font-size: 15px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .item-note-box {
-            display: none;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--card-border);
-        }
-
-        .item-note-box input {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--card-border);
-            background: #0a140f;
-            color: #f7d0a1;
-            font-size: 12px;
-            outline: none;
-        }
-
-        .item-note-box input::placeholder {
-            color: #555;
-        }
-
+        /* --- Footer Bottom Bar --- */
         .bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #0f1d15;
-            border-top: 1px solid var(--card-border);
-            padding: 12px 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(12, 24, 17, 0.92); backdrop-filter: blur(20px);
+            padding: 20px 25px; border-top: 1px solid rgba(197, 155, 39, 0.25);
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
         }
+        .total-info h4 { margin: 0; font-size: 11px; color: var(--text-dim); font-weight: 400; text-transform: uppercase; }
+        .total-info p { margin: 0; font-size: 24px; font-weight: 800; color: var(--accent-gold); line-height: 1; }
 
-        .total-box {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .total-label {
-            font-size: 12px;
-            color: var(--text-sub);
-        }
-
-        .total-amount {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--accent-color);
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--accent-color) 0%, #b0871d 100%);
-            color: #0c1811;
-            border: none;
-            padding: 12px 26px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 800;
+        .btn-order {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #a07d1a 100%);
+            color: #0c1811; border: none; padding: 14px 32px; border-radius: 14px;
+            font-weight: 700; font-size: 16px; box-shadow: 0 8px 20px rgba(197,155,39,0.35);
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(197, 155, 39, 0.4);
         }
 
-        .btn-submit:active {
-            transform: scale(0.98);
+        /* --- Digital Receipt Modal --- */
+        #summaryModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 1000; display: none;
+            padding: 30px 20px; overflow-y: auto;
+        }
+        .receipt {
+            background: #fff; color: #222; border-radius: 4px; padding: 35px 25px;
+            max-width: 420px; margin: 0 auto; position: relative;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .receipt::before, .receipt::after {
+            content: ""; position: absolute; left: 0; width: 100%; height: 12px;
+            background-size: 16px 12px;
+        }
+        .receipt::before {
+            top: -12px;
+            background-image: radial-gradient(circle, #fff 8px, transparent 0);
+            background-position: -8px 0;
+        }
+        .receipt::after {
+            bottom: -12px;
+            background-image: radial-gradient(circle, #fff 8px, transparent 0);
+            background-position: -8px 0;
+            transform: rotate(180deg);
+        }
+        .receipt-header { text-align: center; border-bottom: 2px dashed #ddd; padding-bottom: 20px; margin-bottom: 20px; }
+        .receipt-title { font-family: 'Playfair Display', serif; font-size: 26px; color: #0c1811; font-weight: 700; }
+        .receipt-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; line-height: 1.4; }
+        .receipt-total { border-top: 2px solid #333; margin-top: 20px; padding-top: 15px; font-weight: bold; font-size: 20px; display: flex; justify-content: space-between; }
+        
+        .btn-confirm {
+            width: 100%; background: #06C755; color: #fff; border: none; padding: 18px;
+            border-radius: 14px; margin-top: 30px; font-weight: 700; font-family: 'Prompt'; font-size: 16px;
+        }
+        .btn-cancel {
+            width: 100%; background: transparent; color: #888; border: 1px solid #ddd; padding: 12px;
+            border-radius: 14px; margin-top: 12px; font-size: 13px; font-family: 'Prompt';
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .premium-header h1 { font-size: 2.2rem; }
+            .section-card { padding: 18px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1><span>NER</span> แจ่วฮ้อน</h1>
-        <p>Pre-Order & Table Reservation</p>
-        <div class="store-info-bar">
-            <a href="https://lin.ee/Oy7FTKX" target="_blank" class="info-pill">💬 LINE OA</a>
-            <a href="https://maps.app.goo.gl/3guLLbPHzDHTCiDy9?g_st=ic" target="_blank" class="info-pill">📍 แผนที่ร้าน</a>
-            <a href="tel:0988799171" class="info-pill">📞 098-879-9171</a>
+    <header class="premium-header">
+        <h1><span>NER</span> JAEW HON</h1>
+        <p>PREMIUM ISAN SOUL</p>
+        <div class="info-pills">
+            <a href="https://lin.ee/Oy7FTKX" target="_blank" class="pill"><i class="fa-brands fa-line"></i> LINE OA</a>
+            <a href="https://maps.app.goo.gl/3guLLbPHzDHTCiDy9?g_st=ic" target="_blank" class="pill"><i class="fa-solid fa-location-dot"></i> MAPS</a>
+            <a href="tel:0988799171" class="pill"><i class="fa-solid fa-phone"></i> 098-879-9171</a>
         </div>
-    </div>
+    </header>
 
     <div class="container">
-        <!-- 1. ข้อมูลการจอง -->
-        <div class="card">
-            <div class="card-title">
-                📌 ข้อมูลการสั่งจอง <span class="en-sub">/ Booking Details</span>
+        <div class="section-card">
+            <div class="card-header"><i class="fa-solid fa-calendar-check"></i> <span>RESERVATION | ข้อมูลการจอง</span></div>
+            
+            <div class="alert-box" id="holidayBox">
+                <i class="fa-solid fa-calendar-day" style="color:var(--accent-gold); margin-right:5px;"></i>
+                <span id="holidayNotice">กำลังคำนวณวันหยุด...</span><br>
+                <small style="opacity: 0.7;">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามได้ที่ IG: <a href="https://instagram.com/ner.bkk" target="_blank" style="color:var(--accent-gold)">ner.bkk</a></small>
             </div>
 
-            <!-- แจ้งวันหยุดจันทร์เว้นจันทร์ (Dynamic) -->
-            <div class="holiday-banner" id="holidayNotice">
-                🗓️ <b>ประกาศวันหยุดร้าน (จันทร์เว้นจันทร์):</b> กำลังโหลด... | ตรวจสอบตารางอัปเดตได้ที่ IG: <a href="https://instagram.com/ner.bkk" target="_blank">@ner.bkk</a>
+            <div class="alert-box" style="background: rgba(217, 56, 30, 0.05); border-color: var(--accent-red);">
+                <i class="fa-solid fa-circle-exclamation" style="color:var(--accent-red); margin-right:5px;"></i>
+                <b style="color:var(--text-white)">นโยบายเวลา:</b><br>
+                - ไม่รับจองหลัง 18:00 น.<br>
+                - มาเลทเกิน 15 นาที ขออนุญาตปล่อยโต๊ะครับ
             </div>
 
-            <div class="notice-box">
-                ⚠️ <b>เงื่อนไขเวลาและนโยบายร้าน / Policy:</b>
-                <ul style="margin-left: 18px; margin-top: 4px; font-size: 11px;">
-                    <li><b>จันทร์ - ศุกร์:</b> เปิด 11.30-14.00 (Last Q 13.00 / Last O 13.30) และ 16.30-21.00 (Last Q 20.15 / Last O 20.30)</li>
-                    <li><b>เสาร์ - อาทิตย์:</b> เปิด 12.00-21.00 (Last Q 20.15 / Last O 20.30)</li>
-                    <li>ร้านไม่รับจองหลัง 18:00 น. และหากมาเลทเกิน <b>15 นาที</b> ขออนุญาตปล่อยโต๊ะ</li>
-                </ul>
+            <div class="input-group">
+                <label>ชื่อผู้จอง (Customer Name)</label>
+                <input type="text" id="name" placeholder="ระบุชื่อของคุณ">
             </div>
 
-            <div class="form-group">
-                <label>ชื่อผู้จอง <span class="en">/ Name</span> *</label>
-                <input type="text" id="custName" placeholder="ระบุชื่อของคุณ / Your name">
-            </div>
-
-            <div class="form-row form-group">
-                <div>
-                    <label>เบอร์โทรศัพท์ <span class="en">/ Phone</span> *</label>
-                    <input type="tel" id="custPhone" placeholder="08X-XXX-XXXX">
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>เบอร์โทรศัพท์</label>
+                    <input type="tel" id="phone" placeholder="08x-xxx-xxxx">
                 </div>
-                <div>
-                    <label>จำนวนลูกค้า <span class="en">/ Guests</span> *</label>
-                    <select id="custGuests">
-                        <option value="1 ท่าน / 1 Person">1 ท่าน / 1 Person</option>
-                        <option value="2 ท่าน / 2 People" selected>2 ท่าน / 2 People</option>
-                        <option value="3 ท่าน / 3 People">3 ท่าน / 3 People</option>
-                        <option value="4 ท่าน / 4 People">4 ท่าน / 4 People</option>
-                        <option value="5 ท่าน / 5 People">5 ท่าน / 5 People</option>
-                        <option value="6 ท่าน / 6 People">6 ท่าน / 6 People</option>
-                        <option value="7-8 ท่าน / 7-8 People">7-8 ท่าน / 7-8 People</option>
-                        <option value="9+ ท่าน / 9+ People">9+ ท่าน / 9+ People</option>
+                <div class="input-group">
+                    <label>จำนวนท่าน</label>
+                    <select id="guests">
+                        <option value="1">1 ท่าน</option>
+                        <option value="2" selected>2 ท่าน</option>
+                        <option value="3">3 ท่าน</option>
+                        <option value="4">4 ท่าน</option>
+                        <option value="5">5 ท่าน</option>
+                        <option value="6">6 ท่าน</option>
+                        <option value="7+">7 ท่านขึ้นไป</option>
                     </select>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>วันที่ทาน <span class="en">/ Date</span></label>
-                <input type="date" id="custDate">
+            <div class="input-group">
+                <label>วันที่ทาน (Date)</label>
+                <input type="date" id="date">
             </div>
 
-            <div class="form-group">
-                <label>เวลาที่เข้าทาน <span class="en">/ Arrival Time (AM/PM)</span></label>
-                <div class="time-picker-group">
-                    <select id="timeHour">
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04" selected>04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-                    <select id="timeMinute"></select>
-                    <select id="timeAmpm">
+            <div class="input-group">
+                <label>เวลาที่เข้าทาน (Arrival Time)</label>
+                <div class="time-row">
+                    <select id="hour"></select>
+                    <select id="minute"></select>
+                    <select id="ampm">
                         <option value="AM">AM</option>
                         <option value="PM" selected>PM</option>
                     </select>
@@ -465,331 +260,253 @@
             </div>
         </div>
 
-        <!-- 2. รายการอาหาร -->
         <div id="menuContainer"></div>
     </div>
 
-    <!-- แถบสรุปยอดด้านล่าง -->
     <div class="bottom-bar">
-        <div class="total-box">
-            <span class="total-label">ราคารวม / Total (<span id="totalItemsCount">0</span>)</span>
-            <span class="total-amount"><span id="totalPrice">0</span> ฿</span>
+        <div class="total-info">
+            <h4>Estimated Total</h4>
+            <p><span id="totalPrice">0</span> ฿</p>
         </div>
-        <button class="btn-submit" onclick="submitOrder()">ส่งออเดอร์ / Submit</button>
+        <button class="btn-order" onclick="openSummary()">สรุปรายการสั่ง</button>
+    </div>
+
+    <div id="summaryModal">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="receipt-title">NER JAEW HON</div>
+                <div style="font-size: 11px; color: #666; margin-top: 8px; letter-spacing: 1px;">PRE-ORDER RECEIPT</div>
+            </div>
+            
+            <div id="receiptMeta" style="font-size: 12px; margin-bottom: 20px; line-height: 1.8; color: #444;"></div>
+
+            <div id="receiptItems" style="border-top: 1px dashed #ddd; padding-top: 15px;"></div>
+
+            <div class="receipt-total">
+                <span>TOTAL</span>
+                <span id="receiptTotalAmount">0 ฿</span>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; font-size: 11px; color: #888; line-height: 1.5;">
+                * ทางร้านไม่มีการเก็บมัดจำจอง<br>
+                * กรุณามาถึงก่อนเวลา 15 นาที<br>
+                THANK YOU FOR YOUR ORDER
+            </div>
+
+            <button class="btn-confirm" onclick="submitFinalOrder()">
+                <i class="fa-brands fa-line"></i> ยืนยันและส่งเข้า LINE
+            </button>
+            <button class="btn-cancel" onclick="closeSummary()">แก้ไขข้อมูล</button>
+        </div>
     </div>
 
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // คำนวณวันหยุดจันทร์เว้นจันทร์ ล่วงหน้า 2 เดือน (อ้างอิงรอบหยุด 20/07/2026)
-        function calculateHolidaySchedule() {
-            const lastOffMonday = new Date(2026, 6, 20); // 20 July 2026
-            const today = new Date();
-            let checkDate = new Date(lastOffMonday);
-            checkDate.setDate(checkDate.getDate() + 14);
-
-            const twoMonthsLater = new Date();
-            twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
-
-            let upcomingHolidays = [];
-            while (checkDate <= twoMonthsLater) {
-                if (checkDate >= today) {
-                    const dd = String(checkDate.getDate()).padStart(2, '0');
-                    const mm = String(checkDate.getMonth() + 1).padStart(2, '0');
-                    const yyyy = checkDate.getFullYear();
-                    upcomingHolidays.push(`${dd}/${mm}/${yyyy}`);
-                }
-                checkDate.setDate(checkDate.getDate() + 14);
-            }
-
-            const noticeEl = document.getElementById('holidayNotice');
-            if (upcomingHolidays.length > 0) {
-                noticeEl.innerHTML = `🗓️ <b>วันหยุดร้าน (จันทร์เว้นจันทร์) รอบถัดไป:</b> <span style="color:var(--accent-color); font-weight:bold;">${upcomingHolidays.join(', ')}</span> | อัปเดตล่าสุด IG: <a href="https://instagram.com/ner.bkk" target="_blank">@ner.bkk</a>`;
-            } else {
-                noticeEl.innerHTML = `🗓️ ตรวจสอบวันหยุดร้านได้ที่ IG: <a href="https://instagram.com/ner.bkk" target="_blank">@ner.bkk</a>`;
-            }
-        }
-
-        function initMinutes() {
-            const selectMin = document.getElementById('timeMinute');
-            let options = '';
-            for (let i = 0; i < 60; i++) {
-                const val = i < 10 ? '0' + i : '' + i;
-                options += `<option value="${val}">${val}</option>`;
-            }
-            selectMin.innerHTML = options;
-        }
-
+        // --- FULL MENU DATA FROM EXCEL ---
         const menuData = [
-            // แจ่วฮ้อนชุดจุ่ม
-            {"id": "item_0", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมูทะเล", "en": "SHABU PORK & SEA FOOD SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Fresh Shrimp, Pangasius Dory Fillet, Fresh Squid, Egg, Glass Noodles, Mixed Vegetables)", "price": 429},
-            {"id": "item_1", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มเนื้อ", "en": "SHABU BEEF SET (Sliced Chuck Roll Beef, Sliced Ribeye Beef (AUS), Sliced Brisket Flap (AUS), Egg, Glass Noodles, Mixed Vegetables)", "price": 339},
-            {"id": "item_2", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมู", "en": "SHABU PORK SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Egg, Glass Noodles, Mixed Vegetables)", "price": 329},
-            {"id": "item_3", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มเดี่ยวหมู", "en": "SHABU SINGLE PORKSET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Egg, Glass Noodles, Mixed Vegetables)", "price": 189},
-            
-            // แจ่วฮ้อนพร้อมทาน
-            {"id": "item_4", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว ต้มพร้อมทาน (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT NORMAL SET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Glass Noodles, Mixed Vegetables) - Served 11.00 a.m. - 6.00 p.m. only", "price": 119},
-            {"id": "item_5", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว หมูจุกจุก (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT EXTRA PORK SET (More pork from the Single Set) - Served 11.00 a.m. - 6.00 p.m. only", "price": 159},
-            
-            // เนื้อสัตว์
-            {"id": "item_6", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูล้วน (ไม่มีเครื่องใน)", "en": "Pork Lover (No Offal)", "price": 199},
-            {"id": "item_7", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูหมัก NER", "en": "Marinated Pork", "price": 49},
-            {"id": "item_8", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสามชั้นสไลซ์", "en": "Sliced Pork Belly", "price": 59},
-            {"id": "item_9", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันคอสไลซ์", "en": "Sliced Pork Neck", "price": 59},
-            {"id": "item_10", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันนอกสไลซ์", "en": "Sliced Pork Sirloin", "price": 49},
-            {"id": "item_11", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ตับหมู", "en": "Pork Liver", "price": 39},
-            {"id": "item_12", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เซ่งจี๊", "en": "Pork Kidney", "price": 39},
-            {"id": "item_13", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อรวม", "en": "Beef Lover", "price": 239},
-            {"id": "item_14", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อใบพายสไลซ์", "en": "Sliced Chuck Roll Beef", "price": 89},
-            {"id": "item_15", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อริบอายสไลซ์ (AUS)", "en": "Sliced Ribeye Beef (AUS)", "price": 89},
-            {"id": "item_16", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อเสือร้องไห้สไลซ์ (AUS)", "en": "Sliced Brisket Flap (AUS)", "price": 89},
-            {"id": "item_17", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาดอลลี่", "en": "Dory Fish", "price": 59},
-            {"id": "item_18", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "กุ้ง", "en": "Shrimp", "price": 69},
-            {"id": "item_19", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาหมึก", "en": "Squid", "price": 69},
-            
-            // ผัก & เส้น
-            {"id": "item_20", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ชุดผักรวม", "en": "Vegetable Combo", "price": 69},
-            {"id": "item_21", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "กะหล่ำปลี", "en": "Cabbage", "price": 29},
-            {"id": "item_22", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ผักบุ้ง", "en": "Morning Glory", "price": 19},
-            {"id": "item_23", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ผักชีฝรั่ง", "en": "Culantro", "price": 19},
-            {"id": "item_24", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "โหระพา", "en": "Sweet Basil", "price": 29},
-            {"id": "item_25", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "ใบชะพลู", "en": "Wild Betel Leaves", "price": 29},
-            {"id": "item_26", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "วุ้นเส้น", "en": "Glass Noodles", "price": 29},
-            {"id": "item_27", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "มาม่า", "en": "Instant Noodles", "price": 29},
-            {"id": "item_28", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "บะหมี่หยก (สด)", "en": "Fresh Jade Noodles", "price": 29},
-            {"id": "item_29", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "เส้นอุด้ง", "en": "Udon Noodles", "price": 39},
-            
-            // ทานเล่น
-            {"id": "item_30", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไข่ไก่สด", "en": "Fresh Egg", "price": 15},
-            {"id": "item_31", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ปลา", "en": "Fish Tofu", "price": 49},
-            {"id": "item_32", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ไข่", "en": "Egg Tofu", "price": 29},
-            {"id": "item_33", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ชีส", "en": "Cheese Tofu", "price": 49},
-            {"id": "item_34", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้แท่ง", "en": "Bean Curd Stick", "price": 49},
-            {"id": "item_35", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้ทอด", "en": "Fried Tofu Skin Roll", "price": 39},
-            {"id": "item_36", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเปล่า", "en": "Rice", "price": 29},
-            {"id": "item_37", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไก่ป๊อป", "en": "Chicken Pops", "price": 79},
-            {"id": "item_38", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "แฮชบราวน์ เทเทอร์ ทอตส์", "en": "Hash Brown Tater Tots", "price": 69},
-            {"id": "item_39", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเกรียบปลา", "en": "Crispy Fish Crackers", "price": 49},
-            {"id": "item_40", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "คาลามารี", "en": "Calamari", "price": 119},
-            
-            // ของหวาน
-            {"id": "item_41", "category": "เมนูของหวาน / DESSERT", "name": "ซาโมซ่ากล้วย", "en": "Banana Samosa", "price": 79},
-            {"id": "item_42", "category": "เมนูของหวาน / DESSERT", "name": "สละลอยแก้ว", "en": "Chilled Sala Dessert", "price": 59},
-            {"id": "item_43", "category": "เมนูของหวาน / DESSERT", "name": "ลูกตาลลอยแก้ว", "en": "Chilled Toddy Palm Dessert", "price": 59},
-            {"id": "item_44", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ช็อคโกแลต", "en": "Mochi Ice Cream - Chocolate", "price": 39},
-            {"id": "item_45", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - วานิลลา", "en": "Mochi Ice Cream - Vanilla", "price": 39},
-            {"id": "item_46", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - คุกกี้แอนด์ครีม", "en": "Mochi Ice Cream - Cookies & Cream", "price": 39},
-            {"id": "item_47", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มัทฉะ", "en": "Mochi Ice Cream - Matcha", "price": 39},
-            {"id": "item_48", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มะนาว", "en": "Mochi Ice Cream - Lime", "price": 39},
-            {"id": "item_49", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ชาไทย", "en": "Mochi Ice Cream - Thai Tea", "price": 39},
-            
-            // เครื่องดื่ม
-            {"id": "item_50", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำเปล่า", "en": "Drinking Water", "price": 15},
-            {"id": "item_51", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โซดา", "en": "Soda Water", "price": 15},
-            {"id": "item_52", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก original", "en": "Coke Original", "price": 25},
-            {"id": "item_53", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก zero", "en": "Coke Zero", "price": 25},
-            {"id": "item_54", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ original", "en": "Pepsi Original", "price": 25},
-            {"id": "item_55", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ max", "en": "Pepsi Max", "price": 25},
-            {"id": "item_56", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "สิงค์โลม่อนโซดา", "en": "Singha Lemon Soda", "price": 25},
-            {"id": "item_57", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ จิงเจอร์เอล", "en": "Schweppes Ginger Ale", "price": 25},
-            {"id": "item_58", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ มะนาว", "en": "Schweppes Manao Soda", "price": 25},
-            {"id": "item_59", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำแดง", "en": "Fanta Strawberry", "price": 25},
-            {"id": "item_60", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำเขียว", "en": "Fanta Fruit Punch", "price": 25},
-            {"id": "item_61", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำส้ม", "en": "Fanta Orange", "price": 25},
-            {"id": "item_62", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โค้ก original ขวด 1.25 ลิตร", "en": "Coke Original 1.25L Bottle", "price": 40},
-            {"id": "item_63", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", "en": "Bucket of Ice (Refill max 4 guests)", "price": 25},
-            {"id": "item_64", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งแก้ว", "en": "Glass of Ice", "price": 2}
+            {
+                cat: "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET",
+                items: [
+                    { id: 's1', name: "ชุดจุ่มหมูทะเล", en: "Pork & Sea Food Set", price: 429 },
+                    { id: 's2', name: "ชุดจุ่มเนื้อ", en: "Beef Shabu Set", price: 339 },
+                    { id: 's3', name: "ชุดจุ่มหมู", en: "Pork Shabu Set", price: 329 },
+                    { id: 's4', name: "ชุดจุ่มเดี่ยว", en: "Single Set", price: 189 },
+                    { id: 's5', name: "อิ่มเดี่ยว ต้มพร้อมทาน", en: "Ready to Eat (11.00-18.00)", price: 119 },
+                    { id: 's6', name: "อิ่มเดี่ยว หมูจุกๆ", en: "Extra Pork Set (11.00-18.00)", price: 159 }
+                ]
+            },
+            {
+                cat: "เนื้อสัตว์เพิ่มเติม / MEAT",
+                items: [
+                    { id: 'm1', name: "หมูล้วน (ไม่มีเครื่องใน)", en: "Pork Lover (No Offal)", price: 199 },
+                    { id: 'm2', name: "หมูหมัก NER", en: "Marinated Pork", price: 49 },
+                    { id: 'm3', name: "หมูสามชั้นสไลซ์", en: "Sliced Pork Belly", price: 59 },
+                    { id: 'm4', name: "หมูสันคอสไลซ์", en: "Sliced Pork Neck", price: 59 },
+                    { id: 'm5', name: "หมูสันนอกสไลซ์", en: "Sliced Pork Sirloin", price: 49 },
+                    { id: 'm6', name: "เนื้อรวม", en: "Beef Lover Platter", price: 239 },
+                    { id: 'm7', name: "เนื้อใบพายสไลซ์", en: "Sliced Chuck Roll Beef", price: 89 },
+                    { id: 'm8', name: "เนื้อริบอายสไลซ์ (AUS)", en: "Sliced Ribeye Beef", price: 89 },
+                    { id: 'm9', name: "เนื้อเสือร้องไห้สไลซ์ (AUS)", en: "Sliced Brisket Flap", price: 89 },
+                    { id: 'm10', name: "กุ้ง", en: "Fresh Prawns", price: 69 },
+                    { id: 'm11', name: "ปลาหมึก", en: "Squid", price: 69 }
+                ]
+            },
+            {
+                cat: "ของหวาน / DESSERT",
+                items: [
+                    { id: 'd1', name: "ซาโมซ่ากล้วย", en: "Banana Samosa", price: 79 },
+                    { id: 'd2', name: "ลูกตาลลอยแก้ว", en: "Toddy Palm in Syrup", price: 59 },
+                    { id: 'mj1', name: "โมจิไอศครีม - ช็อคโกแลต", en: "Mochi Ice Cream - Chocolate", price: 39 },
+                    { id: 'mj2', name: "โมจิไอศครีม - ชาไทย", en: "Mochi Ice Cream - Thai Tea", price: 39 },
+                    { id: 'mj3', name: "โมจิไอศครีม - มัทฉะ", en: "Mochi Ice Cream - Matcha", price: 39 }
+                ]
+            },
+            {
+                cat: "เครื่องดื่ม / BEVERAGE",
+                items: [
+                    { id: 'dr1', name: "น้ำโค้ก Original", en: "Coke Original", price: 25 },
+                    { id: 'dr2', name: "น้ำโค้ก Zero", en: "Coke Zero", price: 25 },
+                    { id: 'dr3', name: "น้ำแป๊ปซี่ Original", en: "Pepsi Original", price: 25 },
+                    { id: 'dr4', name: "สิงห์เลมอนโซดา", en: "Singha Lemon Soda", price: 25 },
+                    { id: 'dr5', name: "น้ำแข็งถัง (รีฟิล)", en: "Ice Bucket (Refill)", price: 25 }
+                ]
+            }
         ];
 
         const orderMap = {};
 
-        async function initLiff() {
-            try {
-                await liff.init({ liffId: LIFF_ID });
-                if (!liff.isInClient() && !liff.isLoggedIn()) {
-                    liff.login();
-                }
-            } catch (err) {
-                console.error("LIFF Init Error:", err);
-            }
+        // --- INITIALIZATION ---
+        function init() {
+            renderMenu();
+            initTimeSelectors();
+            calculateHolidays();
+            liff.init({ liffId: LIFF_ID }).catch(err => console.error(err));
+            document.getElementById('date').valueAsDate = new Date();
         }
 
-        function renderMenu() {
-            const container = document.getElementById('menuContainer');
-            const categories = {};
-            
-            menuData.forEach(item => {
-                if (!categories[item.category]) {
-                    categories[item.category] = [];
-                }
-                categories[item.category].push(item);
-            });
+        // --- CALC ALTERNATING MONDAYS ---
+        function calculateHolidays() {
+            const startDay = new Date(2026, 6, 20); // 20 July 2026
+            const today = new Date();
+            let holidays = [];
+            let check = new Date(startDay);
 
-            let html = '';
-            for (const [catName, items] of Object.entries(categories)) {
-                html += `<div class="category-title">${catName}</div>`;
-                items.forEach(item => {
+            for(let i=0; i<15; i++) {
+                if (check >= today) {
+                    holidays.push(check.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit' }));
+                }
+                check.setDate(check.getDate() + 14);
+                if (holidays.length >= 4) break;
+            }
+            document.getElementById('holidayNotice').innerText = "ร้านหยุดจันทร์ที่: " + holidays.join(', ');
+        }
+
+        // --- TIME SELECTORS ---
+        function initTimeSelectors() {
+            const h = document.getElementById('hour');
+            const m = document.getElementById('minute');
+            for(let i=1; i<=12; i++) h.options.add(new Option(i.toString().padStart(2,'0'), i));
+            for(let i=0; i<60; i++) m.options.add(new Option(i.toString().padStart(2,'0'), i));
+            h.value = 5;
+        }
+
+        // --- MENU RENDERING ---
+        function renderMenu() {
+            let html = "";
+            menuData.forEach(category => {
+                html += `<div class="category-title">${category.cat}</div>`;
+                category.items.forEach(item => {
                     html += `
-                        <div class="menu-card" id="card_${item.id}">
-                            <div class="menu-img-placeholder">
-                                <span>Image<br>coming soon</span>
+                        <div class="menu-item" id="card-${item.id}">
+                            <div class="img-box">Image<br>coming soon</div>
+                            <div class="menu-details">
+                                <span class="menu-name">${item.name}</span>
+                                <span class="menu-en">${item.en}</span>
+                                <span class="menu-price">${item.price} ฿</span>
+                                <input type="text" class="note-input" id="note-${item.id}" placeholder="ระบุหมายเหตุ เช่น ไม่ใส่พริก...">
                             </div>
-                            <div class="menu-header">
-                                <div class="menu-info">
-                                    <div class="menu-name">${item.name}</div>
-                                    <div class="menu-en">${item.en}</div>
-                                    <div class="menu-price">${item.price.toLocaleString()} .-</div>
-                                </div>
-                                <div class="qty-control">
-                                    <button class="btn-qty" onclick="updateQty('${item.id}', -1)">-</button>
-                                    <span class="qty-val" id="qty_${item.id}">0</span>
-                                    <button class="btn-qty" onclick="updateQty('${item.id}', 1)">+</button>
-                                </div>
+                            <div class="qty-controls">
+                                <button class="btn-q" onclick="updateQty('${item.id}', -1, ${item.price})">-</button>
+                                <span class="qty-val" id="qty-${item.id}">0</span>
+                                <button class="btn-q" onclick="updateQty('${item.id}', 1, ${item.price})">+</button>
                             </div>
-                        </div>
-                        <div class="item-note-box" id="note_box_${item.id}">
-                            <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุ / Special Instructions (e.g., No spicy, No onions)">
                         </div>
                     `;
                 });
-            }
-            container.innerHTML = html;
+            });
+            document.getElementById('menuContainer').innerHTML = html;
         }
 
-        function updateQty(itemId, change) {
-            const current = orderMap[itemId] || 0;
-            const newQty = Math.max(0, current + change);
+        function updateQty(id, delta, price) {
+            const current = orderMap[id] ? orderMap[id].qty : 0;
+            const newVal = Math.max(0, current + delta);
             
-            const cardEl = document.getElementById(`card_${itemId}`);
-            const noteBoxEl = document.getElementById(`note_box_${itemId}`);
-
-            if (newQty === 0) {
-                delete orderMap[itemId];
-                noteBoxEl.style.display = 'none';
-                document.getElementById(`note_input_${itemId}`).value = '';
-                cardEl.classList.remove('selected');
+            const card = document.getElementById(`card-${id}`);
+            const note = document.getElementById(`note-${id}`);
+            
+            if (newVal > 0) {
+                const itemData = menuData.flatMap(c => c.items).find(i => i.id === id);
+                orderMap[id] = { qty: newVal, price: price, name: itemData.name };
+                card.classList.add('selected');
+                note.style.display = 'block';
             } else {
-                orderMap[itemId] = newQty;
-                noteBoxEl.style.display = 'block';
-                cardEl.classList.add('selected');
+                delete orderMap[id];
+                card.classList.remove('selected');
+                note.style.display = 'none';
             }
             
-            document.getElementById(`qty_${itemId}`).innerText = newQty;
+            document.getElementById(`qty-${id}`).innerText = newVal;
             calculateTotal();
         }
 
         function calculateTotal() {
             let total = 0;
-            let count = 0;
-            menuData.forEach(item => {
-                const qty = orderMap[item.id] || 0;
-                if (qty > 0) {
-                    total += item.price * qty;
-                    count += qty;
-                }
-            });
+            for (let key in orderMap) total += (orderMap[key].qty * orderMap[key].price);
             document.getElementById('totalPrice').innerText = total.toLocaleString();
-            document.getElementById('totalItemsCount').innerText = count;
         }
 
-        function fallbackCopyToClipboard(msg) {
-            navigator.clipboard.writeText(msg).then(() => {
-                alert('📋 คัดลอกรายละเอียดออเดอร์เรียบร้อยแล้ว!\n\nกรุณากด OK แล้วนำไป "วาง (Paste)" ส่งในแชท LINE OA ของร้านได้เลยครับ');
-                if (liff.isInClient()) {
-                    liff.closeWindow();
-                }
-            }).catch(err => {
-                alert('ออเดอร์ของคุณ:\n\n' + msg);
-            });
+        // --- SUMMARY & SUBMISSION ---
+        function openSummary() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const hr = parseInt(document.getElementById('hour').value);
+            const ampm = document.getElementById('ampm').value;
+
+            if(!name || !phone) return alert("กรุณาระบุชื่อและเบอร์โทรศัพท์");
+            if(ampm === "PM" && hr > 6 && hr !== 12) return alert("ขออภัยครับ ร้านไม่รับจองหลัง 18:00 น.");
+            if(Object.keys(orderMap).length === 0) return alert("กรุณาเลือกรายการอาหารอย่างน้อย 1 อย่าง");
+
+            let itemsHtml = "";
+            for (let id in orderMap) {
+                itemsHtml += `<div class="receipt-item"><span>${orderMap[id].name} x ${orderMap[id].qty}</span><span>${(orderMap[id].qty * orderMap[id].price).toLocaleString()}</span></div>`;
+            }
+
+            document.getElementById('receiptMeta').innerHTML = `
+                <b>NAME:</b> ${name}<br>
+                <b>TEL :</b> ${phone}<br>
+                <b>DATE:</b> ${document.getElementById('date').value}<br>
+                <b>TIME:</b> ${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${ampm}
+            `;
+            document.getElementById('receiptItems').innerHTML = itemsHtml;
+            document.getElementById('receiptTotalAmount').innerText = document.getElementById('totalPrice').innerText + " ฿";
+            document.getElementById('summaryModal').style.display = 'block';
         }
 
-        function submitOrder() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const guests = document.getElementById('custGuests').value;
-            const date = document.getElementById('custDate').value;
+        function closeSummary() { document.getElementById('summaryModal').style.display = 'none'; }
+
+        function submitFinalOrder() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const time = `${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${document.getElementById('ampm').value}`;
             
-            const hour = document.getElementById('timeHour').value;
-            const min = document.getElementById('timeMinute').value;
-            const ampm = document.getElementById('timeAmpm').value;
-            
-            const fullTimeStr = `${hour}:${min} ${ampm}`;
-
-            let hour24 = parseInt(hour, 10);
-            if (ampm === 'PM' && hour24 !== 12) hour24 += 12;
-            if (ampm === 'AM' && hour24 === 12) hour24 = 0;
-
-            if (hour24 > 18 || (hour24 === 18 && parseInt(min, 10) > 0)) {
-                alert('⚠️ ทางร้านรับจองคิวถึง 18:00 น. (6:00 PM) เท่านั้นครับ\nReservations are accepted until 6:00 PM only.');
-                return;
+            let itemText = "";
+            for (let id in orderMap) {
+                const noteVal = document.getElementById(`note-${id}`).value;
+                itemText += `• ${orderMap[id].name} x${orderMap[id].qty} [${(orderMap[id].qty * orderMap[id].price).toLocaleString()}.-]\n`;
+                if(noteVal) itemText += `  └ Note: ${noteVal}\n`;
             }
 
-            if (!name || !phone) {
-                alert('กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์ / Please enter your name and phone number');
-                return;
-            }
-
-            const selectedItems = [];
-            let grandTotal = 0;
-
-            menuData.forEach(item => {
-                const qty = orderMap[item.id] || 0;
-                if (qty > 0) {
-                    const itemTotal = item.price * qty;
-                    grandTotal += itemTotal;
-                    
-                    const noteInput = document.getElementById(`note_input_${item.id}`);
-                    const noteText = noteInput ? noteInput.value.trim() : '';
-
-                    let itemLine = `• ${item.name} x${qty} [${itemTotal.toLocaleString()}.-]`;
-                    if (noteText) {
-                        itemLine += `\n  └ 📝 Note: ${noteText}`;
-                    }
-                    selectedItems.push(itemLine);
-                }
-            });
-
-            if (selectedItems.length === 0) {
-                alert('กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการ / Please select at least 1 menu item');
-                return;
-            }
-
-            let msg = `🔥 พรีออเดอร์ - NER แจ่วฮ้อน\n`;
-            msg += `(Pre-order & Table Reservation)\n`;
-            msg += `------------------------\n`;
-            msg += `👤 ชื่อ / Name: ${name}\n`;
-            msg += `📞 เบอร์ / Phone: ${phone}\n`;
-            msg += `👥 จำนวน / Guests: ${guests}\n`;
-            if (date) msg += `📅 วันที่ / Date: ${date}\n`;
-            msg += `⏰ เวลาเข้าทาน / Time: ${fullTimeStr}\n`;
-            msg += `------------------------\n`;
-            msg += `📋 รายการอาหาร / Order Items:\n`;
-            msg += selectedItems.join('\n');
-            msg += `\n------------------------\n`;
-            msg += `💰 ยอดรวม / Total: ${grandTotal.toLocaleString()} THB`;
+            const finalMsg = `🔥 ออเดอร์ร้าน NER แจ่วฮ้อน\n------------------\n👤 คุณ: ${name}\n📞: ${phone}\n📅: ${document.getElementById('date').value}\n⏰: ${time}\n------------------\n📋 รายการอาหาร:\n${itemText}\n💰 รวม: ${document.getElementById('totalPrice').innerText} บาท\n------------------\n*ไม่รับจองหลัง 18.00 น.\n*เลทเกิน 15 นาทีขอปล่อยโต๊ะ`;
 
             if (liff.isLoggedIn()) {
-                liff.sendMessages([{
-                    type: 'text',
-                    text: msg
-                }]).then(() => {
-                    alert('ส่งออเดอร์เรียบร้อยแล้ว ขอบคุณครับ!\nOrder submitted successfully!');
+                liff.sendMessages([{ type: 'text', text: finalMsg }]).then(() => {
+                    alert("ส่งออเดอร์สำเร็จ!");
                     liff.closeWindow();
-                }).catch((err) => {
-                    console.error("LIFF Send Error:", err);
-                    fallbackCopyToClipboard(msg);
+                }).catch(err => {
+                    navigator.clipboard.writeText(finalMsg).then(() => {
+                        alert("ระบบขัดข้อง: คัดลอกออเดอร์ให้แล้ว กรุณาวางส่งใน LINE OA ร้านครับ");
+                        window.location.href = "https://lin.ee/Oy7FTKX";
+                    });
                 });
             } else {
-                fallbackCopyToClipboard(msg);
+                navigator.clipboard.writeText(finalMsg);
+                alert("คัดลอกออเดอร์แล้ว กำลังพาไปที่ LINE OA...");
+                window.location.href = "https://lin.ee/Oy7FTKX";
             }
         }
 
-        document.getElementById('custDate').valueAsDate = new Date();
-
-        calculateHolidaySchedule();
-        initMinutes();
-        renderMenu();
-        initLiff();
+        init();
     </script>
 </body>
 </html>
