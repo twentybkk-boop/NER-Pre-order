@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>พรีออเดอร์ - NER แจ่วฮ้อน</title>
+    <title>NER แจ่วฮ้อน - Pre-order & Reservation</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         :root {
@@ -14,6 +14,8 @@
             --text-main: #ffffff;
             --text-sub: #b0b0b0;
             --border-color: #333333;
+            --warning-bg: #2a1a08;
+            --warning-border: #ff9800;
         }
 
         * {
@@ -26,12 +28,12 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding-bottom: 110px;
+            padding-bottom: 120px;
         }
 
         .header {
             background: linear-gradient(135deg, #2c0b02 0%, #121212 100%);
-            padding: 24px 20px 16px;
+            padding: 24px 20px 18px;
             text-align: center;
             border-bottom: 2px solid var(--accent-color);
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
@@ -67,7 +69,7 @@
 
         .card-title {
             color: var(--accent-color);
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 14px;
             display: flex;
@@ -75,6 +77,25 @@
             gap: 8px;
             border-bottom: 1px solid #2a2a2a;
             padding-bottom: 8px;
+        }
+
+        .card-title .en-sub {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: normal;
+        }
+
+        .notice-box {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #ffe0b2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .form-group {
@@ -92,19 +113,24 @@
             margin-bottom: 6px;
         }
 
-        input[type="text"], input[type="tel"], input[type="time"], input[type="date"] {
+        label span.en {
+            font-size: 11px;
+            color: #888;
+        }
+
+        input[type="text"], input[type="tel"], input[type="date"], select {
             width: 100%;
             padding: 12px 14px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             background: #262626;
             color: #fff;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: var(--accent-color);
         }
 
@@ -114,9 +140,15 @@
             gap: 12px;
         }
 
+        .time-picker-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+        }
+
         .category-title {
             color: #ffffff;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             margin: 20px 0 12px 4px;
             display: flex;
@@ -257,7 +289,7 @@
             border: none;
             padding: 12px 24px;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: background 0.2s;
@@ -273,29 +305,74 @@
 
     <div class="header">
         <h1>🔥 NER แจ่วฮ้อน 🔥</h1>
-        <p>ระบบสั่งอาหาร & สั่งจองล่วงหน้า</p>
+        <p>สั่งอาหารล่วงหน้า & จองโต๊ะ | Pre-Order & Table Reservation</p>
     </div>
 
     <div class="container">
         <!-- 1. ข้อมูลการจอง -->
         <div class="card">
-            <div class="card-title">📌 ข้อมูลการสั่งจอง</div>
-            <div class="form-group">
-                <label>ชื่อผู้จอง *</label>
-                <input type="text" id="custName" placeholder="ระบุชื่อของคุณ">
+            <div class="card-title">
+                📌 ข้อมูลการสั่งจอง <span class="en-sub">/ Booking Details</span>
             </div>
-            <div class="form-group">
-                <label>เบอร์โทรศัพท์ *</label>
-                <input type="tel" id="custPhone" placeholder="08X-XXX-XXXX">
+
+            <!-- ข้อความแจ้งเตือนเวลาจอง -->
+            <div class="notice-box">
+                ⚠️ <span><b>หมายเหตุ / Note:</b> ร้านรับจองถึง 18:00 น. เท่านั้น<br><span style="font-size: 11px; opacity: 0.9;">Reservations accepted until 6:00 PM only.</span></span>
             </div>
+
+            <div class="form-group">
+                <label>ชื่อผู้จอง <span class="en">/ Name</span> *</label>
+                <input type="text" id="custName" placeholder="ระบุชื่อของคุณ / Your name">
+            </div>
+
             <div class="form-row form-group">
                 <div>
-                    <label>วันที่ทาน</label>
-                    <input type="date" id="custDate">
+                    <label>เบอร์โทรศัพท์ <span class="en">/ Phone</span> *</label>
+                    <input type="tel" id="custPhone" placeholder="08X-XXX-XXXX">
                 </div>
                 <div>
-                    <label>เวลาที่จะเข้าทาน</label>
-                    <input type="time" id="custTime">
+                    <label>จำนวนลูกค้า <span class="en">/ Guests</span> *</label>
+                    <select id="custGuests">
+                        <option value="1 ท่าน / 1 Person">1 ท่าน / 1 Person</option>
+                        <option value="2 ท่าน / 2 People" selected>2 ท่าน / 2 People</option>
+                        <option value="3 ท่าน / 3 People">3 ท่าน / 3 People</option>
+                        <option value="4 ท่าน / 4 People">4 ท่าน / 4 People</option>
+                        <option value="5 ท่าน / 5 People">5 ท่าน / 5 People</option>
+                        <option value="6 ท่าน / 6 People">6 ท่าน / 6 People</option>
+                        <option value="7-8 ท่าน / 7-8 People">7-8 ท่าน / 7-8 People</option>
+                        <option value="9+ ท่าน / 9+ People">9+ ท่าน / 9+ People</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>วันที่ทาน <span class="en">/ Date</span></label>
+                <input type="date" id="custDate">
+            </div>
+
+            <div class="form-group">
+                <label>เวลาที่เข้าทาน <span class="en">/ Arrival Time (AM/PM)</span></label>
+                <div class="time-picker-group">
+                    <select id="timeHour">
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04" selected>04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                    </select>
+                    <select id="timeMinute">
+                        <option value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                    <select id="timeAmpm">
+                        <option value="AM">AM</option>
+                        <option value="PM" selected>PM</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -307,10 +384,10 @@
     <!-- แถบสรุปยอดด้านล่าง -->
     <div class="bottom-bar">
         <div class="total-box">
-            <span class="total-label">ราคารวม (<span id="totalItemsCount">0</span> รายการ)</span>
+            <span class="total-label">ราคารวม / Total (<span id="totalItemsCount">0</span>)</span>
             <span class="total-amount"><span id="totalPrice">0</span> ฿</span>
         </div>
-        <button class="btn-submit" onclick="submitOrder()">ส่งออเดอร์</button>
+        <button class="btn-submit" onclick="submitOrder()">ส่งออเดอร์ / Submit</button>
     </div>
 
     <script>
@@ -319,71 +396,71 @@
 
         // ข้อมูลเมนูอาหารทั้งหมด
         const menuData = [
-            {"id": "item_0", "category": "เมนูแบบชุด", "name": "ชุดจุ่มหมูทะเล", "price": 429},
-            {"id": "item_1", "category": "เมนูแบบชุด", "name": "ชุดจุ่มเนื้อ", "price": 339},
-            {"id": "item_2", "category": "เมนูแบบชุด", "name": "ชุดจุ่มหมู", "price": 329},
-            {"id": "item_3", "category": "เมนูแบบชุด", "name": "ชุดจุ่มเดี่ยว", "price": 189},
-            {"id": "item_4", "category": "เมนูแบบชุด", "name": "อิ่มเดี่ยวต้มพร้อมทาน", "price": 119},
-            {"id": "item_5", "category": "เมนูแบบชุด", "name": "อิ่มเดี่ยวหมูจุกๆ", "price": 159},
-            {"id": "item_6", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "หมูล้วน (ไม่มีเครื่องใน)", "price": 199},
-            {"id": "item_7", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "หมูหมัก NER", "price": 49},
-            {"id": "item_8", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "หมูสามชั้นสไลซ์", "price": 59},
-            {"id": "item_9", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "หมูสันคอสไลซ์", "price": 59},
-            {"id": "item_10", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "หมูสันนอกสไลซ์", "price": 49},
-            {"id": "item_11", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "ตับหมู", "price": 39},
-            {"id": "item_12", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "เซ่งจี๊", "price": 39},
-            {"id": "item_13", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "เนื้อรวม", "price": 239},
-            {"id": "item_14", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "เนื้อใบพายสไลซ์", "price": 89},
-            {"id": "item_15", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "เนื้อริบอายสไลซ์", "price": 89},
-            {"id": "item_16", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "เนื้อเสือร้องไห้สไลซ์", "price": 89},
-            {"id": "item_17", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "ปลาดอลลี่", "price": 59},
-            {"id": "item_18", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "กุ้ง", "price": 69},
-            {"id": "item_19", "category": "เมนูเนื้อสัตว์เพิ่มเติม", "name": "ปลาหมึก", "price": 69},
-            {"id": "item_20", "category": "เมนูผักเพิ่มเติม", "name": "ชุดผักรวม", "price": 69},
-            {"id": "item_21", "category": "เมนูผักเพิ่มเติม", "name": "กะหล่ำปลี", "price": 29},
-            {"id": "item_22", "category": "เมนูผักเพิ่มเติม", "name": "ผักบุ้ง", "price": 19},
-            {"id": "item_23", "category": "เมนูผักเพิ่มเติม", "name": "ผักชีฝรั่ง", "price": 19},
-            {"id": "item_24", "category": "เมนูผักเพิ่มเติม", "name": "โหระพา", "price": 29},
-            {"id": "item_25", "category": "เมนูผักเพิ่มเติม", "name": "ใบชะพลู", "price": 29},
-            {"id": "item_26", "category": "เมนูเส้น", "name": "วุ้นเส้น", "price": 29},
-            {"id": "item_27", "category": "เมนูเส้น", "name": "มาม่า", "price": 29},
-            {"id": "item_28", "category": "เมนูเส้น", "name": "หมี่หยก (สด)", "price": 29},
-            {"id": "item_29", "category": "เมนูเส้น", "name": "เส้นอุด้ง", "price": 39},
-            {"id": "item_30", "category": "เมนูเพิ่มเติม", "name": "ไข่ไก่", "price": 15},
-            {"id": "item_31", "category": "เมนูเพิ่มเติม", "name": "เต้าหู้ปลา", "price": 49},
-            {"id": "item_32", "category": "เมนูเพิ่มเติม", "name": "เต้าหู้ไข่", "price": 29},
-            {"id": "item_33", "category": "เมนูเพิ่มเติม", "name": "เต้าหู้ชีส", "price": 49},
-            {"id": "item_34", "category": "เมนูเพิ่มเติม", "name": "ฟองเต้าหู้แท่ง", "price": 49},
-            {"id": "item_35", "category": "เมนูเพิ่มเติม", "name": "ฟองเต้าหู้ทอด", "price": 39},
-            {"id": "item_36", "category": "เมนูเพิ่มเติม", "name": "ข้าวเปล่า", "price": 29},
-            {"id": "item_37", "category": "เมนูของทานเล่น", "name": "ไก่ป๊อป", "price": 79},
-            {"id": "item_38", "category": "เมนูของทานเล่น", "name": "แฮชบราวน์ เทเทอร์ ทอตส์", "price": 69},
-            {"id": "item_39", "category": "เมนูของทานเล่น", "name": "ข้าวเกรียบปลา", "price": 49},
-            {"id": "item_40", "category": "เมนูของทานเล่น", "name": "คาลามารี", "price": 119},
-            {"id": "item_41", "category": "เมนูของหวาน", "name": "ซาโมซ่ากล้วย", "price": 79},
-            {"id": "item_42", "category": "เมนูของหวาน", "name": "สละลอยแก้ว", "price": 59},
-            {"id": "item_43", "category": "เมนูของหวาน", "name": "ลูกตาลลอยแก้ว", "price": 59},
-            {"id": "item_44", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - ช็อคโกแลต", "price": 39},
-            {"id": "item_45", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - วานิลลา", "price": 39},
-            {"id": "item_46", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - คุกกี้แอนด์ครีม", "price": 39},
-            {"id": "item_47", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - มัทฉะ", "price": 39},
-            {"id": "item_48", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - มะนาว", "price": 39},
-            {"id": "item_49", "category": "เมนูของหวาน", "name": "โมจิไอศครีม - ชาไทย", "price": 39},
-            {"id": "item_50", "category": "เมนูเครื่องดื่ม", "name": "น้ำเปล่า", "price": 15},
-            {"id": "item_51", "category": "เมนูเครื่องดื่ม", "name": "โซดา", "price": 15},
-            {"id": "item_52", "category": "เมนูเครื่องดื่ม", "name": "น้ำโค้ก original", "price": 25},
-            {"id": "item_53", "category": "เมนูเครื่องดื่ม", "name": "น้ำโค้ก zero", "price": 25},
-            {"id": "item_54", "category": "เมนูเครื่องดื่ม", "name": "น้ำแป๊ปซี่ original", "price": 25},
-            {"id": "item_55", "category": "เมนูเครื่องดื่ม", "name": "น้ำแป๊ปซี่ max", "price": 25},
-            {"id": "item_56", "category": "เมนูเครื่องดื่ม", "name": "สิงค์โลม่อนโซดา", "price": 25},
-            {"id": "item_57", "category": "เมนูเครื่องดื่ม", "name": "ชเวปส์ จิงเจอร์เอล", "price": 25},
-            {"id": "item_58", "category": "เมนูเครื่องดื่ม", "name": "ชเวปส์ มะนาว", "price": 25},
-            {"id": "item_59", "category": "เมนูเครื่องดื่ม", "name": "แฟนต้า น้ำแดง", "price": 25},
-            {"id": "item_60", "category": "เมนูเครื่องดื่ม", "name": "แฟนต้า น้ำเขียว", "price": 25},
-            {"id": "item_61", "category": "เมนูเครื่องดื่ม", "name": "แฟนต้า น้ำส้ม", "price": 25},
-            {"id": "item_62", "category": "เมนูเครื่องดื่ม", "name": "โค้ก original ขวด 1.25 ลิตร", "price": 40},
-            {"id": "item_63", "category": "เมนูเครื่องดื่ม", "name": "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ1 ออเดอร์)", "price": 25},
-            {"id": "item_64", "category": "เมนูเครื่องดื่ม", "name": "น้ำแข็งแก้ว", "price": 2}
+            {"id": "item_0", "category": "เมนูแบบชุด / Sets", "name": "ชุดจุ่มหมูทะเล", "price": 429},
+            {"id": "item_1", "category": "เมนูแบบชุด / Sets", "name": "ชุดจุ่มเนื้อ", "price": 339},
+            {"id": "item_2", "category": "เมนูแบบชุด / Sets", "name": "ชุดจุ่มหมู", "price": 329},
+            {"id": "item_3", "category": "เมนูแบบชุด / Sets", "name": "ชุดจุ่มเดี่ยว", "price": 189},
+            {"id": "item_4", "category": "เมนูแบบชุด / Sets", "name": "อิ่มเดี่ยวต้มพร้อมทาน", "price": 119},
+            {"id": "item_5", "category": "เมนูแบบชุด / Sets", "name": "อิ่มเดี่ยวหมูจุกๆ", "price": 159},
+            {"id": "item_6", "category": "เมนูเนื้อสัตว์ / Meat", "name": "หมูล้วน (ไม่มีเครื่องใน)", "price": 199},
+            {"id": "item_7", "category": "เมนูเนื้อสัตว์ / Meat", "name": "หมูหมัก NER", "price": 49},
+            {"id": "item_8", "category": "เมนูเนื้อสัตว์ / Meat", "name": "หมูสามชั้นสไลซ์", "price": 59},
+            {"id": "item_9", "category": "เมนูเนื้อสัตว์ / Meat", "name": "หมูสันคอสไลซ์", "price": 59},
+            {"id": "item_10", "category": "เมนูเนื้อสัตว์ / Meat", "name": "หมูสันนอกสไลซ์", "price": 49},
+            {"id": "item_11", "category": "เมนูเนื้อสัตว์ / Meat", "name": "ตับหมู", "price": 39},
+            {"id": "item_12", "category": "เมนูเนื้อสัตว์ / Meat", "name": "เซ่งจี๊", "price": 39},
+            {"id": "item_13", "category": "เมนูเนื้อสัตว์ / Meat", "name": "เนื้อรวม", "price": 239},
+            {"id": "item_14", "category": "เมนูเนื้อสัตว์ / Meat", "name": "เนื้อใบพายสไลซ์", "price": 89},
+            {"id": "item_15", "category": "เมนูเนื้อสัตว์ / Meat", "name": "เนื้อริบอายสไลซ์", "price": 89},
+            {"id": "item_16", "category": "เมนูเนื้อสัตว์ / Meat", "name": "เนื้อเสือร้องไห้สไลซ์", "price": 89},
+            {"id": "item_17", "category": "เมนูเนื้อสัตว์ / Meat", "name": "ปลาดอลลี่", "price": 59},
+            {"id": "item_18", "category": "เมนูเนื้อสัตว์ / Meat", "name": "กุ้ง", "price": 69},
+            {"id": "item_19", "category": "เมนูเนื้อสัตว์ / Meat", "name": "ปลาหมึก", "price": 69},
+            {"id": "item_20", "category": "เมนูผัก / Vegetables", "name": "ชุดผักรวม", "price": 69},
+            {"id": "item_21", "category": "เมนูผัก / Vegetables", "name": "กะหล่ำปลี", "price": 29},
+            {"id": "item_22", "category": "เมนูผัก / Vegetables", "name": "ผักบุ้ง", "price": 19},
+            {"id": "item_23", "category": "เมนูผัก / Vegetables", "name": "ผักชีฝรั่ง", "price": 19},
+            {"id": "item_24", "category": "เมนูผัก / Vegetables", "name": "โหระพา", "price": 29},
+            {"id": "item_25", "category": "เมนูผัก / Vegetables", "name": "ใบชะพลู", "price": 29},
+            {"id": "item_26", "category": "เมนูเส้น / Noodles", "name": "วุ้นเส้น", "price": 29},
+            {"id": "item_27", "category": "เมนูเส้น / Noodles", "name": "มาม่า", "price": 29},
+            {"id": "item_28", "category": "เมนูเส้น / Noodles", "name": "หมี่หยก (สด)", "price": 29},
+            {"id": "item_29", "category": "เมนูเส้น / Noodles", "name": "เส้นอุด้ง", "price": 39},
+            {"id": "item_30", "category": "เมนูเพิ่มเติม / Add-ons", "name": "ไข่ไก่", "price": 15},
+            {"id": "item_31", "category": "เมนูเพิ่มเติม / Add-ons", "name": "เต้าหู้ปลา", "price": 49},
+            {"id": "item_32", "category": "เมนูเพิ่มเติม / Add-ons", "name": "เต้าหู้ไข่", "price": 29},
+            {"id": "item_33", "category": "เมนูเพิ่มเติม / Add-ons", "name": "เต้าหู้ชีส", "price": 49},
+            {"id": "item_34", "category": "เมนูเพิ่มเติม / Add-ons", "name": "ฟองเต้าหู้แท่ง", "price": 49},
+            {"id": "item_35", "category": "เมนูเพิ่มเติม / Add-ons", "name": "ฟองเต้าหู้ทอด", "price": 39},
+            {"id": "item_36", "category": "เมนูเพิ่มเติม / Add-ons", "name": "ข้าวเปล่า", "price": 29},
+            {"id": "item_37", "category": "ของทานเล่น / Appetizers", "name": "ไก่ป๊อป", "price": 79},
+            {"id": "item_38", "category": "ของทานเล่น / Appetizers", "name": "แฮชบราวน์ เทเทอร์ ทอตส์", "price": 69},
+            {"id": "item_39", "category": "ของทานเล่น / Appetizers", "name": "ข้าวเกรียบปลา", "price": 49},
+            {"id": "item_40", "category": "ของทานเล่น / Appetizers", "name": "คาลามารี", "price": 119},
+            {"id": "item_41", "category": "ของหวาน / Desserts", "name": "ซาโมซ่ากล้วย", "price": 79},
+            {"id": "item_42", "category": "ของหวาน / Desserts", "name": "สละลอยแก้ว", "price": 59},
+            {"id": "item_43", "category": "ของหวาน / Desserts", "name": "ลูกตาลลอยแก้ว", "price": 59},
+            {"id": "item_44", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - ช็อคโกแลต", "price": 39},
+            {"id": "item_45", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - วานิลลา", "price": 39},
+            {"id": "item_46", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - คุกกี้แอนด์ครีม", "price": 39},
+            {"id": "item_47", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - มัทฉะ", "price": 39},
+            {"id": "item_48", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - มะนาว", "price": 39},
+            {"id": "item_49", "category": "ของหวาน / Desserts", "name": "โมจิไอศครีม - ชาไทย", "price": 39},
+            {"id": "item_50", "category": "เครื่องดื่ม / Beverages", "name": "น้ำเปล่า", "price": 15},
+            {"id": "item_51", "category": "เครื่องดื่ม / Beverages", "name": "โซดา", "price": 15},
+            {"id": "item_52", "category": "เครื่องดื่ม / Beverages", "name": "น้ำโค้ก original", "price": 25},
+            {"id": "item_53", "category": "เครื่องดื่ม / Beverages", "name": "น้ำโค้ก zero", "price": 25},
+            {"id": "item_54", "category": "เครื่องดื่ม / Beverages", "name": "น้ำแป๊ปซี่ original", "price": 25},
+            {"id": "item_55", "category": "เครื่องดื่ม / Beverages", "name": "น้ำแป๊ปซี่ max", "price": 25},
+            {"id": "item_56", "category": "เครื่องดื่ม / Beverages", "name": "สิงค์โลม่อนโซดา", "price": 25},
+            {"id": "item_57", "category": "เครื่องดื่ม / Beverages", "name": "ชเวปส์ จิงเจอร์เอล", "price": 25},
+            {"id": "item_58", "category": "เครื่องดื่ม / Beverages", "name": "ชเวปส์ มะนาว", "price": 25},
+            {"id": "item_59", "category": "เครื่องดื่ม / Beverages", "name": "แฟนต้า น้ำแดง", "price": 25},
+            {"id": "item_60", "category": "เครื่องดื่ม / Beverages", "name": "แฟนต้า น้ำเขียว", "price": 25},
+            {"id": "item_61", "category": "เครื่องดื่ม / Beverages", "name": "แฟนต้า น้ำส้ม", "price": 25},
+            {"id": "item_62", "category": "เครื่องดื่ม / Beverages", "name": "โค้ก original ขวด 1.25 ลิตร", "price": 40},
+            {"id": "item_63", "category": "เครื่องดื่ม / Beverages", "name": "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ1 ออเดอร์)", "price": 25},
+            {"id": "item_64", "category": "เครื่องดื่ม / Beverages", "name": "น้ำแข็งแก้ว", "price": 2}
         ];
 
         // เก็บจำนวนสั่งซื้อ
@@ -392,7 +469,6 @@
         async function initLiff() {
             try {
                 await liff.init({ liffId: LIFF_ID });
-                // ป้องกันการล็อกอินซ้ำถ้าเปิดในแอป LINE อยู่แล้ว
                 if (!liff.isInClient() && !liff.isLoggedIn()) {
                     liff.login();
                 }
@@ -430,7 +506,7 @@
                                 </div>
                             </div>
                             <div class="item-note-box" id="note_box_${item.id}">
-                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุระบุตัวเลือกเมนูนี้ (เช่น ไม่เอาเครื่องใน)">
+                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุ / Special Instructions (e.g. No organs)">
                             </div>
                         </div>
                     `;
@@ -475,11 +551,27 @@
         function submitOrder() {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
+            const guests = document.getElementById('custGuests').value;
             const date = document.getElementById('custDate').value;
-            const time = document.getElementById('custTime').value;
+            
+            const hour = document.getElementById('timeHour').value;
+            const min = document.getElementById('timeMinute').value;
+            const ampm = document.getElementById('timeAmpm').value;
+            
+            const fullTimeStr = `${hour}:${min} ${ampm}`;
+
+            // แปลงเวลาตรวจสอบเงื่อนไข 18:00 (6:00 PM)
+            let hour24 = parseInt(hour, 10);
+            if (ampm === 'PM' && hour24 !== 12) hour24 += 12;
+            if (ampm === 'AM' && hour24 === 12) hour24 = 0;
+
+            if (hour24 > 18 || (hour24 === 18 && parseInt(min, 10) > 0)) {
+                alert('⚠️ ทางร้านรับจองคิวถึง 18:00 น. (6:00 PM) เท่านั้นครับ\nReservations are accepted until 6:00 PM only.');
+                return;
+            }
 
             if (!name || !phone) {
-                alert('กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์ก่อนครับ');
+                alert('กรุณากรอกชื่อผู้จองและเบอร์โทรศัพท์ / Please enter your name and phone number');
                 return;
             }
 
@@ -497,34 +589,37 @@
 
                     let itemLine = `• ${item.name} x${qty} (${itemTotal.toLocaleString()}.-)`;
                     if (noteText) {
-                        itemLine += `\n  └ 📝 ${noteText}`;
+                        itemLine += `\n  └ 📝 Note: ${noteText}`;
                     }
                     selectedItems.push(itemLine);
                 }
             });
 
             if (selectedItems.length === 0) {
-                alert('กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ');
+                alert('กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการ / Please select at least 1 menu item');
                 return;
             }
 
-            let msg = `📌 พรีออเดอร์ - NER แจ่วฮ้อน\n`;
-            msg += `👤 คุณ: ${name}\n`;
-            msg += `📞 เบอร์: ${phone}\n`;
-            if (date) msg += `📅 วันที่: ${date}\n`;
-            if (time) msg += `⏰ เวลาเข้าทาน: ${time} น.\n`;
+            let msg = `🔥 พรีออเดอร์ - NER แจ่วฮ้อน\n`;
+            msg += `(Pre-order & Table Reservation)\n`;
             msg += `------------------------\n`;
-            msg += `📋 รายการอาหารที่สั่ง:\n`;
+            msg += `👤 ชื่อ / Name: ${name}\n`;
+            msg += `📞 เบอร์ / Phone: ${phone}\n`;
+            msg += `👥 จำนวน / Guests: ${guests}\n`;
+            if (date) msg += `📅 วันที่ / Date: ${date}\n`;
+            msg += `⏰ เวลาเข้าทาน / Time: ${fullTimeStr}\n`;
+            msg += `------------------------\n`;
+            msg += `📋 รายการอาหาร / Order Items:\n`;
             msg += selectedItems.join('\n');
             msg += `\n------------------------\n`;
-            msg += `💰 ยอดรวมทั้งหมด: ${grandTotal.toLocaleString()} บาท`;
+            msg += `💰 ยอดรวม / Total: ${grandTotal.toLocaleString()} THB`;
 
             if (liff.isLoggedIn()) {
                 liff.sendMessages([{
                     type: 'text',
                     text: msg
                 }]).then(() => {
-                    alert('ส่งออเดอร์เรียบร้อยแล้ว ขอบคุณครับ!');
+                    alert('ส่งออเดอร์เรียบร้อยแล้ว ขอบคุณครับ!\nOrder submitted successfully!');
                     liff.closeWindow();
                 }).catch((err) => {
                     alert('เกิดข้อผิดพลาดในการส่งข้อความ: ' + err.message);
