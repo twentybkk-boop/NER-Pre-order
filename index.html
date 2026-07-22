@@ -52,7 +52,7 @@
         <div class="max-w-xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-emerald-950 rounded-2xl flex items-center justify-center border border-gold/40 shadow-lg overflow-hidden p-1.5">
-                    <img src="NER-Logo design-FINAL OK-Mix_FINAL copy 10.png" alt="NER Logo" class="w-full h-full object-contain">
+                    <img src="ner-logo.png" alt="NER Logo" class="w-full h-full object-contain">
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-none font-kanit tracking-wide">NER แจ่วฮ้อน</h1>
@@ -169,7 +169,7 @@
         <div class="bg-white text-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-slate-100 font-mono">
             <div class="text-center pb-4 border-b-2 border-dashed border-slate-200">
                 <div class="w-12 h-12 bg-emerald-950 rounded-2xl flex items-center justify-center mx-auto mb-2 border border-gold/40 shadow overflow-hidden p-1.5">
-                    <img src="NER-Logo design-FINAL OK-Mix_FINAL copy 10.png" alt="NER Logo" class="w-full h-full object-contain">
+                    <img src="ner-logo.png" alt="NER Logo" class="w-full h-full object-contain">
                 </div>
                 <h3 class="text-xl font-bold font-kanit text-emerald-950">NER JAEW HON</h3>
                 <p class="text-[11px] text-slate-400 tracking-widest mt-0.5 font-sans">DIGITAL PRE-ORDER RECEIPT</p>
@@ -207,8 +207,6 @@
     <!-- JavaScript Application Logic -->
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzgRIkCwXKdZbrUI2zzEII67v5ATyzCF8Qc0WILSOiCDrjkY093yObEAW57E75KATZLwg/exec";
-        const LINE_OA_URL = "https://lin.ee/Oy7FTKX";
 
         const menuData = [
             {
@@ -469,19 +467,23 @@
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> กำลังส่งออเดอร์...`;
             btn.disabled = true;
 
-            fetch(GAS_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: finalMsg })
-            }).then(() => {
-                alert("ส่งออเดอร์เข้า LINE OA ของร้านเรียบร้อยแล้วครับ!");
-                window.location.href = LINE_OA_URL;
-            }).catch(err => {
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + err);
+            if (liff.isInClient()) {
+                liff.sendMessages([{
+                    type: 'text',
+                    text: finalMsg
+                }]).then(() => {
+                    alert("ส่งออเดอร์เข้าห้องแชท LINE OA ของร้านสำเร็จ!");
+                    liff.closeWindow();
+                }).catch((err) => {
+                    alert("เกิดข้อผิดพลาดในการส่งข้อมูล: " + err.message);
+                    btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ส่งออเดอร์เข้า LINE OA ร้านทันที`;
+                    btn.disabled = false;
+                });
+            } else {
+                alert("กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ");
                 btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ส่งออเดอร์เข้า LINE OA ร้านทันที`;
                 btn.disabled = false;
-            });
+            }
         }
 
         init();
