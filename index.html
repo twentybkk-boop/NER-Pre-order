@@ -7,16 +7,16 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --card-bg: #181818;
-            --card-border: #2a2a2a;
-            --accent-color: #d9381e; /* สีแดงพริกแจ่ว / แดงเนอร์ */
+            --bg-color: #0c0c0c;
+            --card-bg: #161616;
+            --card-border: #262626;
+            --accent-color: #d9381e;
             --accent-hover: #b82813;
-            --gold-color: #e5a93b;   /* สีทองพรีเมียม */
+            --gold-color: #e5a93b;
             --text-main: #f5f5f5;
             --text-sub: #a0a0a0;
-            --warning-bg: #261608;
-            --warning-border: #8a5314;
+            --warning-bg: #221408;
+            --warning-border: #7a460e;
         }
 
         * {
@@ -33,18 +33,18 @@
         }
 
         .header {
-            background: linear-gradient(180deg, #3d0a04 0%, #0d0d0d 100%);
-            padding: 28px 20px 20px;
+            background: linear-gradient(180deg, #380803 0%, #0c0c0c 100%);
+            padding: 26px 20px 18px;
             text-align: center;
             border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 4px 20px rgba(217, 56, 30, 0.25);
+            box-shadow: 0 4px 20px rgba(217, 56, 30, 0.2);
         }
 
         .header h1 {
             color: var(--text-main);
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
 
@@ -56,7 +56,6 @@
             color: var(--gold-color);
             font-size: 13px;
             font-weight: 500;
-            letter-spacing: 0.5px;
         }
 
         .container {
@@ -82,7 +81,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid #282828;
+            border-bottom: 1px solid #242424;
             padding-bottom: 10px;
         }
 
@@ -128,7 +127,7 @@
             padding: 12px 14px;
             border-radius: 8px;
             border: 1px solid #333;
-            background: #222;
+            background: #202020;
             color: #fff;
             font-size: 14px;
             outline: none;
@@ -154,9 +153,9 @@
 
         .category-title {
             color: var(--gold-color);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            margin: 24px 0 12px 4px;
+            margin: 22px 0 12px 4px;
             display: flex;
             align-items: center;
             border-left: 3px solid var(--accent-color);
@@ -174,7 +173,7 @@
 
         .menu-card.selected {
             border-color: var(--accent-color);
-            background: #201312;
+            background: #1e1110;
         }
 
         .menu-header {
@@ -211,16 +210,16 @@
         .qty-control {
             display: flex;
             align-items: center;
-            background: #242424;
+            background: #222;
             border-radius: 8px;
-            border: 1px solid #383838;
+            border: 1px solid #333;
             overflow: hidden;
         }
 
         .btn-qty {
             width: 34px;
             height: 34px;
-            background: #2d2d2d;
+            background: #2c2c2c;
             color: #fff;
             border: none;
             font-size: 18px;
@@ -230,7 +229,6 @@
             align-items: center;
             justify-content: center;
             user-select: none;
-            transition: background 0.1s;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -257,8 +255,8 @@
             width: 100%;
             padding: 8px 10px;
             border-radius: 6px;
-            border: 1px solid #444;
-            background: #121212;
+            border: 1px solid #3a3a3a;
+            background: #101010;
             color: #f7d0a1;
             font-size: 12px;
             outline: none;
@@ -273,8 +271,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #141414;
-            border-top: 1px solid #2a2a2a;
+            background: #121212;
+            border-top: 1px solid #282828;
             padding: 12px 20px;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
             display: flex;
@@ -372,22 +370,23 @@
             <div class="form-group">
                 <label>เวลาที่เข้าทาน <span class="en">/ Arrival Time (AM/PM)</span></label>
                 <div class="time-picker-group">
+                    <!-- ช่องชั่วโมง 01-12 ครบถ้วน -->
                     <select id="timeHour">
-                        <option value="11">11</option>
-                        <option value="12">12</option>
                         <option value="01">01</option>
                         <option value="02">02</option>
                         <option value="03">03</option>
                         <option value="04" selected>04</option>
                         <option value="05">05</option>
                         <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
                     </select>
-                    <select id="timeMinute">
-                        <option value="00">00</option>
-                        <option value="15">15</option>
-                        <option value="30">30</option>
-                        <option value="45">45</option>
-                    </select>
+                    <!-- ช่องนาที 00-59 Dynamic Dynamic generation -->
+                    <select id="timeMinute"></select>
                     <select id="timeAmpm">
                         <option value="AM">AM</option>
                         <option value="PM" selected>PM</option>
@@ -412,7 +411,17 @@
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // รายการเมนูอัปเดตตรงตามไฟล์ Excel และใบเมนูร้าน
+        // สร้างรายการนาที 00 ถึง 59
+        function initMinutes() {
+            const selectMin = document.getElementById('timeMinute');
+            let options = '';
+            for (let i = 0; i < 60; i++) {
+                const val = i < 10 ? '0' + i : '' + i;
+                options += `<option value="${val}">${val}</option>`;
+            }
+            selectMin.innerHTML = options;
+        }
+
         const menuData = [
             // แจ่วฮ้อนชุดจุ่ม
             {"id": "item_0", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมูทะเล", "en": "SHABU PORK & SEA FOOD SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Fresh Shrimp, Pangasius Dory Fillet, Fresh Squid, Egg, Glass Noodles, Mixed Vegetables)", "price": 429},
@@ -465,7 +474,7 @@
             {"id": "item_39", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเกรียบปลา", "en": "Crispy Fish Crackers", "price": 49},
             {"id": "item_40", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "คาลามารี", "en": "Calamari", "price": 119},
             
-            // เมนูของหวาน (อิงจากไฟล์ Excel)
+            // ของหวาน
             {"id": "item_41", "category": "เมนูของหวาน / DESSERT", "name": "ซาโมซ่ากล้วย", "en": "Banana Samosa", "price": 79},
             {"id": "item_42", "category": "เมนูของหวาน / DESSERT", "name": "สละลอยแก้ว", "en": "Chilled Sala Dessert", "price": 59},
             {"id": "item_43", "category": "เมนูของหวาน / DESSERT", "name": "ลูกตาลลอยแก้ว", "en": "Chilled Toddy Palm Dessert", "price": 59},
@@ -476,7 +485,7 @@
             {"id": "item_48", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มะนาว", "en": "Mochi Ice Cream - Lime", "price": 39},
             {"id": "item_49", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ชาไทย", "en": "Mochi Ice Cream - Thai Tea", "price": 39},
             
-            // เมนูเครื่องดื่ม (อิงจากไฟล์ Excel)
+            // เครื่องดื่ม
             {"id": "item_50", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำเปล่า", "en": "Drinking Water", "price": 15},
             {"id": "item_51", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โซดา", "en": "Soda Water", "price": 15},
             {"id": "item_52", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก original", "en": "Coke Original", "price": 25},
@@ -509,8 +518,8 @@
 
         function renderMenu() {
             const container = document.getElementById('menuContainer');
-            
             const categories = {};
+            
             menuData.forEach(item => {
                 if (!categories[item.category]) {
                     categories[item.category] = [];
@@ -577,6 +586,17 @@
             });
             document.getElementById('totalPrice').innerText = total.toLocaleString();
             document.getElementById('totalItemsCount').innerText = count;
+        }
+
+        function fallbackCopyToClipboard(msg) {
+            navigator.clipboard.writeText(msg).then(() => {
+                alert('📋 คัดลอกรายละเอียดออเดอร์ให้แล้วครับ!\n\n(เนื่องจากสิทธิ์ Scope LINE ยังไม่ได้เปิดใช้งาน) กรุณากด OK แล้วกด "วาง (Paste)" ข้อความลงในแชท LINE ร้านได้เลยครับ');
+                if (liff.isInClient()) {
+                    liff.closeWindow();
+                }
+            }).catch(err => {
+                alert('ออเดอร์ของคุณ:\n\n' + msg);
+            });
         }
 
         function submitOrder() {
@@ -652,15 +672,17 @@
                     alert('ส่งออเดอร์เรียบร้อยแล้ว ขอบคุณครับ!\nOrder submitted successfully!');
                     liff.closeWindow();
                 }).catch((err) => {
-                    alert('เกิดข้อผิดพลาดในการส่งข้อความ: ' + err.message);
+                    console.error("LIFF Send Error:", err);
+                    fallbackCopyToClipboard(msg);
                 });
             } else {
-                alert('กรุณาเปิดหน้านี้ผ่านแอปพลิเคชัน LINE ครับ');
+                fallbackCopyToClipboard(msg);
             }
         }
 
         document.getElementById('custDate').valueAsDate = new Date();
 
+        initMinutes();
         renderMenu();
         initLiff();
     </script>
