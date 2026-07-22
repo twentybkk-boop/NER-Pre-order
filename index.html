@@ -7,15 +7,16 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --accent-color: #ff5722;
-            --accent-hover: #e65100;
-            --text-main: #ffffff;
-            --text-sub: #b0b0b0;
-            --border-color: #333333;
-            --warning-bg: #2a1a08;
-            --warning-border: #ff9800;
+            --bg-color: #0d0d0d;
+            --card-bg: #181818;
+            --card-border: #2a2a2a;
+            --accent-color: #d9381e; /* สีแดงพริกแจ่ว / แดงเนอร์ */
+            --accent-hover: #b82813;
+            --gold-color: #e5a93b;   /* สีทองพรีเมียม */
+            --text-main: #f5f5f5;
+            --text-sub: #a0a0a0;
+            --warning-bg: #261608;
+            --warning-border: #8a5314;
         }
 
         * {
@@ -28,28 +29,34 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding-bottom: 120px;
+            padding-bottom: 110px;
         }
 
         .header {
-            background: linear-gradient(135deg, #2c0b02 0%, #121212 100%);
-            padding: 24px 20px 18px;
+            background: linear-gradient(180deg, #3d0a04 0%, #0d0d0d 100%);
+            padding: 28px 20px 20px;
             text-align: center;
             border-bottom: 2px solid var(--accent-color);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(217, 56, 30, 0.25);
         }
 
         .header h1 {
-            color: var(--accent-color);
-            font-size: 24px;
-            font-weight: 700;
+            color: var(--text-main);
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
             margin-bottom: 4px;
-            letter-spacing: 0.5px;
+        }
+
+        .header h1 span {
+            color: var(--accent-color);
         }
 
         .header p {
-            color: var(--text-sub);
+            color: var(--gold-color);
             font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .container {
@@ -63,20 +70,20 @@
             border-radius: 14px;
             padding: 18px;
             margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .card-title {
-            color: var(--accent-color);
+            color: var(--gold-color);
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 8px;
+            border-bottom: 1px solid #282828;
+            padding-bottom: 10px;
         }
 
         .card-title .en-sub {
@@ -92,7 +99,7 @@
             padding: 12px;
             margin-bottom: 14px;
             font-size: 12px;
-            color: #ffe0b2;
+            color: #f7d0a1;
             line-height: 1.5;
         }
 
@@ -113,23 +120,24 @@
 
         label span.en {
             font-size: 11px;
-            color: #888;
+            color: #777;
         }
 
         input[type="text"], input[type="tel"], input[type="date"], select {
             width: 100%;
             padding: 12px 14px;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: #262626;
+            border: 1px solid #333;
+            background: #222;
             color: #fff;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
         }
 
         input:focus, select:focus {
             border-color: var(--accent-color);
+            box-shadow: 0 0 6px rgba(217, 56, 30, 0.4);
         }
 
         .form-row {
@@ -145,26 +153,28 @@
         }
 
         .category-title {
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 600;
-            margin: 20px 0 12px 4px;
+            color: var(--gold-color);
+            font-size: 16px;
+            font-weight: 700;
+            margin: 24px 0 12px 4px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 10px;
         }
 
         .menu-card {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
-            padding: 12px 14px;
+            padding: 14px;
             margin-bottom: 10px;
-            transition: border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .menu-card.selected {
             border-color: var(--accent-color);
+            background: #201312;
         }
 
         .menu-header {
@@ -175,12 +185,12 @@
 
         .menu-info {
             flex: 1;
-            padding-right: 10px;
+            padding-right: 12px;
         }
 
         .menu-name {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
             color: #fff;
             margin-bottom: 2px;
         }
@@ -188,29 +198,29 @@
         .menu-en {
             font-size: 11px;
             color: var(--text-sub);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             line-height: 1.3;
         }
 
         .menu-price {
-            font-size: 13px;
-            color: var(--accent-color);
-            font-weight: 600;
+            font-size: 14px;
+            color: var(--gold-color);
+            font-weight: 700;
         }
 
         .qty-control {
             display: flex;
             align-items: center;
-            background: #2a2a2a;
+            background: #242424;
             border-radius: 8px;
-            border: 1px solid #444;
+            border: 1px solid #383838;
             overflow: hidden;
         }
 
         .btn-qty {
             width: 34px;
             height: 34px;
-            background: #333;
+            background: #2d2d2d;
             color: #fff;
             border: none;
             font-size: 18px;
@@ -220,6 +230,7 @@
             align-items: center;
             justify-content: center;
             user-select: none;
+            transition: background 0.1s;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -247,9 +258,9 @@
             padding: 8px 10px;
             border-radius: 6px;
             border: 1px solid #444;
-            background: #141414;
-            color: #ffb74d;
-            font-size: 13px;
+            background: #121212;
+            color: #f7d0a1;
+            font-size: 12px;
             outline: none;
         }
 
@@ -262,10 +273,10 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #1a1a1a;
-            border-top: 1px solid #333;
+            background: #141414;
+            border-top: 1px solid #2a2a2a;
             padding: 12px 20px;
-            box-shadow: 0 -4px 16px rgba(0,0,0,0.6);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -283,34 +294,34 @@
         }
 
         .total-amount {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent-color);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gold-color);
         }
 
         .btn-submit {
-            background: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent-color) 0%, #b82813 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 26px;
             border-radius: 10px;
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(217, 56, 30, 0.4);
         }
 
         .btn-submit:active {
-            background: var(--accent-hover);
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🔥 NER แจ่วฮ้อน 🔥</h1>
-        <p>สั่งอาหารล่วงหน้า & จองโต๊ะ | Pre-Order & Table Reservation</p>
+        <h1><span>NER</span> แจ่วฮ้อน</h1>
+        <p>Pre-Order & Table Reservation</p>
     </div>
 
     <div class="container">
@@ -320,7 +331,6 @@
                 📌 ข้อมูลการสั่งจอง <span class="en-sub">/ Booking Details</span>
             </div>
 
-            <!-- ข้อความแจ้งเตือนเวลาจองและสายเกิน 15 นาที -->
             <div class="notice-box">
                 ⚠️ <b>เงื่อนไขการจอง / Reservation Policy:</b>
                 <ul style="margin-left: 18px; margin-top: 4px;">
@@ -400,10 +410,9 @@
     </div>
 
     <script>
-        // LIFF ID
         const LIFF_ID = "2010784971-mH3KqiRT";
 
-        // ข้อมูลเมนูอาหารพร้อมภาษาอังกฤษ (อัปเดตตรงตามใบเมนูจริง)
+        // รายการเมนูอัปเดตตรงตามไฟล์ Excel และใบเมนูร้าน
         const menuData = [
             // แจ่วฮ้อนชุดจุ่ม
             {"id": "item_0", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มหมูทะเล", "en": "SHABU PORK & SEA FOOD SET (Marinated Pork, Slice Pork Neck, Sliced Pork Sirloin, Sliced Pork Belly, Pork Kidney, Pork Liver, Fresh Shrimp, Pangasius Dory Fillet, Fresh Squid, Egg, Glass Noodles, Mixed Vegetables)", "price": 429},
@@ -412,23 +421,21 @@
             {"id": "item_3", "category": "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET", "name": "ชุดจุ่มเดี่ยวหมู", "en": "SHABU SINGLE PORKSET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Egg, Glass Noodles, Mixed Vegetables)", "price": 189},
             
             // แจ่วฮ้อนพร้อมทาน
-            {"id": "item_4", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว ต้มพร้อมทาน (เฉพาะช่วงเวลา 11.00-18.00 น. - เฉพาะ lunch set จะไม่ได้เสิร์ฟหลัง 6 โมงเย็น)", "en": "READY TO EAT NORMAL SET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Glass Noodles, Mixed Vegetables) - Only 11.00 a.m. - 6.00 p.m. (Lunch set is not served after 6:00 PM)", "price": 119},
-            {"id": "item_5", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว หมูจุกจุก (เฉพาะช่วงเวลา 11.00-18.00 น. - เฉพาะ lunch set จะไม่ได้เสิร์ฟหลัง 6 โมงเย็น)", "en": "READY TO EAT EXTRA PORK SET (More pork from the Single Set – for those who just can't get enough.) - Only 11.00 a.m. - 6.00 p.m. (Lunch set is not served after 6:00 PM)", "price": 159},
+            {"id": "item_4", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว ต้มพร้อมทาน (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT NORMAL SET (Marinated Pork, Sliced Pork Sirloin, Sliced Pork Belly, Liver, Glass Noodles, Mixed Vegetables) - Served 11.00 a.m. - 6.00 p.m. only", "price": 119},
+            {"id": "item_5", "category": "แจ่วฮ้อนพร้อมทาน / JAEW HON READY TO EAT", "name": "อิ่มเดี่ยว หมูจุกจุก (เฉพาะช่วงเวลา 11.00-18.00 น.)", "en": "READY TO EAT EXTRA PORK SET (More pork from the Single Set) - Served 11.00 a.m. - 6.00 p.m. only", "price": 159},
             
-            // เนื้อสัตว์ - เนื้อหมู
-            {"id": "item_6", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูลูก (ไม่มีเครื่องใน)", "en": "Pork Lover (No Offal)", "price": 199},
+            // เนื้อสัตว์
+            {"id": "item_6", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูล้วน (ไม่มีเครื่องใน)", "en": "Pork Lover (No Offal)", "price": 199},
             {"id": "item_7", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูหมัก NER", "en": "Marinated Pork", "price": 49},
-            {"id": "item_8", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "สามชั้นหมูสไลซ์", "en": "Sliced Pork Belly", "price": 59},
-            {"id": "item_9", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "สันคอหมูสไลซ์", "en": "Sliced Pork Neck", "price": 59},
-            {"id": "item_10", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "สันนอก", "en": "Sliced Pork Sirloin", "price": 49},
+            {"id": "item_8", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสามชั้นสไลซ์", "en": "Sliced Pork Belly", "price": 59},
+            {"id": "item_9", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันคอสไลซ์", "en": "Sliced Pork Neck", "price": 59},
+            {"id": "item_10", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "หมูสันนอกสไลซ์", "en": "Sliced Pork Sirloin", "price": 49},
             {"id": "item_11", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ตับหมู", "en": "Pork Liver", "price": 39},
-            {"id": "item_12", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เซ่งจี๊หมู", "en": "Pork Kidney", "price": 39},
-            
-            // เนื้อสัตว์ - เนื้อวัว & อาหารทะเล
-            {"id": "item_13", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อใบพายสไลซ์", "en": "Sliced Chuck Roll Beef", "price": 89},
-            {"id": "item_14", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อริบอายสไลซ์ (AUS)", "en": "Sliced Ribeye Beef (AUS)", "price": 89},
-            {"id": "item_15", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อเสือร้องไห้สไลซ์ (AUS)", "en": "Sliced Brisket Flap (AUS)", "price": 89},
-            {"id": "item_16", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อรวม", "en": "Beef Lover", "price": 239},
+            {"id": "item_12", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เซ่งจี๊", "en": "Pork Kidney", "price": 39},
+            {"id": "item_13", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อรวม", "en": "Beef Lover", "price": 239},
+            {"id": "item_14", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อใบพายสไลซ์", "en": "Sliced Chuck Roll Beef", "price": 89},
+            {"id": "item_15", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อริบอายสไลซ์ (AUS)", "en": "Sliced Ribeye Beef (AUS)", "price": 89},
+            {"id": "item_16", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "เนื้อเสือร้องไห้สไลซ์ (AUS)", "en": "Sliced Brisket Flap (AUS)", "price": 89},
             {"id": "item_17", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาดอลลี่", "en": "Dory Fish", "price": 59},
             {"id": "item_18", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "กุ้ง", "en": "Shrimp", "price": 69},
             {"id": "item_19", "category": "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", "name": "ปลาหมึก", "en": "Squid", "price": 69},
@@ -445,33 +452,48 @@
             {"id": "item_28", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "บะหมี่หยก (สด)", "en": "Fresh Jade Noodles", "price": 29},
             {"id": "item_29", "category": "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES", "name": "เส้นอุด้ง", "en": "Udon Noodles", "price": 39},
             
-            // ทานเล่น & เพิ่มเติม
-            {"id": "item_30", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ไข่ไก่สด", "en": "Fresh Egg", "price": 15},
-            {"id": "item_31", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "เต้าหู้ปลา", "en": "Fish Tofu", "price": 49},
-            {"id": "item_32", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "เต้าหู้ไข่", "en": "Egg Tofu", "price": 29},
-            {"id": "item_33", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "เต้าหู้ชีส", "en": "Cheese Tofu", "price": 49},
-            {"id": "item_34", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ฟองเต้าหู้แท่ง", "en": "Bean Curd Stick", "price": 49},
-            {"id": "item_35", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ฟองเต้าหู้ทอด", "en": "Fried Tofu Skin Roll", "price": 39},
-            {"id": "item_36", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ปูอัด", "en": "Crab Stick", "price": 39},
-            {"id": "item_37", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ข้าวเปล่า", "en": "Rice", "price": 29},
-            {"id": "item_38", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ไก่ป๊อป", "en": "Chicken Pops", "price": 79},
-            {"id": "item_39", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "แฮชบราวน์ เทเทอร์ ทอดส์", "en": "Hash Brown Tater Tots", "price": 69},
-            {"id": "item_40", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "ข้าวเกรียบปลา", "en": "Crispy Fish Crackers", "price": 49},
-            {"id": "item_41", "category": "ทานเล่น & เพิ่มเติม / APPETIZERS & ADDITIONAL", "name": "คาลามารี", "en": "Calamari", "price": 119},
+            // ทานเล่น
+            {"id": "item_30", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไข่ไก่สด", "en": "Fresh Egg", "price": 15},
+            {"id": "item_31", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ปลา", "en": "Fish Tofu", "price": 49},
+            {"id": "item_32", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ไข่", "en": "Egg Tofu", "price": 29},
+            {"id": "item_33", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "เต้าหู้ชีส", "en": "Cheese Tofu", "price": 49},
+            {"id": "item_34", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้แท่ง", "en": "Bean Curd Stick", "price": 49},
+            {"id": "item_35", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ฟองเต้าหู้ทอด", "en": "Fried Tofu Skin Roll", "price": 39},
+            {"id": "item_36", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเปล่า", "en": "Rice", "price": 29},
+            {"id": "item_37", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ไก่ป๊อป", "en": "Chicken Pops", "price": 79},
+            {"id": "item_38", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "แฮชบราวน์ เทเทอร์ ทอตส์", "en": "Hash Brown Tater Tots", "price": 69},
+            {"id": "item_39", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "ข้าวเกรียบปลา", "en": "Crispy Fish Crackers", "price": 49},
+            {"id": "item_40", "category": "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE", "name": "คาลามารี", "en": "Calamari", "price": 119},
             
-            // ของหวาน & เครื่องดื่ม
-            {"id": "item_42", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "ซาโมซ่ากล้วย", "en": "Banana Samosa", "price": 79},
-            {"id": "item_43", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "สละลอยแก้ว", "en": "Chilled Sala Dessert", "price": 59},
-            {"id": "item_44", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "ลูกตาลลอยแก้ว", "en": "Chilled Toddy Palm Dessert", "price": 59},
-            {"id": "item_45", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "น้ำเปล่า", "en": "Drinking Water", "price": 15},
-            {"id": "item_46", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "โซดา", "en": "Soda", "price": 15},
-            {"id": "item_47", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "น้ำอัดลม (กระป๋อง)", "en": "Soft drink (Can)", "price": 25},
-            {"id": "item_48", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "โค้ก (ขวดใหญ่)", "en": "Coke (Bottle)", "price": 40},
-            {"id": "item_49", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "น้ำแข็งถัง (รีฟิล)", "en": "Bucket of Ice (refill)", "price": 25},
-            {"id": "item_50", "category": "ของหวาน & เครื่องดื่ม / DESSERT & BEVERAGE", "name": "น้ำแข็งแก้ว", "en": "Glass of Ice", "price": 2}
+            // เมนูของหวาน (อิงจากไฟล์ Excel)
+            {"id": "item_41", "category": "เมนูของหวาน / DESSERT", "name": "ซาโมซ่ากล้วย", "en": "Banana Samosa", "price": 79},
+            {"id": "item_42", "category": "เมนูของหวาน / DESSERT", "name": "สละลอยแก้ว", "en": "Chilled Sala Dessert", "price": 59},
+            {"id": "item_43", "category": "เมนูของหวาน / DESSERT", "name": "ลูกตาลลอยแก้ว", "en": "Chilled Toddy Palm Dessert", "price": 59},
+            {"id": "item_44", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ช็อคโกแลต", "en": "Mochi Ice Cream - Chocolate", "price": 39},
+            {"id": "item_45", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - วานิลลา", "en": "Mochi Ice Cream - Vanilla", "price": 39},
+            {"id": "item_46", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - คุกกี้แอนด์ครีม", "en": "Mochi Ice Cream - Cookies & Cream", "price": 39},
+            {"id": "item_47", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มัทฉะ", "en": "Mochi Ice Cream - Matcha", "price": 39},
+            {"id": "item_48", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - มะนาว", "en": "Mochi Ice Cream - Lime", "price": 39},
+            {"id": "item_49", "category": "เมนูของหวาน / DESSERT", "name": "โมจิไอศครีม - ชาไทย", "en": "Mochi Ice Cream - Thai Tea", "price": 39},
+            
+            // เมนูเครื่องดื่ม (อิงจากไฟล์ Excel)
+            {"id": "item_50", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำเปล่า", "en": "Drinking Water", "price": 15},
+            {"id": "item_51", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โซดา", "en": "Soda Water", "price": 15},
+            {"id": "item_52", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก original", "en": "Coke Original", "price": 25},
+            {"id": "item_53", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำโค้ก zero", "en": "Coke Zero", "price": 25},
+            {"id": "item_54", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ original", "en": "Pepsi Original", "price": 25},
+            {"id": "item_55", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแป๊ปซี่ max", "en": "Pepsi Max", "price": 25},
+            {"id": "item_56", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "สิงค์โลม่อนโซดา", "en": "Singha Lemon Soda", "price": 25},
+            {"id": "item_57", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ จิงเจอร์เอล", "en": "Schweppes Ginger Ale", "price": 25},
+            {"id": "item_58", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "ชเวปส์ มะนาว", "en": "Schweppes Manao Soda", "price": 25},
+            {"id": "item_59", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำแดง", "en": "Fanta Strawberry", "price": 25},
+            {"id": "item_60", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำเขียว", "en": "Fanta Fruit Punch", "price": 25},
+            {"id": "item_61", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "แฟนต้า น้ำส้ม", "en": "Fanta Orange", "price": 25},
+            {"id": "item_62", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "โค้ก original ขวด 1.25 ลิตร", "en": "Coke Original 1.25L Bottle", "price": 40},
+            {"id": "item_63", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", "en": "Bucket of Ice (Refill max 4 guests)", "price": 25},
+            {"id": "item_64", "category": "เมนูเครื่องดื่ม / BEVERAGE", "name": "น้ำแข็งแก้ว", "en": "Glass of Ice", "price": 2}
         ];
 
-        // เก็บจำนวนสั่งซื้อ
         const orderMap = {};
 
         async function initLiff() {
@@ -498,7 +520,7 @@
 
             let html = '';
             for (const [catName, items] of Object.entries(categories)) {
-                html += `<div class="category-title">🏷️ ${catName}</div>`;
+                html += `<div class="category-title">${catName}</div>`;
                 items.forEach(item => {
                     html += `
                         <div class="menu-card" id="card_${item.id}">
@@ -515,7 +537,7 @@
                                 </div>
                             </div>
                             <div class="item-note-box" id="note_box_${item.id}">
-                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุ / Special Instructions (e.g. No organs)">
+                                <input type="text" id="note_input_${item.id}" placeholder="📝 หมายเหตุ / Special Instructions">
                             </div>
                         </div>
                     `;
@@ -569,7 +591,6 @@
             
             const fullTimeStr = `${hour}:${min} ${ampm}`;
 
-            // ตรวจสอบเงื่อนไข 18:00 (6:00 PM)
             let hour24 = parseInt(hour, 10);
             if (ampm === 'PM' && hour24 !== 12) hour24 += 12;
             if (ampm === 'AM' && hour24 === 12) hour24 = 0;
@@ -596,7 +617,7 @@
                     const noteInput = document.getElementById(`note_input_${item.id}`);
                     const noteText = noteInput ? noteInput.value.trim() : '';
 
-                    let itemLine = `• ${item.name} (${item.en}) x${qty} [${itemTotal.toLocaleString()}.-]`;
+                    let itemLine = `• ${item.name} x${qty} [${itemTotal.toLocaleString()}.-]`;
                     if (noteText) {
                         itemLine += `\n  └ 📝 Note: ${noteText}`;
                     }
