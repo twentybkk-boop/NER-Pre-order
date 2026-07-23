@@ -329,6 +329,7 @@
         ];
 
         const orderMap = {};
+        let cachedHolidays = [];
 
         function init() {
             renderMenu();
@@ -351,22 +352,30 @@
             const nameInput = document.getElementById('name');
             nameInput.placeholder = nameInput.getAttribute(`data-placeholder-${currentLang}`);
 
+            updateHolidayNoticeText();
             renderMenu();
         }
 
         function calculateHolidays() {
             const startDay = new Date(2026, 6, 20);
             const today = new Date();
-            let holidays = [];
+            cachedHolidays = [];
             let check = new Date(startDay);
             for(let i=0; i<10; i++) {
                 if (check >= today) {
-                    holidays.push(check.toLocaleDateString('th-TH', { day:'2-digit', month:'2-digit' }));
+                    cachedHolidays.push(check.toLocaleDateString(currentLang === 'th' ? 'th-TH' : 'en-GB', { day:'2-digit', month:'2-digit' }));
                 }
                 check.setDate(check.getDate() + 14);
-                if (holidays.length >= 4) break;
+                if (cachedHolidays.length >= 4) break;
             }
-            document.getElementById('holidayNotice').innerHTML = `<b>${currentLang === 'th' ? 'กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):' : 'Store Holiday Schedule (Every other Monday):'}</b> ${holidays.join(', ')}`;
+            updateHolidayNoticeText();
+        }
+
+        function updateHolidayNoticeText() {
+            const titleText = currentLang === 'th' 
+                ? '<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b>' 
+                : '<b>Store Holiday Schedule (Every other Monday):</b>';
+            document.getElementById('holidayNotice').innerHTML = `${titleText} ${cachedHolidays.join(', ')}`;
         }
 
         function initTimeSelectors() {
@@ -512,7 +521,7 @@
                 const noteInput = document.getElementById(`note-${id}`);
                 const noteVal = noteInput ? noteInput.value : '';
                 const itemTotal = orderMap[id].qty * orderMap[id].price;
-                const itemName = orderMap[id].nameTh; // ส่งเป็นชื่อไทยเข้าไลน์ร้านเพื่อความเข้าใจตรงกันของพนักงาน
+                const itemName = orderMap[id].nameTh;
                 itemText += `• ${itemName} x${orderMap[id].qty} [${itemTotal.toLocaleString()}.-]\n`;
                 if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
             }
