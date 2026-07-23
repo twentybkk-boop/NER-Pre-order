@@ -55,11 +55,15 @@
                     NER
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-none font-kanit tracking-wide">NER แจ่วฮ้อน</h1>
+                    <h1 class="font-bold text-lg leading-none font-kanit tracking-wide" data-lang-th="NER แจ่วฮ้อน" data-lang-en="NER Jaew Hon">NER แจ่วฮ้อน</h1>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
+                <!-- Language Switcher Button -->
+                <button onclick="toggleLanguage()" class="bg-emerald-950 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all font-kanit">
+                    <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
+                </button>
                 <a href="https://lin.ee/Oy7FTKX" target="_blank" class="bg-gold/10 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all">
                     <i class="fa-brands fa-line text-sm"></i> LINE OA
                 </a>
@@ -74,7 +78,7 @@
         <div class="bg-emerald-900 rounded-3xl p-5 border border-gold/20 shadow-xl relative overflow-hidden">
             <div class="flex items-center gap-2.5 pb-3 mb-4 border-b border-gold/15 text-gold font-semibold text-sm">
                 <i class="fa-solid fa-calendar-check text-base"></i>
-                <span class="font-kanit tracking-wide">ข้อมูลการสำรองที่นั่ง (Reservation Details)</span>
+                <span class="font-kanit tracking-wide" data-lang-th="ข้อมูลการสำรองที่นั่ง (Reservation Details)" data-lang-en="Reservation Details">ข้อมูลการสำรองที่นั่ง (Reservation Details)</span>
             </div>
 
             <!-- Holiday Notice Box -->
@@ -83,7 +87,7 @@
                     <i class="fa-solid fa-calendar-day text-gold mt-0.5"></i>
                     <div>
                         <span id="holidayNotice" class="font-medium text-gold">กำลังตรวจสอบวันหยุด...</span>
-                        <p class="text-[11px] text-slate-400 mt-0.5">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram: <a href="https://instagram.com/ner.bkk" target="_blank" class="text-gold underline">ner.bkk</a></p>
+                        <p class="text-[11px] text-slate-400 mt-0.5"><span data-lang-th="* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram:" data-lang-en="* Holidays are subject to change. Follow us on Instagram:">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram:</span> <a href="https://instagram.com/ner.bkk" target="_blank" class="text-gold underline">ner.bkk</a></p>
                     </div>
                 </div>
             </div>
@@ -93,9 +97,9 @@
                 <div class="flex items-start gap-2">
                     <i class="fa-solid fa-circle-exclamation text-rose-400 mt-0.5"></i>
                     <div class="space-y-0.5">
-                        <strong class="text-white font-kanit">นโยบายและเงื่อนไขเวลา (Policy):</strong>
-                        <p>• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น.</p>
-                        <p>• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ</p>
+                        <strong class="text-white font-kanit" data-lang-th="นโยบายและเงื่อนไขเวลา (Policy):" data-lang-en="Time & Reservation Policy:">นโยบายและเงื่อนไขเวลา (Policy):</strong>
+                        <p data-lang-th="• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น." data-lang-en="• No table reservations accepted after 6:00 PM.">• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น.</p>
+                        <p data-lang-th="• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ" data-lang-en="• Please arrive on time. Tables will be released after a 15-minute grace period.">• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ</p>
                     </div>
                 </div>
             </div>
@@ -103,17 +107,17 @@
             <!-- Form Inputs -->
             <div class="space-y-4 text-xs">
                 <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">ชื่อผู้จอง <span class="text-slate-400 font-normal">/ Customer Name</span></label>
-                    <input type="text" id="name" placeholder="กรุณาระบุชื่อของท่าน" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="ชื่อผู้จอง" data-lang-en="Customer Name">ชื่อผู้จอง</span> <span class="text-slate-400 font-normal">/ Customer Name</span></label>
+                    <input type="text" id="name" data-placeholder-th="กรุณาระบุชื่อของท่าน" data-placeholder-en="Enter your name" placeholder="กรุณาระบุชื่อของท่าน" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">เบอร์โทรศัพท์ <span class="text-slate-400 font-normal">/ Phone</span></label>
+                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เบอร์โทรศัพท์" data-lang-en="Phone Number">เบอร์โทรศัพท์</span> <span class="text-slate-400 font-normal">/ Phone</span></label>
                         <input type="tel" id="phone" placeholder="08x-xxx-xxxx" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
                     </div>
                     <div>
-                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">จำนวนท่าน <span class="text-slate-400 font-normal">/ Guests</span></label>
+                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="จำนวนท่าน" data-lang-en="Number of Guests">จำนวนท่าน</span> <span class="text-slate-400 font-normal">/ Guests</span></label>
                         <select id="guests" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
                             <option value="1">1 ท่าน / 1 Person</option>
                             <option value="2" selected>2 ท่าน / 2 People</option>
@@ -127,12 +131,12 @@
                 </div>
 
                 <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">วันที่ต้องการเข้าใช้บริการ <span class="text-slate-400 font-normal">/ Date of Visit</span></label>
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="วันที่ต้องการเข้าใช้บริการ" data-lang-en="Date of Visit">วันที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Date of Visit</span></label>
                     <input type="date" id="date" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
                 </div>
 
                 <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5">เวลาที่ต้องการเข้าใช้บริการ <span class="text-slate-400 font-normal">/ Arrival Time</span></label>
+                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เวลาที่ต้องการเข้าใช้บริการ" data-lang-en="Arrival Time">เวลาที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Arrival Time</span></label>
                     <div class="grid grid-cols-3 gap-2">
                         <select id="hour" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
                         <select id="minute" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
@@ -151,8 +155,8 @@
             <div class="bg-gold/10 border border-gold/40 text-gold p-3.5 rounded-2xl mb-4 text-xs flex items-start gap-2.5 shadow-lg">
                 <i class="fa-solid fa-circle-info text-base mt-0.5"></i>
                 <div>
-                    <strong class="font-kanit text-sm block">💡 คำแนะนำการสั่งอาหาร:</strong>
-                    <p class="text-slate-200 mt-0.5">เมื่อเลือกเมนูแล้ว สามารถพิมพ์ระบุรายละเอียดเพิ่มเติมได้ที่ช่องหมายเหตุใต้แต่ละเมนูครับ (เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก)</p>
+                    <strong class="font-kanit text-sm block" data-lang-th="💡 คำแนะนำการสั่งอาหาร:" data-lang-en="💡 Ordering Guide:">💡 คำแนะนำการสั่งอาหาร:</strong>
+                    <p class="text-slate-200 mt-0.5" data-lang-th="เมื่อเลือกเมนูแล้ว สามารถพิมพ์ระบุรายละเอียดเพิ่มเติมได้ที่ช่องหมายเหตุใต้แต่ละเมนูครับ (เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก)" data-lang-en="You can add special requests/notes under each menu item after selecting it (e.g., no marinated pork, no vegetables).">เมื่อเลือกเมนูแล้ว สามารถพิมพ์ระบุรายละเอียดเพิ่มเติมได้ที่ช่องหมายเหตุใต้แต่ละเมนูครับ (เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก)</p>
                 </div>
             </div>
 
@@ -165,12 +169,12 @@
     <div class="fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-gold/20 p-4 z-40 shadow-2xl">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div>
-                <span class="text-[11px] text-slate-400 uppercase tracking-wider block">Estimated Total</span>
+                <span class="text-[11px] text-slate-400 uppercase tracking-wider block" data-lang-th="ยอดรวมโดยประมาณ" data-lang-en="Estimated Total">Estimated Total</span>
                 <span class="text-2xl font-bold text-gold font-kanit"><span id="totalPrice">0</span> ฿</span>
             </div>
             <button onclick="openSummaryModal()" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-emerald-950 px-6 py-3.5 rounded-2xl font-bold shadow-lg shadow-gold/20 flex items-center gap-2 transition-all font-kanit">
                 <i class="fa-solid fa-file-invoice-dollar text-base"></i>
-                <span>สรุปรายการสั่งซื้อ</span>
+                <span data-lang-th="สรุปรายการสั่งซื้อ" data-lang-en="Order Summary">สรุปรายการสั่งซื้อ</span>
             </button>
         </div>
     </div>
@@ -189,27 +193,27 @@
             <div id="receiptMeta" class="py-4 border-b border-slate-200 text-xs space-y-1.5 text-slate-600 font-sans"></div>
 
             <div class="py-4 border-b border-slate-200">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit">📋 รายการอาหาร (ORDER SUMMARY)</h4>
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit" data-lang-th="📋 รายการอาหาร (ORDER SUMMARY)" data-lang-en="📋 ORDER SUMMARY">📋 รายการอาหาร (ORDER SUMMARY)</h4>
                 <div id="receiptItems" class="space-y-2 text-xs font-sans"></div>
             </div>
 
             <div class="py-4 border-b-2 border-dashed border-slate-200 flex justify-between items-center font-kanit">
-                <span class="text-sm font-bold text-slate-700">ยอดรวมสุทธิ (TOTAL)</span>
+                <span class="text-sm font-bold text-slate-700" data-lang-th="ยอดรวมสุทธิ (TOTAL)" data-lang-en="TOTAL AMOUNT">ยอดรวมสุทธิ (TOTAL)</span>
                 <span id="receiptTotalAmount" class="text-xl font-bold text-rose-600">0 ฿</span>
             </div>
 
             <div class="text-center py-3 text-[10px] text-slate-400 space-y-1 font-sans">
-                <p>* ทางร้านไม่มีการเก็บมัดจำการจอง</p>
+                <p data-lang-th="* ทางร้านไม่มีการเก็บมัดจำการจอง" data-lang-en="* No deposit required for reservations.">* ทางร้านไม่มีการเก็บมัดจำการจอง</p>
                 <p>THANK YOU FOR YOUR RESERVATION</p>
             </div>
 
             <div class="space-y-2 pt-2 font-sans">
                 <button id="submitBtn" onclick="submitFinalOrder()" class="w-full bg-line-green hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
                     <i class="fa-brands fa-line text-xl"></i>
-                    <span>ส่งออเดอร์เข้า LINE OA ร้านทันที</span>
+                    <span data-lang-th="ส่งออเดอร์เข้า LINE OA ร้านทันที" data-lang-en="Send Order to Official LINE">ส่งออเดอร์เข้า LINE OA ร้านทันที</span>
                 </button>
                 <button onclick="closeSummaryModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-2xl text-xs font-medium transition-all">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i> กลับไปแก้ไขรายการ
+                    <i class="fa-solid fa-pen-to-square mr-1"></i> <span data-lang-th="กลับไปแก้ไขรายการ" data-lang-en="Edit Order">กลับไปแก้ไขรายการ</span>
                 </button>
             </div>
         </div>
@@ -218,101 +222,108 @@
     <!-- JavaScript Application Logic -->
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
+        let currentLang = 'th'; // ค่าเริ่มต้นภาษาไทย
 
         const menuData = [
             {
-                cat: "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET",
+                catTh: "แจ่วฮ้อนชุดจุ่ม / JAEW HON SHABU SET",
+                catEn: "JAEW HON SHABU SET",
                 items: [
-                    { id: 's1', name: "ชุดจุ่มหมูทะเล", en: "Pork & Sea Food Set", price: 429 },
-                    { id: 's2', name: "ชุดจุ่มเนื้อ", en: "Beef Shabu Set", price: 339 },
-                    { id: 's3', name: "ชุดจุ่มหมู", en: "Pork Shabu Set", price: 329 },
-                    { id: 's4', name: "ชุดจุ่มเดี่ยวหมู", en: "Single Pork Set", price: 189 },
-                    { id: 's5', name: "อิ่มเดี่ยว ต้มพร้อมทาน", en: "Ready to Eat Normal Set", price: 119, badge: "⚠️ ไม่เสิร์ฟหลัง 18:00 น." },
-                    { id: 's6', name: "อิ่มเดี่ยว หมูจุกจุก", en: "Ready to Eat Extra Pork Set", price: 159, badge: "⚠️ ไม่เสิร์ฟหลัง 18:00 น." }
+                    { id: 's1', nameTh: "ชุดจุ่มหมูทะเล", nameEn: "Pork & Sea Food Set", price: 429 },
+                    { id: 's2', nameTh: "ชุดจุ่มเนื้อ", nameEn: "Beef Shabu Set", price: 339 },
+                    { id: 's3', nameTh: "ชุดจุ่มหมู", nameEn: "Pork Shabu Set", price: 329 },
+                    { id: 's4', nameTh: "ชุดจุ่มเดี่ยวหมู", nameEn: "Single Pork Set", price: 189 },
+                    { id: 's5', nameTh: "อิ่มเดี่ยว ต้มพร้อมทาน", nameEn: "Ready to Eat Normal Set", price: 119, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" },
+                    { id: 's6', nameTh: "อิ่มเดี่ยว หมูจุกจุก", nameEn: "Ready to Eat Extra Pork Set", price: 159, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" }
                 ]
             },
             {
-                cat: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT",
+                catTh: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT",
+                catEn: "ADD-ON MEAT",
                 items: [
-                    { id: 'm1', name: "หมูล้วน (ไม่มีเครื่องใน)", en: "Pork Lover (No Offal)", price: 199 },
-                    { id: 'm2', name: "หมูหมัก NER", en: "Marinated Pork", price: 49 },
-                    { id: 'm3', name: "หมูสามชั้นสไลซ์", en: "Sliced Pork Belly", price: 59 },
-                    { id: 'm4', name: "หมูสันคอสไลซ์", en: "Sliced Pork Neck", price: 59 },
-                    { id: 'm5', name: "หมูสันนอกสไลซ์", en: "Sliced Pork Sirloin", price: 49 },
-                    { id: 'm6', name: "ตับหมู", en: "Pork Liver", price: 39 },
-                    { id: 'm7', name: "เซ่งจี๊", en: "Pork Kidney", price: 39 },
-                    { id: 'm8', name: "เนื้อรวม", en: "Beef Lover", price: 239 },
-                    { id: 'm9', name: "เนื้อใบพายสไลซ์", en: "Sliced Chuck Roll Beef", price: 89 },
-                    { id: 'm10', name: "เนื้อริบอายสไลซ์ (AUS)", en: "Sliced Ribeye Beef (AUS)", price: 89 },
-                    { id: 'm11', name: "เนื้อเสือร้องไห้สไลซ์ (AUS)", en: "Sliced Brisket Flap (AUS)", price: 89 },
-                    { id: 'm12', name: "ปลาดอลลี่", en: "Dory Fish", price: 59 },
-                    { id: 'm13', name: "กุ้ง", en: "Shrimp", price: 69 },
-                    { id: 'm14', name: "ปลาหมึก", en: "Squid", price: 69 }
+                    { id: 'm1', nameTh: "หมูล้วน (ไม่มีเครื่องใน)", nameEn: "Pork Lover (No Offal)", price: 199 },
+                    { id: 'm2', nameTh: "หมูหมัก NER", nameEn: "Marinated Pork", price: 49 },
+                    { id: 'm3', nameTh: "หมูสามชั้นสไลซ์", nameEn: "Sliced Pork Belly", price: 59 },
+                    { id: 'm4', nameTh: "หมูสันคอสไลซ์", nameEn: "Sliced Pork Neck", price: 59 },
+                    { id: 'm5', nameTh: "หมูสันนอกสไลซ์", nameEn: "Sliced Pork Sirloin", price: 49 },
+                    { id: 'm6', nameTh: "ตับหมู", nameEn: "Pork Liver", price: 39 },
+                    { id: 'm7', nameTh: "เซ่งจี๊", nameEn: "Pork Kidney", price: 39 },
+                    { id: 'm8', nameTh: "เนื้อรวม", nameEn: "Beef Lover", price: 239 },
+                    { id: 'm9', nameTh: "เนื้อใบพายสไลซ์", nameEn: "Sliced Chuck Roll Beef", price: 89 },
+                    { id: 'm10', nameTh: "เนื้อริบอายสไลซ์ (AUS)", nameEn: "Sliced Ribeye Beef (AUS)", price: 89 },
+                    { id: 'm11', nameTh: "เนื้อเสือร้องไห้สไลซ์ (AUS)", nameEn: "Sliced Brisket Flap (AUS)", price: 89 },
+                    { id: 'm12', nameTh: "ปลาดอลลี่", nameEn: "Dory Fish", price: 59 },
+                    { id: 'm13', nameTh: "กุ้ง", nameEn: "Shrimp", price: 69 },
+                    { id: 'm14', nameTh: "ปลาหมึก", nameEn: "Squid", price: 69 }
                 ]
             },
             {
-                cat: "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES",
+                catTh: "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES",
+                catEn: "VEGETABLE & NOODLES",
                 items: [
-                    { id: 'v1', name: "ชุดผักรวม", en: "Vegetable Combo", price: 69 },
-                    { id: 'v2', name: "กะหล่ำปลี", en: "Cabbage", price: 29 },
-                    { id: 'v3', name: "ผักบุ้ง", en: "Morning Glory", price: 19 },
-                    { id: 'v4', name: "ผักชีฝรั่ง", en: "Culantro", price: 19 },
-                    { id: 'v5', name: "โหระพา", en: "Sweet Basil", price: 29 },
-                    { id: 'v6', name: "ใบชะพลู", en: "Wild Betel Leaves", price: 29 },
-                    { id: 'n1', name: "วุ้นเส้น", en: "Glass Noodles", price: 29 },
-                    { id: 'n2', name: "มาม่า", en: "Instant Noodles", price: 29 },
-                    { id: 'n3', name: "บะหมี่หยก (สด)", en: "Fresh Jade Noodles", price: 29 },
-                    { id: 'n4', name: "เส้นอุด้ง", en: "Udon Noodles", price: 39 }
+                    { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69 },
+                    { id: 'v2', nameTh: "กะหล่ำปลี", nameEn: "Cabbage", price: 29 },
+                    { id: 'v3', nameTh: "ผักบุ้ง", nameEn: "Morning Glory", price: 19 },
+                    { id: 'v4', nameTh: "ผักชีฝรั่ง", nameEn: "Culantro", price: 19 },
+                    { id: 'v5', nameTh: "โหระพา", nameEn: "Sweet Basil", price: 29 },
+                    { id: 'v6', nameTh: "ใบชะพลู", nameEn: "Wild Betel Leaves", price: 29 },
+                    { id: 'n1', nameTh: "วุ้นเส้น", nameEn: "Glass Noodles", price: 29 },
+                    { id: 'n2', nameTh: "มาม่า", nameEn: "Instant Noodles", price: 29 },
+                    { id: 'n3', nameTh: "บะหมี่หยก (สด)", nameEn: "Fresh Jade Noodles", price: 29 },
+                    { id: 'n4', nameTh: "เส้นอุด้ง", nameEn: "Udon Noodles", price: 39 }
                 ]
             },
             {
-                cat: "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE",
+                catTh: "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE",
+                catEn: "APPETIZERS & MORE",
                 items: [
-                    { id: 'e1', name: "ไข่ไก่สด", en: "Fresh Egg", price: 15 },
-                    { id: 'e2', name: "เต้าหู้ปลา", en: "Fish Tofu", price: 49 },
-                    { id: 'e3', name: "เต้าหู้ไข่", en: "Egg Tofu", price: 29 },
-                    { id: 'e4', name: "เต้าหู้ชีส", en: "Cheese Tofu", price: 49 },
-                    { id: 'e5', name: "ฟองเต้าหู้แท่ง", en: "Bean Curd Stick", price: 49 },
-                    { id: 'e6', name: "ฟองเต้าหู้ทอด", en: "Fried Tofu Skin Roll", price: 39 },
-                    { id: 'e7', name: "ข้าวเปล่า", en: "Rice", price: 29 },
-                    { id: 'a1', name: "ไก่ป๊อป", en: "Chicken Pops", price: 79 },
-                    { id: 'a2', name: "แฮชบราวน์ เทเทอร์ ทอตส์", en: "Hash Brown Tater Tots", price: 69 },
-                    { id: 'a3', name: "ข้าวเกรียบปลา", en: "Crispy Fish Crackers", price: 49 },
-                    { id: 'a4', name: "คาลามารี", en: "Calamari", price: 119 }
+                    { id: 'e1', nameTh: "ไข่ไก่สด", nameEn: "Fresh Egg", price: 15 },
+                    { id: 'e2', nameTh: "เต้าหู้ปลา", nameEn: "Fish Tofu", price: 49 },
+                    { id: 'e3', nameTh: "เต้าหู้ไข่", nameEn: "Egg Tofu", price: 29 },
+                    { id: 'e4', nameTh: "เต้าหู้ชีส", nameEn: "Cheese Tofu", price: 49 },
+                    { id: 'e5', nameTh: "ฟองเต้าหู้แท่ง", nameEn: "Bean Curd Stick", price: 49 },
+                    { id: 'e6', nameTh: "ฟองเต้าหู้ทอด", nameEn: "Fried Tofu Skin Roll", price: 39 },
+                    { id: 'e7', nameTh: "ข้าวเปล่า", nameEn: "Rice", price: 29 },
+                    { id: 'a1', nameTh: "ไก่ป๊อป", nameEn: "Chicken Pops", price: 79 },
+                    { id: 'a2', nameTh: "แฮชบราวน์ เทเทอร์ ทอตส์", nameEn: "Hash Brown Tater Tots", price: 69 },
+                    { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49 },
+                    { id: 'a4', nameTh: "คาลามารี", nameEn: "Calamari", price: 119 }
                 ]
             },
             {
-                cat: "เมนูของหวาน / DESSERT",
+                catTh: "เมนูของหวาน / DESSERT",
+                catEn: "DESSERT",
                 items: [
-                    { id: 'd1', name: "ซาโมซ่ากล้วย", en: "Banana Samosa", price: 79 },
-                    { id: 'd2', name: "สละลอยแก้ว", en: "Chilled Sala Dessert", price: 59 },
-                    { id: 'd3', name: "ลูกตาลลอยแก้ว", en: "Chilled Toddy Palm Dessert", price: 59 },
-                    { id: 'mj1', name: "โมจิไอศครีม - ช็อคโกแลต", en: "Mochi Ice Cream - Chocolate", price: 39 },
-                    { id: 'mj2', name: "โมจิไอศครีม - วานิลลา", en: "Mochi Ice Cream - Vanilla", price: 39 },
-                    { id: 'mj3', name: "โมจิไอศครีม - คุกกี้แอนด์ครีม", en: "Mochi Ice Cream - Cookies & Cream", price: 39 },
-                    { id: 'mj4', name: "โมจิไอศครีม - มัทฉะ", en: "Mochi Ice Cream - Matcha", price: 39 },
-                    { id: 'mj5', name: "โมจิไอศครีม - มะนาว", en: "Mochi Ice Cream - Lime", price: 39 },
-                    { id: 'mj6', name: "โมจิไอศครีม - ชาไทย", en: "Mochi Ice Cream - Thai Tea", price: 39 }
+                    { id: 'd1', nameTh: "ซาโมซ่ากล้วย", nameEn: "Banana Samosa", price: 79 },
+                    { id: 'd2', nameTh: "สละลอยแก้ว", nameEn: "Chilled Sala Dessert", price: 59 },
+                    { id: 'd3', nameTh: "ลูกตาลลอยแก้ว", nameEn: "Chilled Toddy Palm Dessert", price: 59 },
+                    { id: 'mj1', nameTh: "โมจิไอศครีม - ช็อคโกแลต", nameEn: "Mochi Ice Cream - Chocolate", price: 39 },
+                    { id: 'mj2', nameTh: "โมจิไอศครีม - วานิลลา", nameEn: "Mochi Ice Cream - Vanilla", price: 39 },
+                    { id: 'mj3', nameTh: "โมจิไอศครีม - คุกกี้แอนด์ครีม", nameEn: "Mochi Ice Cream - Cookies & Cream", price: 39 },
+                    { id: 'mj4', nameTh: "โมจิไอศครีม - มัทฉะ", nameEn: "Mochi Ice Cream - Matcha", price: 39 },
+                    { id: 'mj5', nameTh: "โมจิไอศครีม - มะนาว", nameEn: "Mochi Ice Cream - Lime", price: 39 },
+                    { id: 'mj6', nameTh: "โมจิไอศครีม - ชาไทย", nameEn: "Mochi Ice Cream - Thai Tea", price: 39 }
                 ]
             },
             {
-                cat: "เมนูเครื่องดื่ม / BEVERAGE",
+                catTh: "เมนูเครื่องดื่ม / BEVERAGE",
+                catEn: "BEVERAGE",
                 items: [
-                    { id: 'dr1', name: "น้ำเปล่า", en: "Drinking Water", price: 15 },
-                    { id: 'dr2', name: "โซดา", en: "Soda Water", price: 15 },
-                    { id: 'dr3', name: "น้ำโค้ก original", en: "Coke Original", price: 25 },
-                    { id: 'dr4', name: "น้ำโค้ก zero", en: "Coke Zero", price: 25 },
-                    { id: 'dr5', name: "น้ำแป๊ปซี่ original", en: "Pepsi Original", price: 25 },
-                    { id: 'dr6', name: "น้ำแป๊ปซี่ max", en: "Pepsi Max", price: 25 },
-                    { id: 'dr7', name: "สิงค์เลม่อนโซดา", en: "Singha Lemon Soda", price: 25 },
-                    { id: 'dr8', name: "ชเวปส์ จิงเจอร์เอล", en: "Schweppes Ginger Ale", price: 25 },
-                    { id: 'dr9', name: "ชเวปส์ มะนาว", en: "Schweppes Manao Soda", price: 25 },
-                    { id: 'dr10', name: "แฟนต้า น้ำแดง", en: "Fanta Strawberry", price: 25 },
-                    { id: 'dr11', name: "แฟนต้า น้ำเขียว", en: "Fanta Fruit Punch", price: 25 },
-                    { id: 'dr12', name: "แฟนต้า น้ำส้ม", en: "Fanta Orange", price: 25 },
-                    { id: 'dr13', name: "โค้ก original ขวด 1.25 ลิตร", en: "Coke Original 1.25L Bottle", price: 40 },
-                    { id: 'dr14', name: "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", en: "Bucket of Ice (Refill max 4 guests)", price: 25 },
-                    { id: 'dr15', name: "น้ำแข็งแก้ว", en: "Glass of Ice", price: 2 }
+                    { id: 'dr1', nameTh: "น้ำเปล่า", nameEn: "Drinking Water", price: 15 },
+                    { id: 'dr2', nameTh: "โซดา", nameEn: "Soda Water", price: 15 },
+                    { id: 'dr3', nameTh: "น้ำโค้ก original", nameEn: "Coke Original", price: 25 },
+                    { id: 'dr4', nameTh: "น้ำโค้ก zero", nameEn: "Coke Zero", price: 25 },
+                    { id: 'dr5', nameTh: "น้ำแป๊ปซี่ original", nameEn: "Pepsi Original", price: 25 },
+                    { id: 'dr6', nameTh: "น้ำแป๊ปซี่ max", nameEn: "Pepsi Max", price: 25 },
+                    { id: 'dr7', nameTh: "สิงค์เลม่อนโซดา", nameEn: "Singha Lemon Soda", price: 25 },
+                    { id: 'dr8', nameTh: "ชเวปส์ จิงเจอร์เอล", nameEn: "Schweppes Ginger Ale", price: 25 },
+                    { id: 'dr9', nameTh: "ชเวปส์ มะนาว", nameEn: "Schweppes Manao Soda", price: 25 },
+                    { id: 'dr10', nameTh: "แฟนต้า น้ำแดง", nameEn: "Fanta Strawberry", price: 25 },
+                    { id: 'dr11', nameTh: "แฟนต้า น้ำเขียว", nameEn: "Fanta Fruit Punch", price: 25 },
+                    { id: 'dr12', nameTh: "แฟนต้า น้ำส้ม", nameEn: "Fanta Orange", price: 25 },
+                    { id: 'dr13', nameTh: "โค้ก original ขวด 1.25 ลิตร", nameEn: "Coke Original 1.25L Bottle", price: 40 },
+                    { id: 'dr14', nameTh: "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", nameEn: "Bucket of Ice (Refill max 4 guests)", price: 25 },
+                    { id: 'dr15', nameTh: "น้ำแข็งแก้ว", nameEn: "Glass of Ice", price: 2 }
                 ]
             }
         ];
@@ -327,6 +338,22 @@
             document.getElementById('date').valueAsDate = new Date();
         }
 
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.getElementById('langText').innerText = currentLang === 'th' ? 'EN' : 'TH';
+            
+            // สลับข้อความทั่วไปตาม data attributes
+            document.querySelectorAll('[data-lang-th]').forEach(el => {
+                el.innerText = el.getAttribute(`data-lang-${currentLang}`);
+            });
+
+            // สลับ placeholder ของ input ชื่อ
+            const nameInput = document.getElementById('name');
+            nameInput.placeholder = nameInput.getAttribute(`data-placeholder-${currentLang}`);
+
+            renderMenu();
+        }
+
         function calculateHolidays() {
             const startDay = new Date(2026, 6, 20);
             const today = new Date();
@@ -339,7 +366,7 @@
                 check.setDate(check.getDate() + 14);
                 if (holidays.length >= 4) break;
             }
-            document.getElementById('holidayNotice').innerHTML = `<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b> ${holidays.join(', ')}`;
+            document.getElementById('holidayNotice').innerHTML = `<b>${currentLang === 'th' ? 'กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):' : 'Store Holiday Schedule (Every other Monday):'}</b> ${holidays.join(', ')}`;
         }
 
         function initTimeSelectors() {
@@ -353,31 +380,38 @@
         function renderMenu() {
             let html = "";
             menuData.forEach(category => {
+                const catTitle = currentLang === 'th' ? category.catTh : category.catEn;
                 html += `<div class="font-kanit font-bold text-gold text-lg mt-8 mb-4 flex items-center gap-3">
-                            <span>${category.cat}</span>
+                            <span>${catTitle}</span>
                             <div class="h-[1px] flex-1 bg-gold/20"></div>
                          </div>`;
                 category.items.forEach(item => {
-                    let badgeHtml = item.badge ? `<span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-md mt-1 font-semibold">${item.badge}</span>` : '';
+                    const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                    const subName = currentLang === 'th' ? item.nameEn : item.nameTh;
+                    const badgeText = item.badgeTh ? (currentLang === 'th' ? item.badgeTh : item.badgeEn) : '';
+                    let badgeHtml = badgeText ? `<span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-md mt-1 font-semibold">${badgeText}</span>` : '';
+                    const currentQty = orderMap[item.id] ? orderMap[item.id].qty : 0;
+                    const isSelected = currentQty > 0;
+
                     html += `
-                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border border-emerald-800 transition-all shadow-sm" id="card-${item.id}">
+                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border ${isSelected ? 'border-gold bg-emerald-800/80' : 'border-emerald-800'} transition-all shadow-sm" id="card-${item.id}">
                             <div class="flex gap-3.5 items-center">
                                 <div class="w-20 h-20 bg-emerald-950 rounded-xl border border-gold/20 flex flex-col items-center justify-center text-[10px] text-slate-400 text-center shrink-0 p-1">
                                     <i class="fa-solid fa-image text-gold/60 text-base mb-1"></i>
                                     <span>Image coming soon</span>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="font-semibold text-white text-sm truncate">${item.name}</h4>
-                                    <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${item.en}</span>
+                                    <h4 class="font-semibold text-white text-sm truncate">${itemName}</h4>
+                                    <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${subName}</span>
                                     ${badgeHtml}
                                     <span class="text-gold font-bold text-sm mt-1.5 block font-kanit">${item.price} ฿</span>
                                     
-                                    <input type="text" class="note-input w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 mt-2.5 outline-none focus:border-gold hidden" id="note-${item.id}" placeholder="ระบุรายละเอียด เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก...">
+                                    <input type="text" class="note-input w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 mt-2.5 outline-none focus:border-gold ${isSelected ? '' : 'hidden'}" id="note-${item.id}" placeholder="${currentLang === 'th' ? 'ระบุรายละเอียด เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก...' : 'Notes e.g. no marinated pork, no veg...'}">
                                 </div>
                                 <div class="flex flex-col items-end justify-between self-stretch shrink-0">
                                     <div class="flex items-center bg-emerald-950 border border-gold/30 rounded-xl overflow-hidden shadow-inner">
                                         <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', -1, ${item.price})">-</button>
-                                        <span class="w-8 text-center text-sm font-bold text-white" id="qty-${item.id}">0</span>
+                                        <span class="w-8 text-center text-sm font-bold text-white" id="qty-${item.id}">${currentQty}</span>
                                         <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', 1, ${item.price})">+</button>
                                     </div>
                                 </div>
@@ -394,17 +428,19 @@
             const newVal = Math.max(0, current + delta);
             const card = document.getElementById(`card-${id}`);
             const note = document.getElementById(`note-${id}`);
+            const itemObj = menuData.flatMap(c => c.items).find(i => i.id === id);
             
             if (newVal > 0) {
-                orderMap[id] = { qty: newVal, price: price, name: menuData.flatMap(c => c.items).find(i => i.id === id).name };
+                orderMap[id] = { qty: newVal, price: price, nameTh: itemObj.nameTh, nameEn: itemObj.nameEn };
                 card.classList.add('border-gold', 'bg-emerald-800/80');
-                note.classList.remove('hidden');
+                if(note) note.classList.remove('hidden');
             } else {
                 delete orderMap[id];
                 card.classList.remove('border-gold', 'bg-emerald-800/80');
-                note.classList.add('hidden');
+                if(note) note.classList.add('hidden');
             }
-            document.getElementById(`qty-${id}`).innerText = newVal;
+            const qtySpan = document.getElementById(`qty-${id}`);
+            if(qtySpan) qtySpan.innerText = newVal;
             calculateTotal();
         }
 
@@ -420,21 +456,23 @@
             const hr = parseInt(document.getElementById('hour').value);
             const ampm = document.getElementById('ampm').value;
 
-            if(!name || !phone) return alert("กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ");
-            if(ampm === "PM" && hr > 6 && hr !== 12) return alert("ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น.");
-            if(Object.keys(orderMap).length === 0) return alert("กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ");
+            if(!name || !phone) return alert(currentLang === 'th' ? "กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ" : "Please provide your name and phone number.");
+            if(ampm === "PM" && hr > 6 && hr !== 12) return alert(currentLang === 'th' ? "ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น." : "Sorry, reservations are not accepted after 6:00 PM.");
+            if(Object.keys(orderMap).length === 0) return alert(currentLang === 'th' ? "กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ" : "Please select at least one menu item.");
 
             let itemsHtml = "";
             let grandTotal = 0;
             for (let id in orderMap) {
                 const itemTotal = orderMap[id].qty * orderMap[id].price;
                 grandTotal += itemTotal;
-                const noteVal = document.getElementById(`note-${id}`).value;
+                const noteInput = document.getElementById(`note-${id}`);
+                const noteVal = noteInput ? noteInput.value : '';
+                const itemName = currentLang === 'th' ? orderMap[id].nameTh : orderMap[id].nameEn;
                 
                 itemsHtml += `
                     <div class="py-2 border-b border-slate-100">
                         <div class="flex justify-between font-bold text-slate-800">
-                            <span>• ${orderMap[id].name} x${orderMap[id].qty}</span>
+                            <span>• ${itemName} x${orderMap[id].qty}</span>
                             <span class="text-rose-600">${itemTotal.toLocaleString()}.-</span>
                         </div>
                 `;
@@ -444,12 +482,16 @@
                 itemsHtml += `</div>`;
             }
 
+            const dateVal = document.getElementById('date').value;
+            const minVal = document.getElementById('minute').value.padStart(2,'0');
+            const guestsVal = document.getElementById('guests').value;
+
             document.getElementById('receiptMeta').innerHTML = `
-                <p><b>ชื่อผู้จอง:</b> ${name}</p>
-                <p><b>เบอร์โทร:</b> ${phone}</p>
-                <p><b>จำนวน:</b> ${document.getElementById('guests').value} ท่าน</p>
-                <p><b>วันที่:</b> ${document.getElementById('date').value}</p>
-                <p><b>เวลา:</b> ${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${ampm}</p>
+                <p><b>${currentLang === 'th' ? 'ชื่อผู้จอง' : 'Name'}:</b> ${name}</p>
+                <p><b>${currentLang === 'th' ? 'เบอร์โทร' : 'Phone'}:</b> ${phone}</p>
+                <p><b>${currentLang === 'th' ? 'จำนวน' : 'Guests'}:</b> ${guestsVal} ${currentLang === 'th' ? 'ท่าน' : 'People'}</p>
+                <p><b>${currentLang === 'th' ? 'วันที่' : 'Date'}:</b> ${dateVal}</p>
+                <p><b>${currentLang === 'th' ? 'เวลา' : 'Time'}:</b> ${hr}:${minVal} ${ampm}</p>
             `;
             document.getElementById('receiptItems').innerHTML = itemsHtml;
             document.getElementById('receiptTotalAmount').innerText = grandTotal.toLocaleString() + " ฿";
@@ -467,16 +509,18 @@
             
             let itemText = "";
             for (let id in orderMap) {
-                const noteVal = document.getElementById(`note-${id}`).value;
+                const noteInput = document.getElementById(`note-${id}`);
+                const noteVal = noteInput ? noteInput.value : '';
                 const itemTotal = orderMap[id].qty * orderMap[id].price;
-                itemText += `• ${orderMap[id].name} x${orderMap[id].qty} [${itemTotal.toLocaleString()}.-]\n`;
+                const itemName = orderMap[id].nameTh; // ส่งเป็นชื่อไทยเข้าไลน์ร้านเพื่อความเข้าใจตรงกันของพนักงาน
+                itemText += `• ${itemName} x${orderMap[id].qty} [${itemTotal.toLocaleString()}.-]\n`;
                 if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
             }
 
             const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> กำลังส่งออเดอร์...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> ${currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...'}`;
             btn.disabled = true;
 
             if (liff.isInClient()) {
@@ -484,16 +528,16 @@
                     type: 'text',
                     text: finalMsg
                 }]).then(() => {
-                    alert("ส่งใบเสร็จออเดอร์เข้าห้องแชท LINE OA ของร้านสำเร็จ!");
+                    alert(currentLang === 'th' ? "ส่งใบเสร็จออเดอร์เข้าห้องแชท LINE OA ของร้านสำเร็จ!" : "Order sent to LINE OA successfully!");
                     liff.closeWindow();
                 }).catch((err) => {
-                    alert("เกิดข้อผิดพลาด: " + err.message);
-                    btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ส่งออเดอร์เข้า LINE OA ร้านทันที`;
+                    alert("Error: " + err.message);
+                    btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE'}`;
                     btn.disabled = false;
                 });
             } else {
-                alert("กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ");
-                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ส่งออเดอร์เข้า LINE OA ร้านทันที`;
+                alert(currentLang === 'th' ? "กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ" : "Please open via LINE OA menu.");
+                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE'}`;
                 btn.disabled = false;
             }
         }
