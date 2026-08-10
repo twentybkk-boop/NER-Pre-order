@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NER แจ่วฮ้อน - Pre-Order & Reservation</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Prompt & Kanit -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <script>
@@ -16,25 +13,11 @@
             theme: {
                 extend: {
                     colors: {
-                        emerald: {
-                            950: '#0c1811',
-                            900: '#14241b',
-                            800: '#1b3325',
-                            700: '#233d2e',
-                        },
-                        gold: {
-                            DEFAULT: '#c59b27',
-                            light: '#e5a93b',
-                            dark: '#a07d1a'
-                        },
-                        line: {
-                            green: '#06C755'
-                        }
+                        emerald: { 950: '#0c1811', 900: '#14241b', 800: '#1b3325', 700: '#233d2e' },
+                        gold: { DEFAULT: '#c59b27', light: '#e5a93b', dark: '#a07d1a' },
+                        line: { green: '#06C755' }
                     },
-                    fontFamily: {
-                        prompt: ['Prompt', 'sans-serif'],
-                        kanit: ['Kanit', 'sans-serif'],
-                    }
+                    fontFamily: { prompt: ['Prompt', 'sans-serif'], kanit: ['Kanit', 'sans-serif'] }
                 }
             }
         }
@@ -58,9 +41,7 @@
                     <h1 class="font-bold text-lg leading-none font-kanit tracking-wide" data-lang-th="NER แจ่วฮ้อน" data-lang-en="NER Jaew Hon">NER แจ่วฮ้อน</h1>
                 </div>
             </div>
-            
             <div class="flex items-center gap-2">
-                <!-- Language Switcher Button -->
                 <button onclick="toggleLanguage()" class="bg-emerald-950 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all font-kanit">
                     <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
                 </button>
@@ -110,7 +91,6 @@
                     <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="ชื่อผู้จอง" data-lang-en="Customer Name">ชื่อผู้จอง</span> <span class="text-slate-400 font-normal">/ Customer Name</span></label>
                     <input type="text" id="name" data-placeholder-th="กรุณาระบุชื่อของท่าน" data-placeholder-en="Enter your name" placeholder="กรุณาระบุชื่อของท่าน" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เบอร์โทรศัพท์" data-lang-en="Phone Number">เบอร์โทรศัพท์</span> <span class="text-slate-400 font-normal">/ Phone</span></label>
@@ -129,12 +109,10 @@
                         </select>
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="วันที่ต้องการเข้าใช้บริการ" data-lang-en="Date of Visit">วันที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Date of Visit</span></label>
                     <input type="date" id="date" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
                 </div>
-
                 <div>
                     <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เวลาที่ต้องการเข้าใช้บริการ" data-lang-en="Arrival Time">เวลาที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Arrival Time</span></label>
                     <div class="grid grid-cols-3 gap-2">
@@ -151,15 +129,13 @@
 
         <!-- Section 2: Menu Items Container -->
         <div>
-            <!-- Banner Notice for Menu Notes -->
             <div class="bg-gold/10 border border-gold/40 text-gold p-3.5 rounded-2xl mb-4 text-xs flex items-start gap-2.5 shadow-lg">
                 <i class="fa-solid fa-circle-info text-base mt-0.5"></i>
                 <div>
                     <strong class="font-kanit text-sm block" data-lang-th="💡 คำแนะนำการสั่งอาหาร:" data-lang-en="💡 Ordering Guide:">💡 คำแนะนำการสั่งอาหาร:</strong>
-                    <p class="text-slate-200 mt-0.5" data-lang-th="เมื่อเลือกเมนูแล้ว สามารถพิมพ์ระบุรายละเอียดเพิ่มเติมได้ที่ช่องหมายเหตุใต้แต่ละเมนูครับ (เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก)" data-lang-en="You can add special requests/notes under each menu item after selecting it (e.g., no marinated pork, no vegetables).">เมื่อเลือกเมนูแล้ว สามารถพิมพ์ระบุรายละเอียดเพิ่มเติมได้ที่ช่องหมายเหตุใต้แต่ละเมนูครับ (เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก)</p>
+                    <p class="text-slate-200 mt-0.5" data-lang-th="คุณสามารถเลือก Add-on เพิ่มเติม ระบุหมายเหตุ และกดปุ่ม 'ใส่ตะกร้า' สำหรับแต่ละชุดได้ทันที (สามารถสั่งเมนูเดิม ซ้ำคนละคอนดิชั่นได้)" data-lang-en="You can select add-ons, add notes, and click 'Add to Cart' for each item.">คุณสามารถเลือก Add-on เพิ่มเติม ระบุหมายเหตุ และกดปุ่ม 'ใส่ตะกร้า' สำหรับแต่ละชุดได้ทันที</p>
                 </div>
             </div>
-
             <div id="menuContainer" class="space-y-6"></div>
         </div>
 
@@ -169,17 +145,17 @@
     <div class="fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-gold/20 p-4 z-40 shadow-2xl">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div>
-                <span class="text-[11px] text-slate-400 uppercase tracking-wider block" data-lang-th="ยอดรวมโดยประมาณ" data-lang-en="Estimated Total">Estimated Total</span>
+                <span class="text-[11px] text-slate-400 uppercase tracking-wider block" data-lang-th="ยอดรวมในตะกร้า" data-lang-en="Cart Total">Cart Total</span>
                 <span class="text-2xl font-bold text-gold font-kanit"><span id="totalPrice">0</span> ฿</span>
             </div>
             <button onclick="openSummaryModal()" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-emerald-950 px-6 py-3.5 rounded-2xl font-bold shadow-lg shadow-gold/20 flex items-center gap-2 transition-all font-kanit">
-                <i class="fa-solid fa-file-invoice-dollar text-base"></i>
-                <span data-lang-th="สรุปรายการสั่งซื้อ" data-lang-en="Order Summary">สรุปรายการสั่งซื้อ</span>
+                <i class="fa-solid fa-basket-shopping text-base"></i>
+                <span data-lang-th="ดูตะกร้าสินค้าของฉัน" data-lang-en="View Cart">ดูตะกร้าสินค้า (<span id="cartBadge">0</span>)</span>
             </button>
         </div>
     </div>
 
-    <!-- Modern Digital Receipt Modal -->
+    <!-- Modern Digital Receipt & Cart Management Modal -->
     <div id="summaryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white text-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-slate-100 font-mono">
             <div class="text-center pb-4 border-b-2 border-dashed border-slate-200">
@@ -187,14 +163,17 @@
                     NER
                 </div>
                 <h3 class="text-xl font-bold font-kanit text-emerald-950">NER JAEW HON</h3>
-                <p class="text-[11px] text-slate-400 tracking-widest mt-0.5 font-sans">DIGITAL PRE-ORDER RECEIPT</p>
+                <p class="text-[11px] text-slate-400 tracking-widest mt-0.5 font-sans">SHOPPING CART & PRE-ORDER</p>
             </div>
 
             <div id="receiptMeta" class="py-4 border-b border-slate-200 text-xs space-y-1.5 text-slate-600 font-sans"></div>
 
-            <div class="py-4 border-b border-slate-200">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit" data-lang-th="📋 รายการอาหาร (ORDER SUMMARY)" data-lang-en="📋 ORDER SUMMARY">📋 รายการอาหาร (ORDER SUMMARY)</h4>
-                <div id="receiptItems" class="space-y-2 text-xs font-sans"></div>
+            <div class="py-4 border-b border-slate-200 max-h-60 overflow-y-auto">
+                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit flex justify-between items-center">
+                    <span data-lang-th="📋 รายการในตะกร้าของคุณ" data-lang-en="📋 CART ITEMS">📋 รายการในตะกร้าของคุณ</span>
+                    <span class="text-[10px] text-slate-400 font-normal">* สามารถลบรายการได้</span>
+                </h4>
+                <div id="receiptItems" class="space-y-3 text-xs font-sans"></div>
             </div>
 
             <div class="py-4 border-b-2 border-dashed border-slate-200 flex justify-between items-center font-kanit">
@@ -213,7 +192,7 @@
                     <span data-lang-th="ส่งออเดอร์เข้า LINE OA ร้านทันที" data-lang-en="Send Order to Official LINE">ส่งออเดอร์เข้า LINE OA ร้านทันที</span>
                 </button>
                 <button onclick="closeSummaryModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-2xl text-xs font-medium transition-all">
-                    <i class="fa-solid fa-pen-to-square mr-1"></i> <span data-lang-th="กลับไปแก้ไขรายการ" data-lang-en="Edit Order">กลับไปแก้ไขรายการ</span>
+                    <i class="fa-solid fa-arrow-left mr-1"></i> <span data-lang-th="เลือกเมนูอาหารเพิ่ม" data-lang-en="Continue Shopping">เลือกเมนูอาหารเพิ่ม</span>
                 </button>
             </div>
         </div>
@@ -222,7 +201,7 @@
     <!-- JavaScript Application Logic -->
     <script>
         const LIFF_ID = "2010784971-mH3KqiRT";
-        let currentLang = 'th'; // ค่าเริ่มต้นภาษาไทย
+        let currentLang = 'th';
 
         const menuData = [
             {
@@ -328,7 +307,8 @@
             }
         ];
 
-        const orderMap = {};
+        // ตะกร้าสินค้าแบบ Array เก็บทุกออเดอร์ย่อยอิสระ
+        let cart = [];
         let cachedHolidays = [];
 
         function init() {
@@ -343,12 +323,10 @@
             currentLang = currentLang === 'th' ? 'en' : 'th';
             document.getElementById('langText').innerText = currentLang === 'th' ? 'EN' : 'TH';
             
-            // สลับข้อความทั่วไปตาม data attributes
             document.querySelectorAll('[data-lang-th]').forEach(el => {
                 el.innerText = el.getAttribute(`data-lang-${currentLang}`);
             });
 
-            // สลับ placeholder ของ input ชื่อ
             const nameInput = document.getElementById('name');
             nameInput.placeholder = nameInput.getAttribute(`data-placeholder-${currentLang}`);
 
@@ -372,9 +350,7 @@
         }
 
         function updateHolidayNoticeText() {
-            const titleText = currentLang === 'th' 
-                ? '<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b>' 
-                : '<b>Store Holiday Schedule (Every other Monday):</b>';
+            const titleText = currentLang === 'th' ? '<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b>' : '<b>Store Holiday Schedule (Every other Monday):</b>';
             document.getElementById('holidayNotice').innerHTML = `${titleText} ${cachedHolidays.join(', ')}`;
         }
 
@@ -386,8 +362,22 @@
             h.value = 5;
         }
 
+        // ดึงรายชื่อไอเทมทั้งหมดมาทำเป็น Dropdown สำหรับเลือก Add-on
+        function getAddOnOptionsHtml() {
+            let options = `<option value="">-- ${currentLang === 'th' ? 'เลือก Add-on เพิ่มเติม (ถ้ามี)' : 'Select Add-on (Optional)'} --</option>`;
+            menuData.forEach(cat => {
+                cat.items.forEach(item => {
+                    const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                    options += `<option value="${item.id}" data-name-th="${item.nameTh}" data-name-en="${item.nameEn}" data-price="${item.price}">${itemName} (+${item.price}฿)</option>`;
+                });
+            });
+            return options;
+        }
+
         function renderMenu() {
             let html = "";
+            const addOnHtmlOptions = getAddOnOptionsHtml();
+
             menuData.forEach(category => {
                 const catTitle = currentLang === 'th' ? category.catTh : category.catEn;
                 html += `<div class="font-kanit font-bold text-gold text-lg mt-8 mb-4 flex items-center gap-3">
@@ -399,31 +389,37 @@
                     const subName = currentLang === 'th' ? item.nameEn : item.nameTh;
                     const badgeText = item.badgeTh ? (currentLang === 'th' ? item.badgeTh : item.badgeEn) : '';
                     let badgeHtml = badgeText ? `<span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-md mt-1 font-semibold">${badgeText}</span>` : '';
-                    const currentQty = orderMap[item.id] ? orderMap[item.id].qty : 0;
-                    const isSelected = currentQty > 0;
 
                     html += `
-                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border ${isSelected ? 'border-gold bg-emerald-800/80' : 'border-emerald-800'} transition-all shadow-sm" id="card-${item.id}">
-                            <div class="flex gap-3.5 items-center">
+                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border border-emerald-800 transition-all shadow-sm" id="card-${item.id}">
+                            <div class="flex gap-3.5 items-start">
                                 <div class="w-20 h-20 bg-emerald-950 rounded-xl border border-gold/20 flex flex-col items-center justify-center text-[10px] text-slate-400 text-center shrink-0 p-1">
                                     <i class="fa-solid fa-image text-gold/60 text-base mb-1"></i>
-                                    <span>Image coming soon</span>
+                                    <span>Image</span>
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h4 class="font-semibold text-white text-sm truncate">${itemName}</h4>
                                     <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${subName}</span>
                                     ${badgeHtml}
-                                    <span class="text-gold font-bold text-sm mt-1.5 block font-kanit">${item.price} ฿</span>
+                                    <span class="text-gold font-bold text-sm mt-1.5 block font-kanit" id="price-display-${item.id}">${item.price} ฿</span>
                                     
-                                    <input type="text" class="note-input w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 mt-2.5 outline-none focus:border-gold ${isSelected ? '' : 'hidden'}" id="note-${item.id}" placeholder="${currentLang === 'th' ? 'ระบุรายละเอียด เช่น ไม่เอาหมูหมัก, ไม่ใส่ผัก...' : 'Notes e.g. no marinated pork, no veg...'}">
-                                </div>
-                                <div class="flex flex-col items-end justify-between self-stretch shrink-0">
-                                    <div class="flex items-center bg-emerald-950 border border-gold/30 rounded-xl overflow-hidden shadow-inner">
-                                        <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', -1, ${item.price})">-</button>
-                                        <span class="w-8 text-center text-sm font-bold text-white" id="qty-${item.id}">${currentQty}</span>
-                                        <button class="w-8 h-8 bg-emerald-900 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="updateQty('${item.id}', 1, ${item.price})">+</button>
+                                    <!-- ตัวเลือก Add-on -->
+                                    <div class="mt-2.5">
+                                        <select id="addon-${item.id}" onchange="updateItemCardPrice('${item.id}', ${item.price})" class="w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold outline-none focus:border-gold">
+                                            ${addOnHtmlOptions}
+                                        </select>
+                                    </div>
+
+                                    <!-- ช่องหมายเหตุ -->
+                                    <div class="mt-2">
+                                        <input type="text" id="note-${item.id}" class="w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 outline-none focus:border-gold" placeholder="${currentLang === 'th' ? 'ระบุหมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Notes e.g. no veg, less spicy...'}">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-emerald-800/80 flex justify-end">
+                                <button onclick="addToCart('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="bg-gold/20 hover:bg-gold text-gold hover:text-emerald-950 border border-gold/50 px-4 py-2 rounded-xl text-xs font-bold font-kanit transition-all flex items-center gap-1.5 shadow">
+                                    <i class="fa-solid fa-cart-plus"></i> <span data-lang-th="ใส่ตะกร้า" data-lang-en="Add to Cart">ใส่ตะกร้า</span>
+                                </button>
                             </div>
                         </div>
                     `;
@@ -432,31 +428,65 @@
             document.getElementById('menuContainer').innerHTML = html;
         }
 
-        function updateQty(id, delta, price) {
-            const current = orderMap[id] ? orderMap[id].qty : 0;
-            const newVal = Math.max(0, current + delta);
-            const card = document.getElementById(`card-${id}`);
-            const note = document.getElementById(`note-${id}`);
-            const itemObj = menuData.flatMap(c => c.items).find(i => i.id === id);
-            
-            if (newVal > 0) {
-                orderMap[id] = { qty: newVal, price: price, nameTh: itemObj.nameTh, nameEn: itemObj.nameEn };
-                card.classList.add('border-gold', 'bg-emerald-800/80');
-                if(note) note.classList.remove('hidden');
-            } else {
-                delete orderMap[id];
-                card.classList.remove('border-gold', 'bg-emerald-800/80');
-                if(note) note.classList.add('hidden');
-            }
-            const qtySpan = document.getElementById(`qty-${id}`);
-            if(qtySpan) qtySpan.innerText = newVal;
-            calculateTotal();
+        // คำนวณราคาหน้าการ์ดทันทีเมื่อเลือก Add-on
+        function updateItemCardPrice(itemId, basePrice) {
+            const selectEl = document.getElementById(`addon-${itemId}`);
+            const selectedOpt = selectEl.options[selectEl.selectedIndex];
+            const addOnPrice = selectedOpt.dataset.price ? parseInt(selectedOpt.dataset.price) : 0;
+            const totalPrice = basePrice + addOnPrice;
+            document.getElementById(`price-display-${itemId}`).innerText = `${totalPrice} ฿`;
         }
 
-        function calculateTotal() {
-            let total = 0;
-            for (let key in orderMap) total += (orderMap[key].qty * orderMap[key].price);
-            document.getElementById('totalPrice').innerText = total.toLocaleString();
+        // กดปุ่มใส่ตะกร้าสินค้า
+        function addToCart(id, nameTh, nameEn, basePrice) {
+            const selectEl = document.getElementById(`addon-${id}`);
+            const selectedOpt = selectEl.options[selectEl.selectedIndex];
+            
+            let addOnId = selectEl.value;
+            let addOnNameTh = selectedOpt.dataset.nameTh || '';
+            let addOnNameEn = selectedOpt.dataset.nameEn || '';
+            let addOnPrice = selectedOpt.dataset.price ? parseInt(selectedOpt.dataset.price) : 0;
+            
+            const noteVal = document.getElementById(`note-${id}`).value.trim();
+            const finalPrice = basePrice + addOnPrice;
+
+            // บันทึกลง Array Cart เป็น 1 ชิ้นงานอิสระ
+            cart.push({
+                cartId: Date.now() + Math.random(),
+                id: id,
+                nameTh: nameTh,
+                nameEn: nameEn,
+                basePrice: basePrice,
+                addOnId: addOnId,
+                addOnNameTh: addOnNameTh,
+                addOnNameEn: addOnNameEn,
+                addOnPrice: addOnPrice,
+                totalPrice: finalPrice,
+                note: noteVal
+            });
+
+            // รีเซ็ตค่าช่องเลือกหลังกดใส่ตะกร้าเสร็จ
+            selectEl.value = "";
+            document.getElementById(`note-${id}`).value = "";
+            updateItemCardPrice(id, basePrice);
+
+            updateCartBadge();
+            alert(currentLang === 'th' ? "เพิ่มสินค้าลงในตะกร้าเรียบร้อยครับ" : "Item added to cart successfully!");
+        }
+
+        function updateCartBadge() {
+            let totalQty = cart.length;
+            document.getElementById('cartBadge').innerText = totalQty;
+            
+            let totalAmount = 0;
+            cart.forEach(item => totalAmount += item.totalPrice);
+            document.getElementById('totalPrice').innerText = totalAmount.toLocaleString();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            updateCartBadge();
+            openSummaryModal(); // รีเฟรช Modal หน้าตะกร้า
         }
 
         function openSummaryModal() {
@@ -467,29 +497,35 @@
 
             if(!name || !phone) return alert(currentLang === 'th' ? "กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ" : "Please provide your name and phone number.");
             if(ampm === "PM" && hr > 6 && hr !== 12) return alert(currentLang === 'th' ? "ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น." : "Sorry, reservations are not accepted after 6:00 PM.");
-            if(Object.keys(orderMap).length === 0) return alert(currentLang === 'th' ? "กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ" : "Please select at least one menu item.");
+            if(cart.length === 0) return alert(currentLang === 'th' ? "ตะกร้าสินค้าว่างเปล่า กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ" : "Your cart is empty. Please select at least one item.");
 
             let itemsHtml = "";
             let grandTotal = 0;
-            for (let id in orderMap) {
-                const itemTotal = orderMap[id].qty * orderMap[id].price;
-                grandTotal += itemTotal;
-                const noteInput = document.getElementById(`note-${id}`);
-                const noteVal = noteInput ? noteInput.value : '';
-                const itemName = currentLang === 'th' ? orderMap[id].nameTh : orderMap[id].nameEn;
+
+            cart.forEach((item, index) => {
+                grandTotal += item.totalPrice;
+                const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+                const addOnDisplay = item.addOnNameTh ? (currentLang === 'th' ? item.addOnNameTh : item.addOnNameEn) : '';
                 
                 itemsHtml += `
-                    <div class="py-2 border-b border-slate-100">
-                        <div class="flex justify-between font-bold text-slate-800">
-                            <span>• ${itemName} x${orderMap[id].qty}</span>
-                            <span class="text-rose-600">${itemTotal.toLocaleString()}.-</span>
-                        </div>
+                    <div class="py-2.5 border-b border-slate-100 flex justify-between items-start">
+                        <div class="flex-1 pr-2">
+                            <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                                <span>${index + 1}. ${itemName}</span>
+                                <span class="text-rose-600">${item.totalPrice.toLocaleString()}.-</span>
+                            </div>
                 `;
-                if(noteVal) {
-                    itemsHtml += `<div class="mt-1 bg-amber-50 border border-amber-200 text-amber-800 text-[11px] px-2 py-0.5 rounded-lg"><b>Note:</b> ${noteVal}</div>`;
+                if(addOnDisplay) {
+                    itemsHtml += `<div class="text-[11px] text-emerald-700 font-medium">+ Add-on: ${addOnDisplay} (${item.addOnPrice}.-)</div>`;
                 }
-                itemsHtml += `</div>`;
-            }
+                if(item.note) {
+                    itemsHtml += `<div class="mt-0.5 bg-amber-50 border border-amber-200 text-amber-800 text-[10px] px-2 py-0.5 rounded-lg inline-block"><b>Note:</b> ${item.note}</div>`;
+                }
+                itemsHtml += `</div>
+                        <button onclick="removeFromCart(${item.cartId})" class="text-rose-500 hover:text-rose-700 p-1 text-sm"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
 
             const dateVal = document.getElementById('date').value;
             const minVal = document.getElementById('minute').value.padStart(2,'0');
@@ -517,16 +553,13 @@
             const time = `${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${document.getElementById('ampm').value}`;
             
             let itemText = "";
-            for (let id in orderMap) {
-                const noteInput = document.getElementById(`note-${id}`);
-                const noteVal = noteInput ? noteInput.value : '';
-                const itemTotal = orderMap[id].qty * orderMap[id].price;
-                const itemName = orderMap[id].nameTh;
-                itemText += `• ${itemName} x${orderMap[id].qty} [${itemTotal.toLocaleString()}.-]\n`;
-                if(noteVal) itemText += `  └ หมายเหตุ: ${noteVal}\n`;
-            }
+            cart.forEach((item, index) => {
+                const addOnDisplay = item.addOnNameTh ? ` [+ Add-on: ${item.addOnNameTh}]` : '';
+                itemText += `${index + 1}. ${item.nameTh}${addOnDisplay} - ${item.totalPrice.toLocaleString()}.- บาท\n`;
+                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\n`;
+            });
 
-            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหาร:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
+            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหารในตะกร้า:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> ${currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...'}`;
@@ -546,7 +579,7 @@
                 });
             } else {
                 alert(currentLang === 'th' ? "กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ" : "Please open via LINE OA menu.");
-                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE'}`;
+                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้ารายการทันที' : 'Send Order to Official LINE'}`;
                 btn.disabled = false;
             }
         }
