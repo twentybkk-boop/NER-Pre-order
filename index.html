@@ -133,7 +133,7 @@
                 <i class="fa-solid fa-circle-info text-base mt-0.5"></i>
                 <div>
                     <strong class="font-kanit text-sm block" data-lang-th="💡 คำแนะนำการสั่งอาหาร:" data-lang-en="💡 Ordering Guide:">💡 คำแนะนำการสั่งอาหาร:</strong>
-                    <p class="text-slate-200 mt-0.5" data-lang-th="เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ และของทานเล่นสามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ" data-lang-en="Single sets can add optional add-ons. Regular items and appetizers can be added directly with notes.">เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ และของทานเล่นสามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ</p>
+                    <p class="text-slate-200 mt-0.5" data-lang-th="เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ สามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ" data-lang-en="Single sets can add optional add-ons. Other items can be added directly with notes.">เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ สามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ</p>
                 </div>
             </div>
             <div id="menuContainer" class="space-y-6"></div>
@@ -234,7 +234,7 @@
         const LIFF_ID = "2010784971-mH3KqiRT";
         let currentLang = 'th';
 
-        // แยกหมวดหมู่สินค้าทั้งหมดให้ถูกต้อง ชัดเจน
+        // แยกหมวดหมู่อย่างละเอียดชัดเจน (ผัก, เส้น, เมนูเพิ่มเติม, ของทานเล่น แยกออกจากกัน)
         const menuCategories = [
             {
                 catTh: "แจ่วฮ้อนชุดจุ่ม & อิ่มเดี่ยว / JAEW HON SETS",
@@ -269,15 +269,21 @@
                 ]
             },
             {
-                catTh: "เมนูเพิ่มเติม - ผัก & เส้น / VEGETABLE & NOODLES",
-                catEn: "VEGETABLE & NOODLES",
+                catTh: "เมนูเพิ่มเติม - ผัก / VEGETABLES",
+                catEn: "VEGETABLES",
                 items: [
                     { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69, allowAddOn: false },
                     { id: 'v2', nameTh: "กะหล่ำปลี", nameEn: "Cabbage", price: 29, allowAddOn: false },
                     { id: 'v3', nameTh: "ผักบุ้ง", nameEn: "Morning Glory", price: 19, allowAddOn: false },
                     { id: 'v4', nameTh: "ผักชีฝรั่ง", nameEn: "Culantro", price: 19, allowAddOn: false },
                     { id: 'v5', nameTh: "โหระพา", nameEn: "Sweet Basil", price: 29, allowAddOn: false },
-                    { id: 'v6', nameTh: "ใบชะพลู", nameEn: "Wild Betel Leaves", price: 29, allowAddOn: false },
+                    { id: 'v6', nameTh: "ใบชะพลู", nameEn: "Wild Betel Leaves", price: 29, allowAddOn: false }
+                ]
+            },
+            {
+                catTh: "เมนูเพิ่มเติม - เส้น / NOODLES",
+                catEn: "NOODLES",
+                items: [
                     { id: 'n1', nameTh: "วุ้นเส้น", nameEn: "Glass Noodles", price: 29, allowAddOn: false },
                     { id: 'n2', nameTh: "มาม่า", nameEn: "Instant Noodles", price: 29, allowAddOn: false },
                     { id: 'n3', nameTh: "บะหมี่หยก (สด)", nameEn: "Fresh Jade Noodles", price: 29, allowAddOn: false },
@@ -285,8 +291,8 @@
                 ]
             },
             {
-                catTh: "เมนูของทานเล่น & เพิ่มเติม / APPETIZERS & MORE",
-                catEn: "APPETIZERS & MORE",
+                catTh: "เมนูเพิ่มเติม - เครื่องเคียง & ท็อปปิ้ง / ADDITIONAL ITEMS",
+                catEn: "ADDITIONAL ITEMS",
                 items: [
                     { id: 'e1', nameTh: "ไข่ไก่สด", nameEn: "Fresh Egg", price: 15, allowAddOn: false },
                     { id: 'e2', nameTh: "เต้าหู้ปลา", nameEn: "Fish Tofu", price: 49, allowAddOn: false },
@@ -294,7 +300,13 @@
                     { id: 'e4', nameTh: "เต้าหู้ชีส", nameEn: "Cheese Tofu", price: 49, allowAddOn: false },
                     { id: 'e5', nameTh: "ฟองเต้าหู้แท่ง", nameEn: "Bean Curd Stick", price: 49, allowAddOn: false },
                     { id: 'e6', nameTh: "ฟองเต้าหู้ทอด", nameEn: "Fried Tofu Skin Roll", price: 39, allowAddOn: false },
-                    { id: 'e7', nameTh: "ข้าวเปล่า", nameEn: "Rice", price: 29, allowAddOn: false },
+                    { id: 'e7', nameTh: "ข้าวเปล่า", nameEn: "Rice", price: 29, allowAddOn: false }
+                ]
+            },
+            {
+                catTh: "เมนูของทานเล่น / APPETIZERS",
+                catEn: "APPETIZERS",
+                items: [
                     { id: 'a1', nameTh: "ไก่ป๊อป", nameEn: "Chicken Pops", price: 79, allowAddOn: false },
                     { id: 'a2', nameTh: "แฮชบราวน์ เทเทอร์ ทอตส์", nameEn: "Hash Brown Tater Tots", price: 69, allowAddOn: false },
                     { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49, allowAddOn: false },
@@ -339,11 +351,12 @@
             }
         ];
 
-        // หมวดหมู่ย่อยที่จะนำไปแสดงในหน้าต่างเลือก Add-on สำหรับชุดเดี่ยวเท่านั้น
+        // หมวดหมู่ที่จะนำมาให้เลือกเป็น Add-on (เนื้อสัตว์, ผัก, เส้น, เมนูเพิ่ม) สำหรับชุดเดี่ยว
         const addOnPoolCategories = [
             menuCategories[1], // เนื้อสัตว์
-            menuCategories[2], // ผัก & เส้น
-            menuCategories[3]  // เมนูของทานเล่น & เพิ่มเติม (เอาเฉพาะไข่/เต้าหู้ ถ้าต้องการ แต่ตามโจทย์ดึงจากกลุ่มเนื้อ ผัก เส้น และเมนูเพิ่ม)
+            menuCategories[2], // ผัก
+            menuCategories[3], // เส้น
+            menuCategories[4]  // เพิ่มเติม (ไข่, เต้าหู้)
         ];
 
         let cart = [];
@@ -417,7 +430,6 @@
 
                     let actionSectionHtml = "";
                     if (item.allowAddOn) {
-                        // เฉพาะเมนูชุดเดี่ยวที่มีปุ่มเลือก Add-on
                         actionSectionHtml = `
                             <div class="mt-3 pt-3 border-t border-emerald-800/80 flex justify-end">
                                 <button onclick="openAddonModal('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="bg-gold/20 hover:bg-gold text-gold hover:text-emerald-950 border border-gold/50 px-4 py-2 rounded-xl text-xs font-bold font-kanit transition-all flex items-center gap-1.5 shadow">
@@ -426,7 +438,6 @@
                             </div>
                         `;
                     } else {
-                        // เมนูปรกติ (รวมของทานเล่น เครื่องดื่ม) มีช่องระบุหมายเหตุ และปุ่มใส่ตะกร้าปกติ
                         actionSectionHtml = `
                             <div class="mt-2.5">
                                 <input type="text" id="note-${item.id}" class="w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 outline-none focus:border-gold" placeholder="${currentLang === 'th' ? 'ระบุหมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Notes e.g. no veg, less spicy...'}">
@@ -461,18 +472,15 @@
             document.getElementById('menuContainer').innerHTML = html;
         }
 
-        // เปิด Modal สำหรับชุดเดี่ยว
         function openAddonModal(id, nameTh, nameEn, price) {
             selectedBaseItemForAddOn = { id, nameTh, nameEn, price };
             document.getElementById('addonModalTitle').innerText = `เลือก Add-on สำหรับ: ${nameTh}`;
             document.getElementById('modalItemNote').value = "";
 
             let addonHtml = "";
-            // แสดงเฉพาะหมวด เนื้อสัตว์, ผัก&เส้น, และของทานเล่น/เพิ่มเติมบางส่วน
             addOnPoolCategories.forEach(cat => {
                 addonHtml += `<div class="text-[11px] font-bold text-gold mt-2 mb-1 font-kanit border-b border-gold/20 pb-0.5">${cat.catTh}</div>`;
                 cat.items.forEach(subItem => {
-                    // กรองเอาเฉพาะหมวดเมนูเพิ่มเติมจริง ๆ (ไม่เอาของหวานหรือเครื่องดื่มมาปนใน add-on ชุดจุ่มเดี่ยว)
                     addonHtml += `
                         <div class="flex items-center justify-between bg-emerald-950/60 border border-gold/15 rounded-xl px-3 py-1.5 my-1.5">
                             <div class="pr-2 min-w-0 flex-1">
