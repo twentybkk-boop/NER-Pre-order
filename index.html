@@ -204,6 +204,7 @@
     .service-chips { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
     .chip { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 11px; border-radius: 999px; background: rgba(255,255,255,.065); border: 1px solid rgba(244,226,183,.14); color: #edf2ed; font-size: 11px; white-space: nowrap; }
     .chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px rgba(224,189,115,.52); }
+    .chip-long { white-space: normal; line-height: 1.35; max-width: min(100%, 420px); }
 
     .layout { display: grid; gap: 16px; }
     .side-stack { display: grid; gap: 14px; align-content: start; }
@@ -251,6 +252,9 @@
     .menu-visual::before { content: ''; position: absolute; width: 92px; height: 92px; border: 1px solid rgba(144,181,155,.10); border-radius: 50%; transform: translate(34px, -26px); }
     .menu-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.045) 50%, transparent 80%); pointer-events: none; }
     .placeholder-bowl { width: 33px; height: 33px; opacity: .86; }
+    .menu-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .menu-visual.has-photo::before { display: none; }
+    .menu-visual.has-photo::after { background: linear-gradient(180deg, transparent 52%, rgba(14,31,21,.18)); }
     .menu-content { min-width: 0; display: flex; flex-direction: column; }
     .menu-name { margin: 1px 0 0; font-size: 13px; line-height: 1.35; font-weight: 600; color: #fffaf2; }
     .menu-sub { color: #aebcb2; font-size: 10px; line-height: 1.35; margin-top: 3px; }
@@ -375,10 +379,10 @@
     <section class="hero" aria-labelledby="heroTitle">
       <div class="eyebrow" data-lang-th="PRE-ORDER · จองโต๊ะ · สั่งล่วงหน้า" data-lang-en="PRE-ORDER · RESERVE · ORDER AHEAD">PRE-ORDER · จองโต๊ะ · สั่งล่วงหน้า</div>
       <h2 id="heroTitle" data-lang-th="มื้อแจ่วฮ้อนที่พร้อมก่อนคุณมาถึง" data-lang-en="Your Jaew Hon, ready when you arrive">มื้อแจ่วฮ้อนที่พร้อมก่อนคุณมาถึง</h2>
-      <p data-lang-th="เลือกเมนูและส่งออเดอร์ผ่าน LINE OA จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม" data-lang-en="Choose your menu and send the order through LINE OA. The restaurant will continue with you in chat as usual.">เลือกเมนูและส่งออเดอร์ผ่าน LINE OA จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม</p>
+      <p data-lang-th="เลือกเมนูในระบบ แล้วรายการอาหารจะถูกส่งเข้า LINE chat ให้อัตโนมัติ จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม" data-lang-en="Choose your menu here. Your order list will be sent automatically via LINE chat, then the restaurant will reply in the same chat.">เลือกเมนูในระบบ แล้วรายการอาหารจะถูกส่งเข้า LINE chat ให้อัตโนมัติ จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม</p>
       <div class="service-chips" aria-label="Service information">
         <span class="chip"><span class="chip-dot"></span><span data-lang-th="ชำระที่ร้าน" data-lang-en="Pay at restaurant">ชำระที่ร้าน</span></span>
-        <span class="chip"><span class="chip-dot"></span><span data-lang-th="ส่งออเดอร์ผ่าน LINE" data-lang-en="Order via LINE">ส่งออเดอร์ผ่าน LINE</span></span>
+        <span class="chip chip-long"><span class="chip-dot"></span><span data-lang-th="ระบบจะส่งรายการอาหารผ่าน LINE chat ให้อัตโนมัติ" data-lang-en="Your order list will be sent automatically via LINE chat">ระบบจะส่งรายการอาหารผ่าน LINE chat ให้อัตโนมัติ</span></span>
       </div>
     </section>
 
@@ -435,12 +439,12 @@
 
     const menuCategories = [
       { catTh: "แจ่วฮ้อนชุดจุ่ม & อิ่มเดี่ยว / JAEW HON SETS", catEn: "JAEW HON SETS", items: [
-        { id: 's1', nameTh: "ชุดจุ่มหมูทะเล", nameEn: "Pork & Sea Food Set", price: 429, allowAddOn: false },
-        { id: 's2', nameTh: "ชุดจุ่มเนื้อ", nameEn: "Beef Shabu Set", price: 339, allowAddOn: false },
-        { id: 's3', nameTh: "ชุดจุ่มหมู", nameEn: "Pork Shabu Set", price: 329, allowAddOn: false },
-        { id: 's4', nameTh: "ชุดจุ่มเดี่ยวหมู", nameEn: "Single Pork Set", price: 189, allowAddOn: true },
-        { id: 's5', nameTh: "อิ่มเดี่ยว ต้มพร้อมทาน", nameEn: "Ready to Eat Normal Set", price: 119, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" },
-        { id: 's6', nameTh: "อิ่มเดี่ยว หมูจุกจุก", nameEn: "Ready to Eat Extra Pork Set", price: 159, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" }
+        { id: 's1', nameTh: "ชุดจุ่มหมูทะเล", nameEn: "Pork & Sea Food Set", price: 429, allowAddOn: false, image: 'assets/menu/pork-seafood-set.jpg' },
+        { id: 's2', nameTh: "ชุดจุ่มเนื้อ", nameEn: "Beef Shabu Set", price: 339, allowAddOn: false, image: 'assets/menu/beef-set.jpg' },
+        { id: 's3', nameTh: "ชุดจุ่มหมู", nameEn: "Pork Shabu Set", price: 329, allowAddOn: false, image: 'assets/menu/pork-set.jpg' },
+        { id: 's4', nameTh: "ชุดจุ่มเดี่ยวหมู", nameEn: "Single Pork Set", price: 189, allowAddOn: true, image: 'assets/menu/pork-set.jpg' },
+        { id: 's5', nameTh: "อิ่มเดี่ยว ต้มพร้อมทาน", nameEn: "Ready to Eat Normal Set", price: 119, allowAddOn: true, image: 'assets/menu/ready-normal.jpg', badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" },
+        { id: 's6', nameTh: "อิ่มเดี่ยว หมูจุกจุก", nameEn: "Ready to Eat Extra Pork Set", price: 159, allowAddOn: true, image: 'assets/menu/ready-extra-pork.jpg', badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" }
       ]},
       { catTh: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", catEn: "ADD-ON MEAT", items: [
         { id: 'm1', nameTh: "หมูล้วน (ไม่มีเครื่องใน)", nameEn: "Pork Lover (No Offal)", price: 199, allowAddOn: false },
@@ -455,11 +459,11 @@
         { id: 'm10', nameTh: "เนื้อริบอายสไลซ์ (AUS)", nameEn: "Sliced Ribeye Beef (AUS)", price: 89, allowAddOn: false },
         { id: 'm11', nameTh: "เนื้อเสือร้องไห้สไลซ์ (AUS)", nameEn: "Sliced Brisket Flap (AUS)", price: 89, allowAddOn: false },
         { id: 'm12', nameTh: "ปลาดอลลี่", nameEn: "Dory Fish", price: 59, allowAddOn: false },
-        { id: 'm13', nameTh: "กุ้ง", nameEn: "Shrimp", price: 69, allowAddOn: false },
+        { id: 'm13', nameTh: "กุ้ง", nameEn: "Shrimp", price: 69, allowAddOn: false, image: 'assets/menu/shrimp.jpg' },
         { id: 'm14', nameTh: "ปลาหมึก", nameEn: "Squid", price: 69, allowAddOn: false }
       ]},
       { catTh: "เมนูเพิ่มเติม - ผัก / VEGETABLES", catEn: "VEGETABLES", items: [
-        { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69, allowAddOn: false },
+        { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69, allowAddOn: false, image: 'assets/menu/vegetable-combo.jpg' },
         { id: 'v2', nameTh: "กะหล่ำปลี", nameEn: "Cabbage", price: 29, allowAddOn: false },
         { id: 'v3', nameTh: "ผักบุ้ง", nameEn: "Morning Glory", price: 19, allowAddOn: false },
         { id: 'v4', nameTh: "ผักชีฝรั่ง", nameEn: "Culantro", price: 19, allowAddOn: false },
@@ -484,11 +488,11 @@
       { catTh: "เมนูของทานเล่น / APPETIZERS", catEn: "APPETIZERS", items: [
         { id: 'a1', nameTh: "ไก่ป๊อป", nameEn: "Chicken Pops", price: 79, allowAddOn: false },
         { id: 'a2', nameTh: "แฮชบราวน์ เทเทอร์ ทอตส์", nameEn: "Hash Brown Tater Tots", price: 69, allowAddOn: false },
-        { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49, allowAddOn: false },
-        { id: 'a4', nameTh: "คาลามารี", nameEn: "Calamari", price: 119, allowAddOn: false }
+        { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49, allowAddOn: false, image: 'assets/menu/crispy-fish-crackers.jpg' },
+        { id: 'a4', nameTh: "คาลามารี", nameEn: "Calamari", price: 119, allowAddOn: false, image: 'assets/menu/calamari.jpg' }
       ]},
       { catTh: "เมนูของหวาน / DESSERT", catEn: "DESSERT", items: [
-        { id: 'd1', nameTh: "ซาโมซ่ากล้วย", nameEn: "Banana Samosa", price: 79, allowAddOn: false },
+        { id: 'd1', nameTh: "ซาโมซ่ากล้วย", nameEn: "Banana Samosa", price: 79, allowAddOn: false, image: 'assets/menu/banana-samosa.jpg' },
         { id: 'd2', nameTh: "สละลอยแก้ว", nameEn: "Chilled Sala Dessert", price: 59, allowAddOn: false },
         { id: 'd3', nameTh: "ลูกตาลลอยแก้ว", nameEn: "Chilled Toddy Palm Dessert", price: 59, allowAddOn: false },
         { id: 'mj1', nameTh: "โมจิไอศครีม - ช็อคโกแลต", nameEn: "Mochi Ice Cream - Chocolate", price: 39, allowAddOn: false },
@@ -607,7 +611,8 @@
           } else {
             actionSectionHtml = `<input type="text" id="note-${item.id}" class="item-note" placeholder="${currentLang === 'th' ? 'หมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Note e.g. no veg, less spicy...'}"><div class="card-action"><button type="button" onclick="addNormalItemToCart('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="btn btn-secondary card-btn">${currentLang === 'th' ? 'ใส่ตะกร้า' : 'Add to cart'}</button></div>`;
           }
-          html += `<article class="menu-card"><div class="menu-visual">${placeholderIcon()}</div><div class="menu-content"><h4 class="menu-name">${itemName}</h4><div class="menu-sub">${subName}</div>${badgeHtml}<div class="menu-price">${item.price} ฿</div>${actionSectionHtml}</div></article>`;
+          const visualHtml = item.image ? `<div class="menu-visual has-photo"><img class="menu-photo" src="${item.image}" alt="${itemName}" loading="lazy" decoding="async"></div>` : `<div class="menu-visual">${placeholderIcon()}</div>`;
+          html += `<article class="menu-card">${visualHtml}<div class="menu-content"><h4 class="menu-name">${itemName}</h4><div class="menu-sub">${subName}</div>${badgeHtml}<div class="menu-price">${item.price} ฿</div>${actionSectionHtml}</div></article>`;
         });
         html += `</div></section>`;
       });
