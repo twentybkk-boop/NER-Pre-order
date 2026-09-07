@@ -645,32 +645,16 @@
             
             let itemText = "";
             cart.forEach((item, index) => {
-                itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\
-`;
+                itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\n`;
                 if(item.addOns && item.addOns.length > 0) {
                     item.addOns.forEach(a => {
-                        itemText += `   + Add-on: ${a.nameTh} x${a.qty}\
-`;
+                        itemText += `   + Add-on: ${a.nameTh} x${a.qty}\n`;
                     });
                 }
-                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\
-`;
+                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\n`;
             });
 
-            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\
-----------------------------------\
-👤 ชื่อผู้จอง: ${name}\
-📞 เบอร์โทร: ${phone}\
-👥 จำนวน: ${document.getElementById('guests').value} ท่าน\
-📅 วันที่: ${document.getElementById('date').value}\
-⏰ เวลา: ${time}\
-----------------------------------\
-📋 รายการอาหารในตะกร้า:\
-${itemText}----------------------------------\
-💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\
-----------------------------------\
-* ทางร้านไม่มีการเก็บมัดจำการจอง\
-THANK YOU FOR YOUR RESERVATION`;
+            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหารในตะกร้า:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> ${currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...'}`;
