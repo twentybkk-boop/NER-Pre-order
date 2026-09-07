@@ -1,0 +1,132 @@
+name: Apply approved preorder menu images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-approved-menu-images.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install images and patch preorder UI
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .menu-assets.zip
+          unzip -o .menu-assets.zip
+
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          images = {
+              's1': 'assets/menu/s1.webp',
+              's2': 'assets/menu/s2.webp',
+              's3': 'assets/menu/s3.webp',
+              's4': 'assets/menu/s4.webp',
+              's5': 'assets/menu/s5.webp',
+              's6': 'assets/menu/s6.webp',
+              'm1': 'assets/menu/m1.webp',
+              'm2': 'assets/menu/m2.webp',
+              'm4': 'assets/menu/m4.webp',
+              'm9': 'assets/menu/m9.webp',
+              'm10': 'assets/menu/m10.webp',
+              'm11': 'assets/menu/m11.webp',
+              'm12': 'assets/menu/m12.webp',
+              'm13': 'assets/menu/m13.webp',
+              'm14': 'assets/menu/m14.webp',
+              'v1': 'assets/menu/v1.webp',
+              'e5': 'assets/menu/e5.webp',
+              'a2': 'assets/menu/a2.webp',
+              'a3': 'assets/menu/a3.webp',
+              'a4': 'assets/menu/a4.webp',
+              'd1': 'assets/menu/d1.webp',
+              'd3': 'assets/menu/d3.webp',
+          }
+
+          lines = text.splitlines(keepends=True)
+          found = set()
+          out = []
+          for line in lines:
+              for item_id, image_path in images.items():
+                  token = f"id: '{item_id}'"
+                  if token in line:
+                      found.add(item_id)
+                      if 'image:' not in line:
+                          close = line.rfind('}')
+                          if close < 0:
+                              raise RuntimeError(f'Could not patch menu item {item_id}')
+                          line = line[:close].rstrip() + f", image: '{image_path}' " + line[close:]
+                      break
+              out.append(line)
+          text = ''.join(out)
+
+          missing = set(images) - found
+          if missing:
+              raise RuntimeError(f'Menu IDs not found: {sorted(missing)}')
+
+          old_visual = '          const visualHtml = `<div class="menu-visual">${placeholderIcon()}</div>`;'
+          new_visual = '''          const visualHtml = item.image
+            ? `<div class="menu-visual has-photo"><img class="menu-photo" src="${item.image}" alt="${itemName}" loading="lazy" decoding="async"></div>`
+            : `<div class="menu-visual">${placeholderIcon()}</div>`;'''
+          if old_visual in text:
+              text = text.replace(old_visual, new_visual, 1)
+          elif 'class="menu-photo"' not in text:
+              raise RuntimeError('Menu visual render marker not found')
+
+          photo_css = '''
+    .menu-visual.has-photo { background: #201914; }
+    .menu-visual.has-photo::before,
+    .menu-visual.has-photo::after { display: none; }
+    .menu-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: inherit;
+    }
+'''
+          if '.menu-photo {' not in text:
+              marker = '</style>'
+              if marker not in text:
+                  raise RuntimeError('Style closing tag not found')
+              text = text.replace(marker, photo_css + '  </style>', 1)
+
+          for item_id, image_path in images.items():
+              if f"image: '{image_path}'" not in text:
+                  raise RuntimeError(f'Image mapping missing after patch: {item_id}')
+
+          if text.count("image: 'assets/menu/") != len(images):
+              raise RuntimeError('Unexpected number of menu image mappings')
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+          test "$(find assets/menu -maxdepth 1 -type f -name '*.webp' | wc -l)" -eq 22
+          grep -q 'const LIFF_ID = "2010784971-mH3KqiRT"' index.html
+          grep -q "function isMondayDate" index.html
+          grep -q 'class="menu-photo"' index.html
+
+          rm -f .menu-assets.zip
+          rm -f .github/workflows/apply-approved-menu-images.yml
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git status --short
+          git commit -m 'Add approved preorder menu photos'
+          git push
