@@ -1,10 +1,6 @@
-name: Install approved menu sprite
+name: Install menu sprite
 
-on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/install-menu-sprite.yml'
+on: [push]
 
 permissions:
   contents: write
@@ -16,103 +12,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Patch preorder menu cards
+      - name: Patch preorder
+        run: python3 .github/scripts/install_menu_sprite.py
+      - name: Verify and commit
         shell: bash
         run: |
           set -euo pipefail
           test -s assets/menu/menu-sprite.webp
-
-          python3 <<'PY'
-          from pathlib import Path
-
-          path = Path('index.html')
-          text = path.read_text(encoding='utf-8')
-
-          positions = {
-              's1': '0% 0%', 's2': '33.333% 0%', 's3': '66.667% 0%', 's4': '100% 0%',
-              's5': '0% 20%', 's6': '33.333% 20%', 'm1': '66.667% 20%', 'm2': '100% 20%',
-              'm4': '0% 40%', 'm9': '33.333% 40%', 'm10': '66.667% 40%', 'm11': '100% 40%',
-              'm12': '0% 60%', 'm13': '33.333% 60%', 'm14': '66.667% 60%', 'v1': '100% 60%',
-              'e5': '0% 80%', 'a2': '33.333% 80%', 'a3': '66.667% 80%', 'a4': '100% 80%',
-              'd1': '0% 100%', 'd3': '33.333% 100%'
-          }
-          if len(positions) != 22:
-              raise RuntimeError('Expected 22 approved menu photos')
-
-          marker = '    const LIFF_ID = "2010784971-mH3KqiRT";'
-          if 'const MENU_SPRITE_POSITIONS' not in text:
-              if marker not in text:
-                  raise RuntimeError('LIFF marker not found')
-              mapping_lines = ['    const MENU_SPRITE_POSITIONS = {']
-              for key, value in positions.items():
-                  mapping_lines.append(f"      '{key}': '{value}',")
-              mapping_lines.append('    };')
-              mapping = '\n'.join(mapping_lines)
-              text = text.replace(marker, marker + '\n' + mapping, 1)
-
-          old_visual = '          const visualHtml = `<div class="menu-visual">${placeholderIcon()}</div>`;'
-          new_visual = '''          const spritePosition = MENU_SPRITE_POSITIONS[item.id];
-          const visualHtml = spritePosition
-            ? `<div class="menu-visual has-photo"><div class="menu-photo-sprite" role="img" aria-label="${itemName}" style="background-position:${spritePosition}"></div></div>`
-            : `<div class="menu-visual">${placeholderIcon()}</div>`;'''
-          if old_visual in text:
-              text = text.replace(old_visual, new_visual, 1)
-          elif 'MENU_SPRITE_POSITIONS[item.id]' not in text:
-              raise RuntimeError('Menu visual render marker not found')
-
-          photo_css = '''
-    .menu-visual.has-photo {
-      background: #201914;
-      border-color: rgba(224,189,115,.24);
-    }
-    .menu-visual.has-photo::before,
-    .menu-visual.has-photo::after { display: none; }
-    .menu-photo-sprite {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('assets/menu/menu-sprite.webp');
-      background-size: 400% 600%;
-      background-repeat: no-repeat;
-      border-radius: inherit;
-    }
-'''
-          if '.menu-photo-sprite {' not in text:
-              if '</style>' not in text:
-                  raise RuntimeError('Style closing tag not found')
-              text = text.replace('</style>', photo_css + '  </style>', 1)
-
-          for item_id in positions:
-              token = f"id: '{item_id}'"
-              if token not in text:
-                  raise RuntimeError(f'Menu item missing: {item_id}')
-
-          if text.count('const MENU_SPRITE_POSITIONS') != 1:
-              raise RuntimeError('Unexpected sprite mapping count')
-          if text.count('MENU_SPRITE_POSITIONS[item.id]') != 1:
-              raise RuntimeError('Unexpected sprite renderer count')
-
-          path.write_text(text, encoding='utf-8')
-          PY
-
           grep -q 'const LIFF_ID = "2010784971-mH3KqiRT"' index.html
           grep -q 'function isMondayDate' index.html
           grep -q 'MENU_SPRITE_POSITIONS\[item.id\]' index.html
           grep -q 'menu-photo-sprite' index.html
-          test -s assets/menu/menu-sprite.webp
-
           rm -f assets/menu/*.b64tmp
           rm -rf .github/menu-payload
           rm -f .github/scripts/apply_menu_images.py
           rm -f .github/workflows/apply-approved-menu-images.yml
+          rm -f .github/scripts/install_menu_sprite.py
           rm -f .github/workflows/install-menu-sprite.yml
-
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git diff --cached --check
-          git status --short
           git commit -m 'Add approved menu photos to preorder'
           git push
