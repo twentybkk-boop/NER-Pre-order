@@ -1,0 +1,64 @@
+name: Repair approved beef menu images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/repair-beef-images.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Recover corrected sprite payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          src = Path('.github/workflows/replace-beef-images.yml').read_text(encoding='utf-8')
+          marker = "cat > /tmp/menu-sprite.b64 <<'EOF'\n"
+          start = src.index(marker) + len(marker)
+          end = src.index('\nEOF\n', start)
+          payload = src[start:end].strip() + '\n'
+          Path('/tmp/menu-sprite.b64').write_text(payload, encoding='utf-8')
+          PY
+          base64 -d /tmp/menu-sprite.b64 > assets/menu/menu-sprite.webp
+          test "$(wc -c < assets/menu/menu-sprite.webp)" -eq 32970
+          python3 - <<'PY'
+          from pathlib import Path
+          data = Path('assets/menu/menu-sprite.webp').read_bytes()
+          assert data[:4] == b'RIFF'
+          assert data[8:12] == b'WEBP'
+          text = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              "'m9': '33.333% 40%'",
+              "'m10': '66.667% 40%'",
+              "'m11': '100% 40%'",
+              "'a1': '33.333% 80%'",
+              'function isMondayDate',
+              'liff.sendMessages'
+          ]
+          for item in required:
+              assert item in text, item
+          PY
+
+      - name: Commit corrected asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/replace-beef-images.yml
+          rm -f .github/workflows/repair-beef-images.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Replace beef menu images with approved photos'
+          git push
