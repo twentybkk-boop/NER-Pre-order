@@ -66,10 +66,7 @@
             <div id="holidayBox" class="bg-emerald-950/60 border border-dashed border-gold/40 p-3.5 rounded-2xl mb-4 text-xs text-slate-200">
                 <div class="flex items-start gap-2">
                     <i class="fa-solid fa-calendar-day text-gold mt-0.5"></i>
-                    <div>
-                        <span id="holidayNotice" class="font-medium text-gold">กำลังตรวจสอบวันหยุด...</span>
-                        <p class="text-[11px] text-slate-400 mt-0.5"><span data-lang-th="* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram:" data-lang-en="* Holidays are subject to change. Follow us on Instagram:">* วันหยุดอาจมีการเปลี่ยนแปลง ติดตามข้อมูลได้ทาง Instagram:</span> <a href="https://instagram.com/ner.bkk" target="_blank" class="text-gold underline">ner.bkk</a></p>
-                    </div>
+                    <span id="holidayNotice" class="font-medium text-gold">วันหยุดประจำร้าน: ทุกวันจันทร์</span>
                 </div>
             </div>
 
@@ -360,13 +357,12 @@
         ];
 
         let cart = [];
-        let cachedHolidays = [];
         let selectedBaseItemForAddOn = null;
 
         function init() {
             renderMenu();
             initTimeSelectors();
-            calculateHolidays();
+            updateHolidayNoticeText();
             liff.init({ liffId: LIFF_ID }).catch(err => console.error(err));
             document.getElementById('date').valueAsDate = new Date();
         }
@@ -386,24 +382,10 @@
             renderMenu();
         }
 
-        function calculateHolidays() {
-            const startDay = new Date(2026, 6, 20);
-            const today = new Date();
-            cachedHolidays = [];
-            let check = new Date(startDay);
-            for(let i=0; i<10; i++) {
-                if (check >= today) {
-                    cachedHolidays.push(check.toLocaleDateString(currentLang === 'th' ? 'th-TH' : 'en-GB', { day:'2-digit', month:'2-digit' }));
-                }
-                check.setDate(check.getDate() + 14);
-                if (cachedHolidays.length >= 4) break;
-            }
-            updateHolidayNoticeText();
-        }
-
         function updateHolidayNoticeText() {
-            const titleText = currentLang === 'th' ? '<b>กำหนดวันหยุดร้าน (จันทร์เว้นจันทร์):</b>' : '<b>Store Holiday Schedule (Every other Monday):</b>';
-            document.getElementById('holidayNotice').innerHTML = `${titleText} ${cachedHolidays.join(', ')}`;
+            document.getElementById('holidayNotice').textContent = currentLang === 'th'
+                ? 'วันหยุดประจำร้าน: ทุกวันจันทร์'
+                : 'Regular Closing Day: Every Monday';
         }
 
         function initTimeSelectors() {
@@ -663,16 +645,32 @@
             
             let itemText = "";
             cart.forEach((item, index) => {
-                itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\n`;
+                itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\
+`;
                 if(item.addOns && item.addOns.length > 0) {
                     item.addOns.forEach(a => {
-                        itemText += `   + Add-on: ${a.nameTh} x${a.qty}\n`;
+                        itemText += `   + Add-on: ${a.nameTh} x${a.qty}\
+`;
                     });
                 }
-                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\n`;
+                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\
+`;
             });
 
-            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหารในตะกร้า:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
+            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\
+----------------------------------\
+👤 ชื่อผู้จอง: ${name}\
+📞 เบอร์โทร: ${phone}\
+👥 จำนวน: ${document.getElementById('guests').value} ท่าน\
+📅 วันที่: ${document.getElementById('date').value}\
+⏰ เวลา: ${time}\
+----------------------------------\
+📋 รายการอาหารในตะกร้า:\
+${itemText}----------------------------------\
+💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\
+----------------------------------\
+* ทางร้านไม่มีการเก็บมัดจำการจอง\
+THANK YOU FOR YOUR RESERVATION`;
 
             const btn = document.getElementById('submitBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> ${currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...'}`;
