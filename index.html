@@ -1,685 +1,681 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NER แจ่วฮ้อน - Pre-Order & Reservation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        emerald: { 950: '#0c1811', 900: '#14241b', 800: '#1b3325', 700: '#233d2e' },
-                        gold: { DEFAULT: '#c59b27', light: '#e5a93b', dark: '#a07d1a' },
-                        line: { green: '#06C755' }
-                    },
-                    fontFamily: { prompt: ['Prompt', 'sans-serif'], kanit: ['Kanit', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Prompt', sans-serif; background-color: #0c1811; color: #f5f5f0; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1712">
+  <title>NER แจ่วฮ้อน — Pre-order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    :root {
+      --bg: #0b1510;
+      --surface: #132219;
+      --surface-2: #172a1f;
+      --line: rgba(238, 218, 168, .13);
+      --line-strong: rgba(238, 218, 168, .24);
+      --text: #f6f2e7;
+      --muted: #a9b3aa;
+      --muted-2: #77837b;
+      --gold: #d9b66a;
+      --gold-2: #f0d79f;
+      --green: #20c56b;
+      --danger-bg: rgba(161, 54, 45, .16);
+      --shadow-sm: 0 10px 26px rgba(0,0,0,.16);
+      --shadow-md: 0 18px 52px rgba(0,0,0,.24);
+      --shadow-lg: 0 26px 80px rgba(0,0,0,.34);
+      --radius-md: 18px;
+      --radius-lg: 24px;
+      --radius-xl: 30px;
+      --tap: 46px;
+      --content: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% -8%, rgba(195, 145, 57, .12), transparent 34rem),
+        radial-gradient(circle at 88% 8%, rgba(48, 112, 72, .14), transparent 30rem),
+        linear-gradient(180deg, #0b1510 0%, #0c1711 60%, #09120d 100%);
+      min-height: 100vh;
+      font-family: 'Prompt', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      padding-bottom: calc(104px + env(safe-area-inset-bottom));
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input, select { font: inherit; }
+    button, a, select, input { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    [hidden] { display: none !important; }
+    .app-shell { width: min(100%, var(--content)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11, 21, 16, .86);
+      backdrop-filter: blur(18px) saturate(1.15);
+      -webkit-backdrop-filter: blur(18px) saturate(1.15);
+    }
+    .topbar-inner {
+      min-height: 66px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      padding: 5px;
+      background: linear-gradient(145deg, rgba(255,255,255,.05), rgba(217,182,106,.08));
+      border: 1px solid var(--line-strong);
+      box-shadow: inset 0 1px rgba(255,255,255,.04), var(--shadow-sm);
+      object-fit: contain;
+    }
+    .brand-copy { min-width: 0; }
+    .brand-title {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      font-size: 17px;
+      line-height: 1.05;
+      font-weight: 600;
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+    .brand-subtitle {
+      margin-top: 3px;
+      color: var(--muted-2);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .top-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .pill-btn {
+      min-height: 40px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--gold-2);
+      background: rgba(255,255,255,.025);
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .pill-btn:hover { background: rgba(217,182,106,.09); border-color: rgba(217,182,106,.38); }
+    .pill-btn:active { transform: scale(.98); }
+    .pill-btn:focus-visible, .btn:focus-visible, .qty-btn:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--gold-2);
+      outline-offset: 2px;
+    }
+
+    main { padding: 20px 16px 48px; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.025), rgba(255,255,255,0)),
+        linear-gradient(135deg, #14251b 0%, #0f1c15 62%, #142119 100%);
+      box-shadow: var(--shadow-md);
+      padding: 24px 20px 20px;
+      margin-bottom: 16px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      right: -92px;
+      top: -105px;
+      background: radial-gradient(circle, rgba(217,182,106,.18), rgba(217,182,106,0) 68%);
+      pointer-events: none;
+    }
+    .eyebrow { color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 10px; }
+    .hero h2 { margin: 0; font-family: 'Kanit', sans-serif; font-size: clamp(24px, 7vw, 38px); line-height: 1.12; font-weight: 500; max-width: 720px; }
+    .hero p { margin: 9px 0 0; color: var(--muted); max-width: 700px; font-size: 13px; }
+    .service-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chip { display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 11px; border-radius: 999px; background: rgba(255,255,255,.035); border: 1px solid var(--line); color: #d8ded9; font-size: 11px; white-space: nowrap; }
+    .chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px rgba(217,182,106,.45); }
+
+    .layout { display: grid; gap: 16px; }
+    .side-stack { display: grid; gap: 14px; align-content: start; }
+    .section-card { border: 1px solid var(--line); border-radius: var(--radius-lg); background: linear-gradient(180deg, rgba(24,42,31,.94), rgba(17,31,23,.96)); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .section-card-inner { padding: 18px; }
+    .section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .section-kicker { color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 4px; }
+    .section-title { font-family: 'Kanit', sans-serif; font-size: 19px; line-height: 1.2; margin: 0; font-weight: 500; }
+    .section-note { color: var(--muted-2); font-size: 11px; margin-top: 3px; }
+
+    .closed-notice { display: flex; align-items: center; gap: 10px; border: 1px solid rgba(217,182,106,.2); background: rgba(217,182,106,.06); border-radius: var(--radius-md); padding: 11px 12px; color: var(--gold-2); font-size: 12px; font-weight: 500; margin-bottom: 14px; }
+    .closed-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; background: rgba(217,182,106,.1); flex: 0 0 auto; }
+    .policy { border-left: 2px solid rgba(236,141,131,.66); padding: 10px 0 10px 12px; margin: 0 0 16px; color: #d7cbc7; font-size: 11px; }
+    .policy strong { display: block; color: #f0e7e2; margin-bottom: 4px; font-weight: 600; }
+    .policy p { margin: 3px 0; }
+
+    .field-grid { display: grid; gap: 13px; }
+    .field-grid.two { grid-template-columns: 1fr 1fr; }
+    label.field { display: block; }
+    .field-label { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 7px; color: #ece6d9; font-size: 11px; font-weight: 500; }
+    .field-label small { color: var(--muted-2); font-size: 9px; font-weight: 400; }
+    input, select { width: 100%; min-height: var(--tap); border-radius: 14px; border: 1px solid rgba(238,218,168,.16); background: rgba(7,15,10,.48); color: var(--text); padding: 0 13px; transition: border-color .18s ease, background .18s ease, box-shadow .18s ease; font-size: 13px; }
+    input::placeholder { color: #667169; }
+    input:hover, select:hover { border-color: rgba(238,218,168,.28); }
+    input:focus, select:focus { outline: none; border-color: rgba(217,182,106,.65); background: rgba(9,18,12,.72); box-shadow: 0 0 0 3px rgba(217,182,106,.08); }
+    .time-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .menu-pane { min-width: 0; }
+    .menu-intro { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 14px; padding: 13px 14px; border: 1px solid rgba(217,182,106,.18); background: linear-gradient(90deg, rgba(217,182,106,.075), rgba(217,182,106,.025)); border-radius: var(--radius-md); }
+    .menu-intro-icon { color: var(--gold); flex: 0 0 auto; line-height: 1.4; }
+    .menu-intro strong { display: block; color: var(--gold-2); font-family: 'Kanit', sans-serif; font-size: 13px; font-weight: 500; margin-bottom: 1px; }
+    .menu-intro p { color: var(--muted); font-size: 10px; margin: 0; }
+    .category { margin-top: 26px; scroll-margin-top: 78px; }
+    .category:first-child { margin-top: 0; }
+    .category-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; padding: 0 2px; }
+    .category-title { margin: 0; font-family: 'Kanit', sans-serif; font-size: 18px; line-height: 1.25; font-weight: 500; color: #f1eadb; }
+    .category-rule { height: 1px; flex: 1; background: linear-gradient(90deg, var(--line-strong), transparent); margin-bottom: 7px; }
+    .menu-grid { display: grid; gap: 10px; }
+    .menu-card { display: grid; grid-template-columns: 86px 1fr; gap: 13px; min-width: 0; padding: 11px; border-radius: 20px; border: 1px solid rgba(238,218,168,.11); background: linear-gradient(145deg, rgba(25,44,33,.96), rgba(17,31,23,.98)); box-shadow: 0 9px 24px rgba(0,0,0,.12); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .menu-card:hover { border-color: rgba(217,182,106,.22); background: linear-gradient(145deg, rgba(28,49,36,.98), rgba(19,34,25,.98)); }
+    .menu-visual { position: relative; min-height: 86px; border-radius: 16px; overflow: hidden; display: grid; place-items: center; color: rgba(240,215,159,.58); background: radial-gradient(circle at 28% 24%, rgba(217,182,106,.13), transparent 44%), linear-gradient(145deg, #182a20, #0d1912); border: 1px solid rgba(217,182,106,.12); }
+    .menu-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,.025) 50%, transparent 80%); pointer-events: none; }
+    .placeholder-bowl { width: 33px; height: 33px; opacity: .8; }
+    .menu-content { min-width: 0; display: flex; flex-direction: column; }
+    .menu-name { margin: 1px 0 0; font-size: 13px; line-height: 1.35; font-weight: 600; color: #f7f3ea; }
+    .menu-sub { color: var(--muted-2); font-size: 10px; line-height: 1.35; margin-top: 3px; }
+    .badge { display: inline-flex; align-self: flex-start; margin-top: 5px; border-radius: 999px; padding: 3px 7px; background: var(--danger-bg); border: 1px solid rgba(236,141,131,.18); color: #f2b1aa; font-size: 9px; font-weight: 500; }
+    .menu-price { margin-top: 8px; color: var(--gold-2); font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 600; }
+    .item-note { min-height: 38px; margin-top: 8px; padding: 0 10px; border-radius: 11px; font-size: 10px; }
+    .card-action { margin-top: auto; padding-top: 9px; display: flex; justify-content: flex-end; }
+
+    .btn { min-height: var(--tap); border: 1px solid transparent; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 15px; font-weight: 600; transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease; }
+    .btn:active { transform: scale(.985); }
+    .btn-primary { color: #172115; background: linear-gradient(135deg, #efd69b, #caa055); border-color: rgba(255,255,255,.14); box-shadow: 0 10px 24px rgba(193,147,63,.16); }
+    .btn-primary:hover { background: linear-gradient(135deg, #f4dfae, #d6ae61); }
+    .btn-secondary { color: var(--gold-2); background: rgba(217,182,106,.075); border-color: rgba(217,182,106,.24); }
+    .btn-secondary:hover { background: rgba(217,182,106,.13); border-color: rgba(217,182,106,.36); }
+    .btn-ghost { color: var(--muted); background: transparent; border-color: var(--line); }
+    .btn-ghost:hover { color: var(--text); background: rgba(255,255,255,.035); }
+    .btn-line { color: white; background: #06C755; box-shadow: 0 12px 30px rgba(6,199,85,.18); }
+    .btn-line:hover { background: #08b950; }
+    .card-btn { min-height: 38px; padding: 0 12px; border-radius: 11px; font-size: 10px; }
+
+    .cartbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(9,18,13,.2), rgba(9,18,13,.94) 22%, rgba(9,18,13,.98)); pointer-events: none; }
+    .cartbar-inner { width: min(100%, 760px); margin: 0 auto; min-height: 70px; border: 1px solid rgba(217,182,106,.22); border-radius: 20px; background: rgba(18,32,24,.94); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; padding: 10px 11px 10px 14px; pointer-events: auto; }
+    .cart-summary { min-width: 0; flex: 1; }
+    .cart-label { color: var(--muted-2); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+    .cart-total { color: var(--gold-2); font-family: 'Kanit', sans-serif; font-size: 22px; line-height: 1.05; font-weight: 600; margin-top: 2px; }
+    .cart-btn { min-width: 146px; min-height: 50px; border-radius: 15px; font-size: 12px; }
+    .cart-count { min-width: 22px; height: 22px; border-radius: 999px; display: inline-grid; place-items: center; background: rgba(23,33,21,.18); font-size: 10px; font-weight: 700; }
+
+    .modal { position: fixed; inset: 0; z-index: 80; display: none; align-items: flex-end; justify-content: center; background: rgba(2,7,4,.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 12px 12px max(12px, env(safe-area-inset-bottom)); }
+    .modal.open { display: flex; }
+    .sheet { width: min(100%, 560px); max-height: min(88vh, 760px); overflow: hidden; border-radius: 28px; border: 1px solid rgba(238,218,168,.18); background: linear-gradient(180deg, #17291f 0%, #101e16 100%); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; animation: sheetIn .22s cubic-bezier(.2,.8,.2,1); }
+    @keyframes sheetIn { from { transform: translateY(18px); opacity: .5; } to { transform: none; opacity: 1; } }
+    .sheet-head { padding: 18px 18px 12px; border-bottom: 1px solid var(--line); }
+    .sheet-kicker { color: var(--gold); font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .sheet-title { margin: 4px 0 0; font-family: 'Kanit', sans-serif; font-size: 20px; line-height: 1.2; font-weight: 500; }
+    .sheet-sub { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
+    .sheet-body { padding: 14px 18px; overflow-y: auto; overscroll-behavior: contain; }
+    .sheet-actions { padding: 12px 18px 18px; border-top: 1px solid var(--line); display: grid; gap: 8px; background: rgba(10,19,14,.7); }
+
+    .addon-category { margin: 15px 0 7px; color: var(--gold-2); font-family: 'Kanit', sans-serif; font-size: 12px; font-weight: 500; }
+    .addon-row { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 10px; border-radius: 13px; border: 1px solid rgba(238,218,168,.11); background: rgba(5,13,8,.28); margin-bottom: 6px; }
+    .addon-name { font-size: 11px; color: #eee8dd; }
+    .addon-price { color: var(--gold); font-size: 9px; font-weight: 600; margin-top: 2px; }
+    .qty-control { display: inline-flex; align-items: center; border: 1px solid rgba(217,182,106,.24); border-radius: 12px; overflow: hidden; background: rgba(9,18,12,.58); }
+    .qty-btn { width: 36px; height: 36px; border: 0; background: transparent; color: var(--text); font-size: 18px; display: grid; place-items: center; }
+    .qty-btn:hover { background: rgba(217,182,106,.11); color: var(--gold-2); }
+    .qty-val { width: 28px; text-align: center; color: #fff; font-size: 11px; font-weight: 600; }
+
+    .receipt-sheet { background: #f5f2ea; color: #1e2a22; border-color: rgba(255,255,255,.35); }
+    .receipt-head { text-align: center; padding: 20px 18px 14px; border-bottom: 1px dashed #c9c5bb; }
+    .receipt-logo { width: 52px; height: 52px; object-fit: contain; margin: 0 auto 7px; border-radius: 14px; background: #132219; padding: 5px; }
+    .receipt-title { margin: 0; font-family: 'Kanit', sans-serif; font-size: 20px; font-weight: 600; }
+    .receipt-sub { margin-top: 2px; color: #777c77; font-size: 9px; letter-spacing: .13em; }
+    .receipt-body { padding: 14px 18px; overflow-y: auto; }
+    .receipt-meta { font-size: 11px; color: #59615b; line-height: 1.65; padding-bottom: 12px; border-bottom: 1px solid #dcd8ce; }
+    .receipt-meta p { margin: 0; }
+    .receipt-items { padding: 8px 0; }
+    .receipt-item { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid #e3dfd6; }
+    .receipt-item-name { font-size: 11px; font-weight: 600; color: #26342a; }
+    .receipt-item-sub { margin-top: 3px; font-size: 9px; color: #617065; }
+    .receipt-item-note { display: inline-block; margin-top: 4px; font-size: 8px; color: #7c5d22; background: #f2e7cc; border-radius: 7px; padding: 3px 6px; }
+    .receipt-item-price { font-size: 11px; font-weight: 700; color: #9d6220; white-space: nowrap; }
+    .trash-btn { border: 0; background: transparent; color: #aa5c55; width: 32px; height: 32px; border-radius: 9px; font-size: 14px; }
+    .trash-btn:hover { background: #f3e3e1; }
+    .receipt-total { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-top: 1px dashed #c9c5bb; border-bottom: 1px dashed #c9c5bb; font-family: 'Kanit', sans-serif; }
+    .receipt-total strong { font-size: 14px; }
+    .receipt-total span { font-size: 21px; font-weight: 600; color: #a35c25; }
+    .receipt-foot { color: #858b86; font-size: 9px; text-align: center; padding: 10px 0 0; }
+    .receipt-sheet .sheet-actions { background: rgba(238,234,224,.95); border-color: #dcd8ce; }
+    .receipt-sheet .btn-ghost { color: #59615b; border-color: #d5d0c5; }
+    .receipt-sheet .btn-ghost:hover { color: #28362c; background: #e9e5dc; }
+
+    @media (min-width: 720px) {
+      main { padding: 28px 22px 56px; }
+      .hero { padding: 30px 28px 26px; margin-bottom: 20px; }
+      .layout { grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+      .side-stack { position: sticky; top: 92px; }
+      .menu-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .menu-card { grid-template-columns: 96px 1fr; min-height: 154px; }
+      .menu-visual { min-height: 96px; }
+      .modal { align-items: center; padding: 24px; }
+      .sheet { border-radius: 30px; max-height: 84vh; }
+      .cartbar-inner { padding-left: 18px; }
+    }
+
+    @media (max-width: 390px) {
+      .topbar-inner { padding-left: 12px; padding-right: 12px; }
+      .brand-subtitle { display: none; }
+      .pill-btn .hide-small { display: none; }
+      main { padding-left: 12px; padding-right: 12px; }
+      .hero { padding-left: 16px; padding-right: 16px; }
+      .section-card-inner { padding: 15px; }
+      .field-grid.two { grid-template-columns: 1fr; }
+      .menu-card { grid-template-columns: 78px 1fr; gap: 10px; }
+      .menu-visual { min-height: 78px; }
+      .cart-btn { min-width: 132px; padding: 0 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
 </head>
-<body class="bg-emerald-950 text-slate-100 antialiased min-h-screen pb-28">
-
-    <!-- Top Navigation Bar -->
-    <header class="bg-emerald-900/90 backdrop-blur-md text-white sticky top-0 z-50 border-b border-gold/20 shadow-lg">
-        <div class="max-w-xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-emerald-950 rounded-2xl flex items-center justify-center border border-gold/40 shadow-lg overflow-hidden p-1.5 font-kanit font-bold text-gold text-sm tracking-wider">
-                    NER
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-none font-kanit tracking-wide" data-lang-th="NER แจ่วฮ้อน" data-lang-en="NER Jaew Hon">NER แจ่วฮ้อน</h1>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <button onclick="toggleLanguage()" class="bg-emerald-950 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all font-kanit">
-                    <i class="fa-solid fa-globe"></i> <span id="langText">EN</span>
-                </button>
-                <a href="https://lin.ee/Oy7FTKX" target="_blank" class="bg-gold/10 border border-gold/40 text-gold hover:bg-gold/20 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all">
-                    <i class="fa-brands fa-line text-sm"></i> LINE OA
-                </a>
-            </div>
+<body>
+  <header class="topbar">
+    <div class="app-shell topbar-inner">
+      <div class="brand">
+        <img class="brand-mark" src="NER-Logo design-FINAL OK-Mix_FINAL copy 10.png" alt="NER logo">
+        <div class="brand-copy">
+          <h1 class="brand-title" data-lang-th="NER แจ่วฮ้อน" data-lang-en="NER Jaew Hon">NER แจ่วฮ้อน</h1>
+          <div class="brand-subtitle">Northeast Recipe</div>
         </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-xl mx-auto p-4 space-y-6">
-
-        <!-- Section 1: Reservation Details Card -->
-        <div class="bg-emerald-900 rounded-3xl p-5 border border-gold/20 shadow-xl relative overflow-hidden">
-            <div class="flex items-center gap-2.5 pb-3 mb-4 border-b border-gold/15 text-gold font-semibold text-sm">
-                <i class="fa-solid fa-calendar-check text-base"></i>
-                <span class="font-kanit tracking-wide" data-lang-th="ข้อมูลการสำรองที่นั่ง (Reservation Details)" data-lang-en="Reservation Details">ข้อมูลการสำรองที่นั่ง (Reservation Details)</span>
-            </div>
-
-            <!-- Holiday Notice Box -->
-            <div id="holidayBox" class="bg-emerald-950/60 border border-dashed border-gold/40 p-3.5 rounded-2xl mb-4 text-xs text-slate-200">
-                <div class="flex items-start gap-2">
-                    <i class="fa-solid fa-calendar-day text-gold mt-0.5"></i>
-                    <span id="holidayNotice" class="font-medium text-gold">วันหยุดประจำร้าน: ทุกวันจันทร์</span>
-                </div>
-            </div>
-
-            <!-- Time Policy Box -->
-            <div class="bg-rose-950/30 border border-rose-500/30 p-3.5 rounded-2xl mb-4 text-xs text-rose-200">
-                <div class="flex items-start gap-2">
-                    <i class="fa-solid fa-circle-exclamation text-rose-400 mt-0.5"></i>
-                    <div class="space-y-0.5">
-                        <strong class="text-white font-kanit" data-lang-th="นโยบายและเงื่อนไขเวลา (Policy):" data-lang-en="Time & Reservation Policy:">นโยบายและเงื่อนไขเวลา (Policy):</strong>
-                        <p data-lang-th="• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น." data-lang-en="• No table reservations accepted after 6:00 PM.">• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น.</p>
-                        <p data-lang-th="• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ" data-lang-en="• Please arrive on time. Tables will be released after a 15-minute grace period.">• ขอความกรุณามาตรงเวลา หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Form Inputs -->
-            <div class="space-y-4 text-xs">
-                <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="ชื่อผู้จอง" data-lang-en="Customer Name">ชื่อผู้จอง</span> <span class="text-slate-400 font-normal">/ Customer Name</span></label>
-                    <input type="text" id="name" data-placeholder-th="กรุณาระบุชื่อของท่าน" data-placeholder-en="Enter your name" placeholder="กรุณาระบุชื่อของท่าน" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เบอร์โทรศัพท์" data-lang-en="Phone Number">เบอร์โทรศัพท์</span> <span class="text-slate-400 font-normal">/ Phone</span></label>
-                        <input type="tel" id="phone" placeholder="08x-xxx-xxxx" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-gold text-sm transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="จำนวนท่าน" data-lang-en="Number of Guests">จำนวนท่าน</span> <span class="text-slate-400 font-normal">/ Guests</span></label>
-                        <select id="guests" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
-                            <option value="1">1 ท่าน / 1 Person</option>
-                            <option value="2" selected>2 ท่าน / 2 People</option>
-                            <option value="3">3 ท่าน / 3 People</option>
-                            <option value="4">4 ท่าน / 4 People</option>
-                            <option value="5">5 ท่าน / 5 People</option>
-                            <option value="6">6 ท่าน / 6 People</option>
-                            <option value="7+">7 ท่านขึ้นไป / 7+ People</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="วันที่ต้องการเข้าใช้บริการ" data-lang-en="Date of Visit">วันที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Date of Visit</span></label>
-                    <input type="date" id="date" class="w-full bg-emerald-950 border border-gold/30 rounded-2xl px-4 py-3 text-white focus:outline-none focus:border-gold text-sm transition-all">
-                </div>
-                <div>
-                    <label class="block text-gold font-semibold uppercase tracking-wider mb-1.5"><span data-lang-th="เวลาที่ต้องการเข้าใช้บริการ" data-lang-en="Arrival Time">เวลาที่ต้องการเข้าใช้บริการ</span> <span class="text-slate-400 font-normal">/ Arrival Time</span></label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <select id="hour" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
-                        <select id="minute" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm"></select>
-                        <select id="ampm" class="bg-emerald-950 border border-gold/30 rounded-2xl px-3 py-3 text-white text-center focus:outline-none focus:border-gold text-sm">
-                            <option value="AM">AM</option>
-                            <option value="PM" selected>PM</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 2: Menu Items Container -->
-        <div>
-            <div class="bg-gold/10 border border-gold/40 text-gold p-3.5 rounded-2xl mb-4 text-xs flex items-start gap-2.5 shadow-lg">
-                <i class="fa-solid fa-circle-info text-base mt-0.5"></i>
-                <div>
-                    <strong class="font-kanit text-sm block" data-lang-th="💡 คำแนะนำการสั่งอาหาร:" data-lang-en="💡 Ordering Guide:">💡 คำแนะนำการสั่งอาหาร:</strong>
-                    <p class="text-slate-200 mt-0.5" data-lang-th="เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ สามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ" data-lang-en="Single sets can add optional add-ons. Other items can be added directly with notes.">เมนูชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on เพิ่มเติมได้ ส่วนเมนูอื่นๆ สามารถกดใส่ตะกร้าและระบุหมายเหตุได้ทันทีครับ</p>
-                </div>
-            </div>
-            <div id="menuContainer" class="space-y-6"></div>
-        </div>
-
-    </main>
-
-    <!-- Bottom Sticky Order Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-emerald-950/95 backdrop-blur-md border-t border-gold/20 p-4 z-40 shadow-2xl">
-        <div class="max-w-xl mx-auto flex justify-between items-center">
-            <div>
-                <span class="text-[11px] text-slate-400 uppercase tracking-wider block" data-lang-th="ยอดรวมในตะกร้า" data-lang-en="Cart Total">Cart Total</span>
-                <span class="text-2xl font-bold text-gold font-kanit"><span id="totalPrice">0</span> ฿</span>
-            </div>
-            <button onclick="openSummaryModal()" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-emerald-950 px-6 py-3.5 rounded-2xl font-bold shadow-lg shadow-gold/20 flex items-center gap-2 transition-all font-kanit">
-                <i class="fa-solid fa-basket-shopping text-base"></i>
-                <span data-lang-th="ดูตะกร้าสินค้าของฉัน" data-lang-en="View Cart">ดูตะกร้าสินค้า (<span id="cartBadge">0</span>)</span>
-            </button>
-        </div>
+      </div>
+      <div class="top-actions">
+        <button class="pill-btn" type="button" onclick="toggleLanguage()" aria-label="Switch language"><span aria-hidden="true">文</span><span id="langText">EN</span></button>
+        <a class="pill-btn" href="https://lin.ee/Oy7FTKX" target="_blank" rel="noopener"><span aria-hidden="true">●</span><span class="hide-small">LINE OA</span></a>
+      </div>
     </div>
+  </header>
 
-    <!-- Modal: Add-on Selection Popup (เฉพาะชุดเดี่ยว) -->
-    <div id="addonModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-emerald-900 border border-gold/40 text-slate-100 rounded-3xl max-w-md w-full p-6 shadow-2xl relative my-8 font-sans">
-            <div class="text-center pb-3 border-b border-gold/20">
-                <h3 id="addonModalTitle" class="text-lg font-bold font-kanit text-gold">เลือก Add-on เพิ่มเติม</h3>
-                <p class="text-[11px] text-slate-300 tracking-wide mt-0.5">*(ไม่บังคับ / Optional) สามารถเลือกเพิ่มเนื้อสัตว์ ผัก หรือเส้นได้ตามต้องการ</p>
+  <main class="app-shell">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="eyebrow" data-lang-th="PRE-ORDER · จองโต๊ะ · สั่งล่วงหน้า" data-lang-en="PRE-ORDER · RESERVE · ORDER AHEAD">PRE-ORDER · จองโต๊ะ · สั่งล่วงหน้า</div>
+      <h2 id="heroTitle" data-lang-th="มื้อแจ่วฮ้อนที่พร้อมก่อนคุณมาถึง" data-lang-en="Your Jaew Hon, ready when you arrive">มื้อแจ่วฮ้อนที่พร้อมก่อนคุณมาถึง</h2>
+      <p data-lang-th="เลือกเมนูและส่งออเดอร์ผ่าน LINE OA จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม" data-lang-en="Choose your menu and send the order through LINE OA. The restaurant will continue with you in chat as usual.">เลือกเมนูและส่งออเดอร์ผ่าน LINE OA จากนั้นทางร้านจะตอบกลับในแชทตามขั้นตอนเดิม</p>
+      <div class="service-chips" aria-label="Service information">
+        <span class="chip"><span class="chip-dot"></span><span data-lang-th="ชำระที่ร้าน" data-lang-en="Pay at restaurant">ชำระที่ร้าน</span></span>
+        <span class="chip"><span class="chip-dot"></span><span data-lang-th="ส่งออเดอร์ผ่าน LINE" data-lang-en="Order via LINE">ส่งออเดอร์ผ่าน LINE</span></span>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="side-stack">
+        <section class="section-card" aria-labelledby="reservationTitle">
+          <div class="section-card-inner">
+            <div class="section-head">
+              <div>
+                <div class="section-kicker" data-lang-th="รายละเอียดการจอง" data-lang-en="Reservation details">รายละเอียดการจอง</div>
+                <h2 class="section-title" id="reservationTitle" data-lang-th="ข้อมูลสำหรับออเดอร์" data-lang-en="Order information">ข้อมูลสำหรับออเดอร์</h2>
+                <div class="section-note" data-lang-th="กรอกข้อมูลเดิมเพื่อให้ร้านติดต่อกลับได้สะดวก" data-lang-en="Provide the same required details so the restaurant can contact you.">กรอกข้อมูลเดิมเพื่อให้ร้านติดต่อกลับได้สะดวก</div>
+              </div>
             </div>
 
-            <div class="py-3 space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gold uppercase tracking-wider mb-1">หมายเหตุประจำจาน (Note):</label>
-                    <input type="text" id="modalItemNote" class="w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-2 text-xs text-gold placeholder-slate-500 outline-none focus:border-gold" placeholder="เช่น ไม่เอาผัก, เผ็ดน้อย...">
-                </div>
+            <div id="holidayBox" class="closed-notice" role="note"><span class="closed-icon" aria-hidden="true">◷</span><span id="holidayNotice">ร้านหยุดทุกวันจันทร์</span></div>
 
-                <h4 class="text-xs font-bold text-gold uppercase tracking-wider pt-2 border-t border-gold/15 font-kanit">รายการ Add-on ที่เลือกได้:</h4>
-                <div id="addonListContainer" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                    <!-- รายการ Add-on จะถูก render ที่นี่ -->
-                </div>
+            <div class="policy">
+              <strong data-lang-th="นโยบายเวลา" data-lang-en="Time policy">นโยบายเวลา</strong>
+              <p data-lang-th="• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น." data-lang-en="• No table reservations accepted after 6:00 PM.">• ทางร้านงดรับสำรองที่นั่งหลังเวลา 18:00 น.</p>
+              <p data-lang-th="• หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ" data-lang-en="• Tables will be released after a 15-minute grace period.">• หากล่าช้าเกิน 15 นาที ขออนุญาตปล่อยโต๊ะ</p>
             </div>
 
-            <div class="pt-4 border-t border-gold/25 flex gap-2">
-                <button onclick="confirmAddOnToCart()" class="flex-1 bg-gold hover:bg-gold-light text-emerald-950 py-3 rounded-2xl font-bold font-kanit shadow-lg transition-all text-sm">
-                    <i class="fa-solid fa-cart-plus mr-1"></i> ใส่ตะกร้าสินค้า
-                </button>
-                <button onclick="closeAddonModal()" class="bg-emerald-950 hover:bg-emerald-800 border border-gold/30 text-slate-300 px-5 py-3 rounded-2xl text-xs font-medium transition-all">
-                    ยกเลิก
-                </button>
+            <div class="field-grid">
+              <label class="field"><span class="field-label"><span data-lang-th="ชื่อผู้จอง" data-lang-en="Customer name">ชื่อผู้จอง</span><small>Customer Name</small></span><input type="text" id="name" data-placeholder-th="กรุณาระบุชื่อของท่าน" data-placeholder-en="Enter your name" placeholder="กรุณาระบุชื่อของท่าน" autocomplete="name"></label>
+              <div class="field-grid two">
+                <label class="field"><span class="field-label"><span data-lang-th="เบอร์โทรศัพท์" data-lang-en="Phone number">เบอร์โทรศัพท์</span><small>Phone</small></span><input type="tel" id="phone" placeholder="08x-xxx-xxxx" autocomplete="tel" inputmode="tel"></label>
+                <label class="field"><span class="field-label"><span data-lang-th="จำนวนท่าน" data-lang-en="Guests">จำนวนท่าน</span><small>Guests</small></span><select id="guests" aria-label="Number of guests"><option value="1">1 ท่าน / 1 Person</option><option value="2" selected>2 ท่าน / 2 People</option><option value="3">3 ท่าน / 3 People</option><option value="4">4 ท่าน / 4 People</option><option value="5">5 ท่าน / 5 People</option><option value="6">6 ท่าน / 6 People</option><option value="7+">7 ท่านขึ้นไป / 7+ People</option></select></label>
+              </div>
+              <label class="field"><span class="field-label"><span data-lang-th="วันที่เข้าใช้บริการ" data-lang-en="Date of visit">วันที่เข้าใช้บริการ</span><small>Date</small></span><input type="date" id="date"></label>
+              <label class="field"><span class="field-label"><span data-lang-th="เวลาที่เข้าใช้บริการ" data-lang-en="Arrival time">เวลาที่เข้าใช้บริการ</span><small>Arrival</small></span><span class="time-grid"><select id="hour" aria-label="Hour"></select><select id="minute" aria-label="Minute"></select><select id="ampm" aria-label="AM or PM"><option value="AM">AM</option><option value="PM" selected>PM</option></select></span></label>
             </div>
-        </div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="menu-pane" aria-labelledby="menuTitle">
+        <div class="section-head"><div><div class="section-kicker" data-lang-th="เมนู NER" data-lang-en="NER menu">เมนู NER</div><h2 class="section-title" id="menuTitle" data-lang-th="เลือกอาหารล่วงหน้า" data-lang-en="Choose your food">เลือกอาหารล่วงหน้า</h2></div></div>
+        <div class="menu-intro"><div class="menu-intro-icon" aria-hidden="true">✦</div><div><strong data-lang-th="เลือกง่าย สั่งตามเดิม" data-lang-en="Same ordering, cleaner experience">เลือกง่าย สั่งตามเดิม</strong><p data-lang-th="ชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on ได้ เมนูอื่นใส่ตะกร้าและระบุหมายเหตุได้เหมือนเดิม" data-lang-en="Single sets can add optional add-ons. Other items can be added directly with notes, just like before.">ชุดเดี่ยวและอิ่มเดี่ยวสามารถเลือก Add-on ได้ เมนูอื่นใส่ตะกร้าและระบุหมายเหตุได้เหมือนเดิม</p></div></div>
+        <div id="menuContainer"></div>
+      </section>
     </div>
+  </main>
 
-    <!-- Modal: Digital Receipt & Cart Management -->
-    <div id="summaryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white text-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative my-8 border border-slate-100 font-mono">
-            <div class="text-center pb-4 border-b-2 border-dashed border-slate-200">
-                <div class="w-12 h-12 bg-emerald-950 rounded-2xl flex items-center justify-center mx-auto mb-2 border border-gold/40 shadow font-kanit font-bold text-gold text-base">
-                    NER
-                </div>
-                <h3 class="text-xl font-bold font-kanit text-emerald-950">NER JAEW HON</h3>
-                <p class="text-[11px] text-slate-400 tracking-widest mt-0.5 font-sans">SHOPPING CART & PRE-ORDER</p>
-            </div>
+  <div class="cartbar" aria-live="polite"><div class="cartbar-inner"><div class="cart-summary"><div class="cart-label" data-lang-th="ยอดรวมในตะกร้า" data-lang-en="Cart total">ยอดรวมในตะกร้า</div><div class="cart-total"><span id="totalPrice">0</span> ฿</div></div><button class="btn btn-primary cart-btn" type="button" onclick="openSummaryModal()"><span data-lang-th="ดูตะกร้า" data-lang-en="View cart">ดูตะกร้า</span><span class="cart-count" id="cartBadge">0</span></button></div></div>
 
-            <div id="receiptMeta" class="py-4 border-b border-slate-200 text-xs space-y-1.5 text-slate-600 font-sans"></div>
+  <div id="addonModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="addonModalTitle"><div class="sheet"><div class="sheet-head"><div class="sheet-kicker" data-lang-th="ปรับแต่งเมนู" data-lang-en="Customize item">ปรับแต่งเมนู</div><h3 class="sheet-title" id="addonModalTitle">เลือก Add-on เพิ่มเติม</h3><p class="sheet-sub" data-lang-th="ไม่บังคับ — เลือกเพิ่มเนื้อสัตว์ ผัก หรือเส้นได้ตามต้องการ" data-lang-en="Optional — add extra meat, vegetables, or noodles as you like.">ไม่บังคับ — เลือกเพิ่มเนื้อสัตว์ ผัก หรือเส้นได้ตามต้องการ</p></div><div class="sheet-body"><label class="field"><span class="field-label"><span data-lang-th="หมายเหตุประจำจาน" data-lang-en="Item note">หมายเหตุประจำจาน</span><small>Note</small></span><input type="text" id="modalItemNote" data-placeholder-th="เช่น ไม่เอาผัก, เผ็ดน้อย..." data-placeholder-en="e.g. no vegetables, less spicy..." placeholder="เช่น ไม่เอาผัก, เผ็ดน้อย..."></label><div id="addonListContainer"></div></div><div class="sheet-actions"><button class="btn btn-primary" type="button" onclick="confirmAddOnToCart()"><span data-lang-th="ใส่ตะกร้า" data-lang-en="Add to cart">ใส่ตะกร้า</span></button><button class="btn btn-ghost" type="button" onclick="closeAddonModal()"><span data-lang-th="ยกเลิก" data-lang-en="Cancel">ยกเลิก</span></button></div></div></div>
 
-            <div class="py-4 border-b border-slate-200 max-h-60 overflow-y-auto">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-kanit flex justify-between items-center">
-                    <span data-lang-th="📋 รายการในตะกร้าของคุณ" data-lang-en="📋 CART ITEMS">📋 รายการในตะกร้าของคุณ</span>
-                    <span class="text-[10px] text-slate-400 font-normal">* สามารถลบรายการได้</span>
-                </h4>
-                <div id="receiptItems" class="space-y-3 text-xs font-sans"></div>
-            </div>
+  <div id="summaryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="summaryTitle"><div class="sheet receipt-sheet"><div class="receipt-head"><img class="receipt-logo" src="NER-Logo design-FINAL OK-Mix_FINAL copy 10.png" alt="NER logo"><h3 class="receipt-title" id="summaryTitle">NER JAEW HON</h3><div class="receipt-sub">SHOPPING CART & PRE-ORDER</div></div><div class="receipt-body"><div id="receiptMeta" class="receipt-meta"></div><div id="receiptItems" class="receipt-items"></div><div class="receipt-total"><strong data-lang-th="ยอดรวมสุทธิ" data-lang-en="Total amount">ยอดรวมสุทธิ</strong><span id="receiptTotalAmount">0 ฿</span></div><div class="receipt-foot"><div data-lang-th="* ทางร้านไม่มีการเก็บมัดจำการจอง" data-lang-en="* No deposit required for reservations.">* ทางร้านไม่มีการเก็บมัดจำการจอง</div><div>THANK YOU FOR YOUR RESERVATION</div></div></div><div class="sheet-actions"><button id="submitBtn" class="btn btn-line" type="button" onclick="submitFinalOrder()"><span data-lang-th="ส่งออเดอร์เข้า LINE OA ร้านทันที" data-lang-en="Send order to Official LINE">ส่งออเดอร์เข้า LINE OA ร้านทันที</span></button><button class="btn btn-ghost" type="button" onclick="closeSummaryModal()"><span data-lang-th="เลือกเมนูอาหารเพิ่ม" data-lang-en="Continue shopping">เลือกเมนูอาหารเพิ่ม</span></button></div></div></div>
 
-            <div class="py-4 border-b-2 border-dashed border-slate-200 flex justify-between items-center font-kanit">
-                <span class="text-sm font-bold text-slate-700" data-lang-th="ยอดรวมสุทธิ (TOTAL)" data-lang-en="TOTAL AMOUNT">ยอดรวมสุทธิ (TOTAL)</span>
-                <span id="receiptTotalAmount" class="text-xl font-bold text-rose-600">0 ฿</span>
-            </div>
+  <script>
+    const LIFF_ID = "2010784971-mH3KqiRT";
+    let currentLang = 'th';
 
-            <div class="text-center py-3 text-[10px] text-slate-400 space-y-1 font-sans">
-                <p data-lang-th="* ทางร้านไม่มีการเก็บมัดจำการจอง" data-lang-en="* No deposit required for reservations.">* ทางร้านไม่มีการเก็บมัดจำการจอง</p>
-                <p>THANK YOU FOR YOUR RESERVATION</p>
-            </div>
+    const menuCategories = [
+      { catTh: "แจ่วฮ้อนชุดจุ่ม & อิ่มเดี่ยว / JAEW HON SETS", catEn: "JAEW HON SETS", items: [
+        { id: 's1', nameTh: "ชุดจุ่มหมูทะเล", nameEn: "Pork & Sea Food Set", price: 429, allowAddOn: false },
+        { id: 's2', nameTh: "ชุดจุ่มเนื้อ", nameEn: "Beef Shabu Set", price: 339, allowAddOn: false },
+        { id: 's3', nameTh: "ชุดจุ่มหมู", nameEn: "Pork Shabu Set", price: 329, allowAddOn: false },
+        { id: 's4', nameTh: "ชุดจุ่มเดี่ยวหมู", nameEn: "Single Pork Set", price: 189, allowAddOn: true },
+        { id: 's5', nameTh: "อิ่มเดี่ยว ต้มพร้อมทาน", nameEn: "Ready to Eat Normal Set", price: 119, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" },
+        { id: 's6', nameTh: "อิ่มเดี่ยว หมูจุกจุก", nameEn: "Ready to Eat Extra Pork Set", price: 159, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" }
+      ]},
+      { catTh: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT", catEn: "ADD-ON MEAT", items: [
+        { id: 'm1', nameTh: "หมูล้วน (ไม่มีเครื่องใน)", nameEn: "Pork Lover (No Offal)", price: 199, allowAddOn: false },
+        { id: 'm2', nameTh: "หมูหมัก NER", nameEn: "Marinated Pork", price: 49, allowAddOn: false },
+        { id: 'm3', nameTh: "หมูสามชั้นสไลซ์", nameEn: "Sliced Pork Belly", price: 59, allowAddOn: false },
+        { id: 'm4', nameTh: "หมูสันคอสไลซ์", nameEn: "Sliced Pork Neck", price: 59, allowAddOn: false },
+        { id: 'm5', nameTh: "หมูสันนอกสไลซ์", nameEn: "Sliced Pork Sirloin", price: 49, allowAddOn: false },
+        { id: 'm6', nameTh: "ตับหมู", nameEn: "Pork Liver", price: 39, allowAddOn: false },
+        { id: 'm7', nameTh: "เซ่งจี๊", nameEn: "Pork Kidney", price: 39, allowAddOn: false },
+        { id: 'm8', nameTh: "เนื้อรวม", nameEn: "Beef Lover", price: 239, allowAddOn: false },
+        { id: 'm9', nameTh: "เนื้อใบพายสไลซ์", nameEn: "Sliced Chuck Roll Beef", price: 89, allowAddOn: false },
+        { id: 'm10', nameTh: "เนื้อริบอายสไลซ์ (AUS)", nameEn: "Sliced Ribeye Beef (AUS)", price: 89, allowAddOn: false },
+        { id: 'm11', nameTh: "เนื้อเสือร้องไห้สไลซ์ (AUS)", nameEn: "Sliced Brisket Flap (AUS)", price: 89, allowAddOn: false },
+        { id: 'm12', nameTh: "ปลาดอลลี่", nameEn: "Dory Fish", price: 59, allowAddOn: false },
+        { id: 'm13', nameTh: "กุ้ง", nameEn: "Shrimp", price: 69, allowAddOn: false },
+        { id: 'm14', nameTh: "ปลาหมึก", nameEn: "Squid", price: 69, allowAddOn: false }
+      ]},
+      { catTh: "เมนูเพิ่มเติม - ผัก / VEGETABLES", catEn: "VEGETABLES", items: [
+        { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69, allowAddOn: false },
+        { id: 'v2', nameTh: "กะหล่ำปลี", nameEn: "Cabbage", price: 29, allowAddOn: false },
+        { id: 'v3', nameTh: "ผักบุ้ง", nameEn: "Morning Glory", price: 19, allowAddOn: false },
+        { id: 'v4', nameTh: "ผักชีฝรั่ง", nameEn: "Culantro", price: 19, allowAddOn: false },
+        { id: 'v5', nameTh: "โหระพา", nameEn: "Sweet Basil", price: 29, allowAddOn: false },
+        { id: 'v6', nameTh: "ใบชะพลู", nameEn: "Wild Betel Leaves", price: 29, allowAddOn: false }
+      ]},
+      { catTh: "เมนูเพิ่มเติม - เส้น / NOODLES", catEn: "NOODLES", items: [
+        { id: 'n1', nameTh: "วุ้นเส้น", nameEn: "Glass Noodles", price: 29, allowAddOn: false },
+        { id: 'n2', nameTh: "มาม่า", nameEn: "Instant Noodles", price: 29, allowAddOn: false },
+        { id: 'n3', nameTh: "บะหมี่หยก (สด)", nameEn: "Fresh Jade Noodles", price: 29, allowAddOn: false },
+        { id: 'n4', nameTh: "เส้นอุด้ง", nameEn: "Udon Noodles", price: 39, allowAddOn: false }
+      ]},
+      { catTh: "เมนูเพิ่มเติม - เครื่องเคียง & ท็อปปิ้ง / ADDITIONAL ITEMS", catEn: "ADDITIONAL ITEMS", items: [
+        { id: 'e1', nameTh: "ไข่ไก่สด", nameEn: "Fresh Egg", price: 15, allowAddOn: false },
+        { id: 'e2', nameTh: "เต้าหู้ปลา", nameEn: "Fish Tofu", price: 49, allowAddOn: false },
+        { id: 'e3', nameTh: "เต้าหู้ไข่", nameEn: "Egg Tofu", price: 29, allowAddOn: false },
+        { id: 'e4', nameTh: "เต้าหู้ชีส", nameEn: "Cheese Tofu", price: 49, allowAddOn: false },
+        { id: 'e5', nameTh: "ฟองเต้าหู้แท่ง", nameEn: "Bean Curd Stick", price: 49, allowAddOn: false },
+        { id: 'e6', nameTh: "ฟองเต้าหู้ทอด", nameEn: "Fried Tofu Skin Roll", price: 39, allowAddOn: false },
+        { id: 'e7', nameTh: "ข้าวเปล่า", nameEn: "Rice", price: 29, allowAddOn: false }
+      ]},
+      { catTh: "เมนูของทานเล่น / APPETIZERS", catEn: "APPETIZERS", items: [
+        { id: 'a1', nameTh: "ไก่ป๊อป", nameEn: "Chicken Pops", price: 79, allowAddOn: false },
+        { id: 'a2', nameTh: "แฮชบราวน์ เทเทอร์ ทอตส์", nameEn: "Hash Brown Tater Tots", price: 69, allowAddOn: false },
+        { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49, allowAddOn: false },
+        { id: 'a4', nameTh: "คาลามารี", nameEn: "Calamari", price: 119, allowAddOn: false }
+      ]},
+      { catTh: "เมนูของหวาน / DESSERT", catEn: "DESSERT", items: [
+        { id: 'd1', nameTh: "ซาโมซ่ากล้วย", nameEn: "Banana Samosa", price: 79, allowAddOn: false },
+        { id: 'd2', nameTh: "สละลอยแก้ว", nameEn: "Chilled Sala Dessert", price: 59, allowAddOn: false },
+        { id: 'd3', nameTh: "ลูกตาลลอยแก้ว", nameEn: "Chilled Toddy Palm Dessert", price: 59, allowAddOn: false },
+        { id: 'mj1', nameTh: "โมจิไอศครีม - ช็อคโกแลต", nameEn: "Mochi Ice Cream - Chocolate", price: 39, allowAddOn: false },
+        { id: 'mj2', nameTh: "โมจิไอศครีม - วานิลลา", nameEn: "Mochi Ice Cream - Vanilla", price: 39, allowAddOn: false },
+        { id: 'mj3', nameTh: "โมจิไอศครีม - คุกกี้แอนด์ครีม", nameEn: "Mochi Ice Cream - Cookies & Cream", price: 39, allowAddOn: false },
+        { id: 'mj4', nameTh: "โมจิไอศครีม - มัทฉะ", nameEn: "Mochi Ice Cream - Matcha", price: 39, allowAddOn: false },
+        { id: 'mj5', nameTh: "โมจิไอศครีม - มะนาว", nameEn: "Mochi Ice Cream - Lime", price: 39, allowAddOn: false },
+        { id: 'mj6', nameTh: "โมจิไอศครีม - ชาไทย", nameEn: "Mochi Ice Cream - Thai Tea", price: 39, allowAddOn: false }
+      ]},
+      { catTh: "เมนูเครื่องดื่ม / BEVERAGE", catEn: "BEVERAGE", items: [
+        { id: 'dr1', nameTh: "น้ำเปล่า", nameEn: "Drinking Water", price: 15, allowAddOn: false },
+        { id: 'dr2', nameTh: "โซดา", nameEn: "Soda Water", price: 15, allowAddOn: false },
+        { id: 'dr3', nameTh: "น้ำโค้ก original", nameEn: "Coke Original", price: 25, allowAddOn: false },
+        { id: 'dr4', nameTh: "น้ำโค้ก zero", nameEn: "Coke Zero", price: 25, allowAddOn: false },
+        { id: 'dr5', nameTh: "น้ำแป๊ปซี่ original", nameEn: "Pepsi Original", price: 25, allowAddOn: false },
+        { id: 'dr6', nameTh: "น้ำแป๊ปซี่ max", nameEn: "Pepsi Max", price: 25, allowAddOn: false },
+        { id: 'dr7', nameTh: "สิงค์เลม่อนโซดา", nameEn: "Singha Lemon Soda", price: 25, allowAddOn: false },
+        { id: 'dr8', nameTh: "ชเวปส์ จิงเจอร์เอล", nameEn: "Schweppes Ginger Ale", price: 25, allowAddOn: false },
+        { id: 'dr9', nameTh: "ชเวปส์ มะนาว", nameEn: "Schweppes Manao Soda", price: 25, allowAddOn: false },
+        { id: 'dr10', nameTh: "แฟนต้า น้ำแดง", nameEn: "Fanta Strawberry", price: 25, allowAddOn: false },
+        { id: 'dr11', nameTh: "แฟนต้า น้ำเขียว", nameEn: "Fanta Fruit Punch", price: 25, allowAddOn: false },
+        { id: 'dr12', nameTh: "แฟนต้า น้ำส้ม", nameEn: "Fanta Orange", price: 25, allowAddOn: false },
+        { id: 'dr13', nameTh: "โค้ก original ขวด 1.25 ลิตร", nameEn: "Coke Original 1.25L Bottle", price: 40, allowAddOn: false },
+        { id: 'dr14', nameTh: "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", nameEn: "Bucket of Ice (Refill max 4 guests)", price: 25, allowAddOn: false },
+        { id: 'dr15', nameTh: "น้ำแข็งแก้ว", nameEn: "Glass of Ice", price: 2, allowAddOn: false }
+      ]}
+    ];
 
-            <div class="space-y-2 pt-2 font-sans">
-                <button id="submitBtn" onclick="submitFinalOrder()" class="w-full bg-line-green hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition-all">
-                    <i class="fa-brands fa-line text-xl"></i>
-                    <span data-lang-th="ส่งออเดอร์เข้า LINE OA ร้านทันที" data-lang-en="Send Order to Official LINE">ส่งออเดอร์เข้า LINE OA ร้านทันที</span>
-                </button>
-                <button onclick="closeSummaryModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-2xl text-xs font-medium transition-all">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> <span data-lang-th="เลือกเมนูอาหารเพิ่ม" data-lang-en="Continue Shopping">เลือกเมนูอาหารเพิ่ม</span>
-                </button>
-            </div>
-        </div>
-    </div>
+    const addOnPoolCategories = [menuCategories[1], menuCategories[2], menuCategories[3], menuCategories[4]];
+    let cart = [];
+    let selectedBaseItemForAddOn = null;
 
-    <!-- JavaScript Application Logic -->
-    <script>
-        const LIFF_ID = "2010784971-mH3KqiRT";
-        let currentLang = 'th';
+    function init() {
+      renderMenu();
+      initTimeSelectors();
+      updateHolidayNoticeText();
+      liff.init({ liffId: LIFF_ID }).catch(err => console.error(err));
+      document.getElementById('date').valueAsDate = new Date();
+    }
 
-        // แยกหมวดหมู่อย่างละเอียดชัดเจน (ผัก, เส้น, เมนูเพิ่มเติม, ของทานเล่น แยกออกจากกัน)
-        const menuCategories = [
-            {
-                catTh: "แจ่วฮ้อนชุดจุ่ม & อิ่มเดี่ยว / JAEW HON SETS",
-                catEn: "JAEW HON SETS",
-                items: [
-                    { id: 's1', nameTh: "ชุดจุ่มหมูทะเล", nameEn: "Pork & Sea Food Set", price: 429, allowAddOn: false },
-                    { id: 's2', nameTh: "ชุดจุ่มเนื้อ", nameEn: "Beef Shabu Set", price: 339, allowAddOn: false },
-                    { id: 's3', nameTh: "ชุดจุ่มหมู", nameEn: "Pork Shabu Set", price: 329, allowAddOn: false },
-                    { id: 's4', nameTh: "ชุดจุ่มเดี่ยวหมู", nameEn: "Single Pork Set", price: 189, allowAddOn: true },
-                    { id: 's5', nameTh: "อิ่มเดี่ยว ต้มพร้อมทาน", nameEn: "Ready to Eat Normal Set", price: 119, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" },
-                    { id: 's6', nameTh: "อิ่มเดี่ยว หมูจุกจุก", nameEn: "Ready to Eat Extra Pork Set", price: 159, allowAddOn: true, badgeTh: "⚠️ ไม่เสิร์ฟหลัง 18:00 น.", badgeEn: "⚠️ Not served after 6:00 PM" }
-                ]
-            },
-            {
-                catTh: "เมนูเพิ่มเติม - เนื้อสัตว์ / ADD-ON MEAT",
-                catEn: "ADD-ON MEAT",
-                items: [
-                    { id: 'm1', nameTh: "หมูล้วน (ไม่มีเครื่องใน)", nameEn: "Pork Lover (No Offal)", price: 199, allowAddOn: false },
-                    { id: 'm2', nameTh: "หมูหมัก NER", nameEn: "Marinated Pork", price: 49, allowAddOn: false },
-                    { id: 'm3', nameTh: "หมูสามชั้นสไลซ์", nameEn: "Sliced Pork Belly", price: 59, allowAddOn: false },
-                    { id: 'm4', nameTh: "หมูสันคอสไลซ์", nameEn: "Sliced Pork Neck", price: 59, allowAddOn: false },
-                    { id: 'm5', nameTh: "หมูสันนอกสไลซ์", nameEn: "Sliced Pork Sirloin", price: 49, allowAddOn: false },
-                    { id: 'm6', nameTh: "ตับหมู", nameEn: "Pork Liver", price: 39, allowAddOn: false },
-                    { id: 'm7', nameTh: "เซ่งจี๊", nameEn: "Pork Kidney", price: 39, allowAddOn: false },
-                    { id: 'm8', nameTh: "เนื้อรวม", nameEn: "Beef Lover", price: 239, allowAddOn: false },
-                    { id: 'm9', nameTh: "เนื้อใบพายสไลซ์", nameEn: "Sliced Chuck Roll Beef", price: 89, allowAddOn: false },
-                    { id: 'm10', nameTh: "เนื้อริบอายสไลซ์ (AUS)", nameEn: "Sliced Ribeye Beef (AUS)", price: 89, allowAddOn: false },
-                    { id: 'm11', nameTh: "เนื้อเสือร้องไห้สไลซ์ (AUS)", nameEn: "Sliced Brisket Flap (AUS)", price: 89, allowAddOn: false },
-                    { id: 'm12', nameTh: "ปลาดอลลี่", nameEn: "Dory Fish", price: 59, allowAddOn: false },
-                    { id: 'm13', nameTh: "กุ้ง", nameEn: "Shrimp", price: 69, allowAddOn: false },
-                    { id: 'm14', nameTh: "ปลาหมึก", nameEn: "Squid", price: 69, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูเพิ่มเติม - ผัก / VEGETABLES",
-                catEn: "VEGETABLES",
-                items: [
-                    { id: 'v1', nameTh: "ชุดผักรวม", nameEn: "Vegetable Combo", price: 69, allowAddOn: false },
-                    { id: 'v2', nameTh: "กะหล่ำปลี", nameEn: "Cabbage", price: 29, allowAddOn: false },
-                    { id: 'v3', nameTh: "ผักบุ้ง", nameEn: "Morning Glory", price: 19, allowAddOn: false },
-                    { id: 'v4', nameTh: "ผักชีฝรั่ง", nameEn: "Culantro", price: 19, allowAddOn: false },
-                    { id: 'v5', nameTh: "โหระพา", nameEn: "Sweet Basil", price: 29, allowAddOn: false },
-                    { id: 'v6', nameTh: "ใบชะพลู", nameEn: "Wild Betel Leaves", price: 29, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูเพิ่มเติม - เส้น / NOODLES",
-                catEn: "NOODLES",
-                items: [
-                    { id: 'n1', nameTh: "วุ้นเส้น", nameEn: "Glass Noodles", price: 29, allowAddOn: false },
-                    { id: 'n2', nameTh: "มาม่า", nameEn: "Instant Noodles", price: 29, allowAddOn: false },
-                    { id: 'n3', nameTh: "บะหมี่หยก (สด)", nameEn: "Fresh Jade Noodles", price: 29, allowAddOn: false },
-                    { id: 'n4', nameTh: "เส้นอุด้ง", nameEn: "Udon Noodles", price: 39, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูเพิ่มเติม - เครื่องเคียง & ท็อปปิ้ง / ADDITIONAL ITEMS",
-                catEn: "ADDITIONAL ITEMS",
-                items: [
-                    { id: 'e1', nameTh: "ไข่ไก่สด", nameEn: "Fresh Egg", price: 15, allowAddOn: false },
-                    { id: 'e2', nameTh: "เต้าหู้ปลา", nameEn: "Fish Tofu", price: 49, allowAddOn: false },
-                    { id: 'e3', nameTh: "เต้าหู้ไข่", nameEn: "Egg Tofu", price: 29, allowAddOn: false },
-                    { id: 'e4', nameTh: "เต้าหู้ชีส", nameEn: "Cheese Tofu", price: 49, allowAddOn: false },
-                    { id: 'e5', nameTh: "ฟองเต้าหู้แท่ง", nameEn: "Bean Curd Stick", price: 49, allowAddOn: false },
-                    { id: 'e6', nameTh: "ฟองเต้าหู้ทอด", nameEn: "Fried Tofu Skin Roll", price: 39, allowAddOn: false },
-                    { id: 'e7', nameTh: "ข้าวเปล่า", nameEn: "Rice", price: 29, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูของทานเล่น / APPETIZERS",
-                catEn: "APPETIZERS",
-                items: [
-                    { id: 'a1', nameTh: "ไก่ป๊อป", nameEn: "Chicken Pops", price: 79, allowAddOn: false },
-                    { id: 'a2', nameTh: "แฮชบราวน์ เทเทอร์ ทอตส์", nameEn: "Hash Brown Tater Tots", price: 69, allowAddOn: false },
-                    { id: 'a3', nameTh: "ข้าวเกรียบปลา", nameEn: "Crispy Fish Crackers", price: 49, allowAddOn: false },
-                    { id: 'a4', nameTh: "คาลามารี", nameEn: "Calamari", price: 119, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูของหวาน / DESSERT",
-                catEn: "DESSERT",
-                items: [
-                    { id: 'd1', nameTh: "ซาโมซ่ากล้วย", nameEn: "Banana Samosa", price: 79, allowAddOn: false },
-                    { id: 'd2', nameTh: "สละลอยแก้ว", nameEn: "Chilled Sala Dessert", price: 59, allowAddOn: false },
-                    { id: 'd3', nameTh: "ลูกตาลลอยแก้ว", nameEn: "Chilled Toddy Palm Dessert", price: 59, allowAddOn: false },
-                    { id: 'mj1', nameTh: "โมจิไอศครีม - ช็อคโกแลต", nameEn: "Mochi Ice Cream - Chocolate", price: 39, allowAddOn: false },
-                    { id: 'mj2', nameTh: "โมจิไอศครีม - วานิลลา", nameEn: "Mochi Ice Cream - Vanilla", price: 39, allowAddOn: false },
-                    { id: 'mj3', nameTh: "โมจิไอศครีม - คุกกี้แอนด์ครีม", nameEn: "Mochi Ice Cream - Cookies & Cream", price: 39, allowAddOn: false },
-                    { id: 'mj4', nameTh: "โมจิไอศครีม - มัทฉะ", nameEn: "Mochi Ice Cream - Matcha", price: 39, allowAddOn: false },
-                    { id: 'mj5', nameTh: "โมจิไอศครีม - มะนาว", nameEn: "Mochi Ice Cream - Lime", price: 39, allowAddOn: false },
-                    { id: 'mj6', nameTh: "โมจิไอศครีม - ชาไทย", nameEn: "Mochi Ice Cream - Thai Tea", price: 39, allowAddOn: false }
-                ]
-            },
-            {
-                catTh: "เมนูเครื่องดื่ม / BEVERAGE",
-                catEn: "BEVERAGE",
-                items: [
-                    { id: 'dr1', nameTh: "น้ำเปล่า", nameEn: "Drinking Water", price: 15, allowAddOn: false },
-                    { id: 'dr2', nameTh: "โซดา", nameEn: "Soda Water", price: 15, allowAddOn: false },
-                    { id: 'dr3', nameTh: "น้ำโค้ก original", nameEn: "Coke Original", price: 25, allowAddOn: false },
-                    { id: 'dr4', nameTh: "น้ำโค้ก zero", nameEn: "Coke Zero", price: 25, allowAddOn: false },
-                    { id: 'dr5', nameTh: "น้ำแป๊ปซี่ original", nameEn: "Pepsi Original", price: 25, allowAddOn: false },
-                    { id: 'dr6', nameTh: "น้ำแป๊ปซี่ max", nameEn: "Pepsi Max", price: 25, allowAddOn: false },
-                    { id: 'dr7', nameTh: "สิงค์เลม่อนโซดา", nameEn: "Singha Lemon Soda", price: 25, allowAddOn: false },
-                    { id: 'dr8', nameTh: "ชเวปส์ จิงเจอร์เอล", nameEn: "Schweppes Ginger Ale", price: 25, allowAddOn: false },
-                    { id: 'dr9', nameTh: "ชเวปส์ มะนาว", nameEn: "Schweppes Manao Soda", price: 25, allowAddOn: false },
-                    { id: 'dr10', nameTh: "แฟนต้า น้ำแดง", nameEn: "Fanta Strawberry", price: 25, allowAddOn: false },
-                    { id: 'dr11', nameTh: "แฟนต้า น้ำเขียว", nameEn: "Fanta Fruit Punch", price: 25, allowAddOn: false },
-                    { id: 'dr12', nameTh: "แฟนต้า น้ำส้ม", nameEn: "Fanta Orange", price: 25, allowAddOn: false },
-                    { id: 'dr13', nameTh: "โค้ก original ขวด 1.25 ลิตร", nameEn: "Coke Original 1.25L Bottle", price: 40, allowAddOn: false },
-                    { id: 'dr14', nameTh: "น้ำแข็งถัง (รีฟิล 4 ท่านต่อ 1 ออเดอร์)", nameEn: "Bucket of Ice (Refill max 4 guests)", price: 25, allowAddOn: false },
-                    { id: 'dr15', nameTh: "น้ำแข็งแก้ว", nameEn: "Glass of Ice", price: 2, allowAddOn: false }
-                ]
+    function toggleLanguage() {
+      currentLang = currentLang === 'th' ? 'en' : 'th';
+      document.documentElement.lang = currentLang;
+      document.getElementById('langText').innerText = currentLang === 'th' ? 'EN' : 'TH';
+      document.querySelectorAll('[data-lang-th]').forEach(el => { el.innerText = el.getAttribute(`data-lang-${currentLang}`); });
+      const nameInput = document.getElementById('name');
+      nameInput.placeholder = nameInput.getAttribute(`data-placeholder-${currentLang}`);
+      const noteInput = document.getElementById('modalItemNote');
+      noteInput.placeholder = noteInput.getAttribute(`data-placeholder-${currentLang}`);
+      updateHolidayNoticeText();
+      renderMenu();
+    }
+
+    function updateHolidayNoticeText() {
+      document.getElementById('holidayNotice').textContent = currentLang === 'th' ? 'ร้านหยุดทุกวันจันทร์' : 'Closed every Monday';
+    }
+
+    function initTimeSelectors() {
+      const h = document.getElementById('hour');
+      const m = document.getElementById('minute');
+      for(let i=1; i<=12; i++) h.options.add(new Option(i.toString().padStart(2,'0'), i));
+      for(let i=0; i<60; i++) m.options.add(new Option(i.toString().padStart(2,'0'), i));
+      h.value = 5;
+    }
+
+    function placeholderIcon() {
+      return `<svg class="placeholder-bowl" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M9 23h30c-.8 9.2-6.8 14-15 14S9.8 32.2 9 23Z" stroke="currentColor" stroke-width="1.7"/><path d="M14 39h20M17 17c0-2 1.5-3.4 1.5-5.2M24 17c0-2 1.5-3.4 1.5-5.2M31 17c0-2 1.5-3.4 1.5-5.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`;
+    }
+
+    function renderMenu() {
+      let html = "";
+      menuCategories.forEach((category, categoryIndex) => {
+        const catTitle = currentLang === 'th' ? category.catTh : category.catEn;
+        html += `<section class="category" id="category-${categoryIndex}"><div class="category-heading"><h3 class="category-title">${catTitle}</h3><div class="category-rule"></div></div><div class="menu-grid">`;
+        category.items.forEach(item => {
+          const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+          const subName = currentLang === 'th' ? item.nameEn : item.nameTh;
+          const badgeText = item.badgeTh ? (currentLang === 'th' ? item.badgeTh : item.badgeEn) : '';
+          const badgeHtml = badgeText ? `<span class="badge">${badgeText}</span>` : '';
+          let actionSectionHtml = "";
+          if (item.allowAddOn) {
+            actionSectionHtml = `<div class="card-action"><button type="button" onclick="openAddonModal('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="btn btn-secondary card-btn">${currentLang === 'th' ? 'เลือก Add-on / ใส่ตะกร้า' : 'Add-ons / Add to cart'}</button></div>`;
+          } else {
+            actionSectionHtml = `<input type="text" id="note-${item.id}" class="item-note" placeholder="${currentLang === 'th' ? 'หมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Note e.g. no veg, less spicy...'}"><div class="card-action"><button type="button" onclick="addNormalItemToCart('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="btn btn-secondary card-btn">${currentLang === 'th' ? 'ใส่ตะกร้า' : 'Add to cart'}</button></div>`;
+          }
+          html += `<article class="menu-card"><div class="menu-visual">${placeholderIcon()}</div><div class="menu-content"><h4 class="menu-name">${itemName}</h4><div class="menu-sub">${subName}</div>${badgeHtml}<div class="menu-price">${item.price} ฿</div>${actionSectionHtml}</div></article>`;
+        });
+        html += `</div></section>`;
+      });
+      document.getElementById('menuContainer').innerHTML = html;
+    }
+
+    function openAddonModal(id, nameTh, nameEn, price) {
+      selectedBaseItemForAddOn = { id, nameTh, nameEn, price };
+      document.getElementById('addonModalTitle').innerText = currentLang === 'th' ? `เลือก Add-on สำหรับ: ${nameTh}` : `Add-ons for: ${nameEn}`;
+      document.getElementById('modalItemNote').value = "";
+      let addonHtml = "";
+      addOnPoolCategories.forEach(cat => {
+        addonHtml += `<div class="addon-category">${currentLang === 'th' ? cat.catTh : cat.catEn}</div>`;
+        cat.items.forEach(subItem => {
+          addonHtml += `<div class="addon-row"><div><div class="addon-name">${currentLang === 'th' ? subItem.nameTh : subItem.nameEn}</div><div class="addon-price">+${subItem.price} ฿</div></div><div class="qty-control" aria-label="Quantity"><button type="button" class="qty-btn" aria-label="Decrease" onclick="adjustModalAddOnQty('${subItem.id}', -1)">−</button><span class="qty-val" id="modal-addon-qty-${subItem.id}">0</span><button type="button" class="qty-btn" aria-label="Increase" onclick="adjustModalAddOnQty('${subItem.id}', 1)">+</button></div></div>`;
+        });
+      });
+      document.getElementById('addonListContainer').innerHTML = addonHtml;
+      window.tempAddOnCounts = {};
+      document.getElementById('addonModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function adjustModalAddOnQty(subId, delta) {
+      if(!window.tempAddOnCounts) window.tempAddOnCounts = {};
+      let current = window.tempAddOnCounts[subId] || 0;
+      let newVal = Math.max(0, current + delta);
+      window.tempAddOnCounts[subId] = newVal;
+      const qtySpan = document.getElementById(`modal-addon-qty-${subId}`);
+      if(qtySpan) qtySpan.innerText = newVal;
+    }
+
+    function closeAddonModal() {
+      document.getElementById('addonModal').classList.remove('open');
+      document.body.style.overflow = '';
+      selectedBaseItemForAddOn = null;
+    }
+
+    function confirmAddOnToCart() {
+      if (!selectedBaseItemForAddOn) return;
+      let chosenAddOns = [];
+      let addOnTotalPrice = 0;
+      if (window.tempAddOnCounts) {
+        addOnPoolCategories.forEach(cat => {
+          cat.items.forEach(subItem => {
+            let qty = window.tempAddOnCounts[subItem.id] || 0;
+            if (qty > 0) {
+              chosenAddOns.push({ id: subItem.id, nameTh: subItem.nameTh, price: subItem.price, qty: qty });
+              addOnTotalPrice += (subItem.price * qty);
             }
-        ];
+          });
+        });
+      }
+      const noteVal = document.getElementById('modalItemNote').value.trim();
+      const finalPrice = selectedBaseItemForAddOn.price + addOnTotalPrice;
+      cart.push({ cartId: Date.now() + Math.random(), id: selectedBaseItemForAddOn.id, nameTh: selectedBaseItemForAddOn.nameTh, nameEn: selectedBaseItemForAddOn.nameEn, basePrice: selectedBaseItemForAddOn.price, addOns: chosenAddOns, totalPrice: finalPrice, note: noteVal });
+      closeAddonModal();
+      updateCartBadge();
+      alert(currentLang === 'th' ? "เพิ่มเมนูพร้อม Add-on ลงในตะกร้าเรียบร้อยครับ" : "Item with add-ons added to cart!");
+    }
 
-        // หมวดหมู่ที่จะนำมาให้เลือกเป็น Add-on (เนื้อสัตว์, ผัก, เส้น, เมนูเพิ่ม) สำหรับชุดเดี่ยว
-        const addOnPoolCategories = [
-            menuCategories[1], // เนื้อสัตว์
-            menuCategories[2], // ผัก
-            menuCategories[3], // เส้น
-            menuCategories[4]  // เพิ่มเติม (ไข่, เต้าหู้)
-        ];
+    function addNormalItemToCart(id, nameTh, nameEn, price) {
+      const noteInput = document.getElementById(`note-${id}`);
+      const noteVal = noteInput ? noteInput.value.trim() : "";
+      cart.push({ cartId: Date.now() + Math.random(), id: id, nameTh: nameTh, nameEn: nameEn, basePrice: price, addOns: [], totalPrice: price, note: noteVal });
+      if(noteInput) noteInput.value = "";
+      updateCartBadge();
+      alert(currentLang === 'th' ? "เพิ่มสินค้าลงในตะกร้าเรียบร้อยครับ" : "Item added to cart successfully!");
+    }
 
-        let cart = [];
-        let selectedBaseItemForAddOn = null;
+    function updateCartBadge() {
+      let totalQty = cart.length;
+      document.getElementById('cartBadge').innerText = totalQty;
+      let totalAmount = 0;
+      cart.forEach(item => totalAmount += item.totalPrice);
+      document.getElementById('totalPrice').innerText = totalAmount.toLocaleString();
+    }
 
-        function init() {
-            renderMenu();
-            initTimeSelectors();
-            updateHolidayNoticeText();
-            liff.init({ liffId: LIFF_ID }).catch(err => console.error(err));
-            document.getElementById('date').valueAsDate = new Date();
+    function removeFromCart(cartId) {
+      cart = cart.filter(item => item.cartId !== cartId);
+      updateCartBadge();
+      openSummaryModal();
+    }
+
+    function openSummaryModal() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const hr = parseInt(document.getElementById('hour').value);
+      const ampm = document.getElementById('ampm').value;
+      if(!name || !phone) return alert(currentLang === 'th' ? "กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ" : "Please provide your name and phone number.");
+      if(ampm === "PM" && hr > 6 && hr !== 12) return alert(currentLang === 'th' ? "ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น." : "Sorry, reservations are not accepted after 6:00 PM.");
+      if(cart.length === 0) return alert(currentLang === 'th' ? "ตะกร้าสินค้าว่างเปล่า กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ" : "Your cart is empty. Please select at least one item.");
+      let itemsHtml = "";
+      let grandTotal = 0;
+      cart.forEach((item, index) => {
+        grandTotal += item.totalPrice;
+        const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
+        itemsHtml += `<div class="receipt-item"><div style="min-width:0;flex:1"><div class="receipt-item-name">${index + 1}. ${itemName}</div>`;
+        if (item.addOns && item.addOns.length > 0) {
+          const addonStrings = item.addOns.map(a => `${a.nameTh} x${a.qty}`);
+          itemsHtml += `<div class="receipt-item-sub">+ Add-on: ${addonStrings.join(', ')}</div>`;
         }
+        if(item.note) itemsHtml += `<div class="receipt-item-note"><b>Note:</b> ${item.note}</div>`;
+        itemsHtml += `</div><div style="display:flex;align-items:flex-start;gap:3px"><div class="receipt-item-price">${item.totalPrice.toLocaleString()}.-</div><button type="button" class="trash-btn" aria-label="Remove item" onclick="removeFromCart(${item.cartId})">×</button></div></div>`;
+      });
+      const dateVal = document.getElementById('date').value;
+      const minVal = document.getElementById('minute').value.padStart(2,'0');
+      const guestsVal = document.getElementById('guests').value;
+      document.getElementById('receiptMeta').innerHTML = `<p><b>${currentLang === 'th' ? 'ชื่อผู้จอง' : 'Name'}:</b> ${name}</p><p><b>${currentLang === 'th' ? 'เบอร์โทร' : 'Phone'}:</b> ${phone}</p><p><b>${currentLang === 'th' ? 'จำนวน' : 'Guests'}:</b> ${guestsVal} ${currentLang === 'th' ? 'ท่าน' : 'People'}</p><p><b>${currentLang === 'th' ? 'วันที่' : 'Date'}:</b> ${dateVal}</p><p><b>${currentLang === 'th' ? 'เวลา' : 'Time'}:</b> ${hr}:${minVal} ${ampm}</p>`;
+      document.getElementById('receiptItems').innerHTML = itemsHtml;
+      document.getElementById('receiptTotalAmount').innerText = grandTotal.toLocaleString() + " ฿";
+      document.getElementById('summaryModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'th' ? 'en' : 'th';
-            document.getElementById('langText').innerText = currentLang === 'th' ? 'EN' : 'TH';
-            
-            document.querySelectorAll('[data-lang-th]').forEach(el => {
-                el.innerText = el.getAttribute(`data-lang-${currentLang}`);
-            });
+    function closeSummaryModal() {
+      document.getElementById('summaryModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
 
-            const nameInput = document.getElementById('name');
-            nameInput.placeholder = nameInput.getAttribute(`data-placeholder-${currentLang}`);
+    function submitFinalOrder() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const time = `${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${document.getElementById('ampm').value}`;
+      let itemText = "";
+      cart.forEach((item, index) => {
+        itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\n`;
+        if(item.addOns && item.addOns.length > 0) item.addOns.forEach(a => { itemText += `   + Add-on: ${a.nameTh} x${a.qty}\n`; });
+        if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\n`;
+      });
+      const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหารในตะกร้า:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
+      const btn = document.getElementById('submitBtn');
+      btn.innerHTML = currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...';
+      btn.disabled = true;
+      if (liff.isInClient()) {
+        liff.sendMessages([{ type: 'text', text: finalMsg }]).then(() => {
+          alert(currentLang === 'th' ? "ส่งใบเสร็จออเดอร์เข้าห้องแชท LINE OA ของร้านสำเร็จ!" : "Order sent to LINE OA successfully!");
+          liff.closeWindow();
+        }).catch((err) => {
+          alert("Error: " + err.message);
+          btn.innerHTML = currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE';
+          btn.disabled = false;
+        });
+      } else {
+        alert(currentLang === 'th' ? "กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ" : "Please open via LINE OA menu.");
+        btn.innerHTML = currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE';
+        btn.disabled = false;
+      }
+    }
 
-            updateHolidayNoticeText();
-            renderMenu();
-        }
-
-        function updateHolidayNoticeText() {
-            document.getElementById('holidayNotice').textContent = currentLang === 'th'
-                ? 'วันหยุดประจำร้าน: ทุกวันจันทร์'
-                : 'Regular Closing Day: Every Monday';
-        }
-
-        function initTimeSelectors() {
-            const h = document.getElementById('hour');
-            const m = document.getElementById('minute');
-            for(let i=1; i<=12; i++) h.options.add(new Option(i.toString().padStart(2,'0'), i));
-            for(let i=0; i<60; i++) m.options.add(new Option(i.toString().padStart(2,'0'), i));
-            h.value = 5;
-        }
-
-        function renderMenu() {
-            let html = "";
-            menuCategories.forEach(category => {
-                const catTitle = currentLang === 'th' ? category.catTh : category.catEn;
-                html += `<div class="font-kanit font-bold text-gold text-lg mt-8 mb-4 flex items-center gap-3">
-                            <span>${catTitle}</span>
-                            <div class="h-[1px] flex-1 bg-gold/20"></div>
-                         </div>`;
-                category.items.forEach(item => {
-                    const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
-                    const subName = currentLang === 'th' ? item.nameEn : item.nameTh;
-                    const badgeText = item.badgeTh ? (currentLang === 'th' ? item.badgeTh : item.badgeEn) : '';
-                    let badgeHtml = badgeText ? `<span class="inline-block bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] px-2 py-0.5 rounded-md mt-1 font-semibold">${badgeText}</span>` : '';
-
-                    let actionSectionHtml = "";
-                    if (item.allowAddOn) {
-                        actionSectionHtml = `
-                            <div class="mt-3 pt-3 border-t border-emerald-800/80 flex justify-end">
-                                <button onclick="openAddonModal('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="bg-gold/20 hover:bg-gold text-gold hover:text-emerald-950 border border-gold/50 px-4 py-2 rounded-xl text-xs font-bold font-kanit transition-all flex items-center gap-1.5 shadow">
-                                    <i class="fa-solid fa-plus-circle"></i> เลือก Add-on / ใส่ตะกร้า
-                                </button>
-                            </div>
-                        `;
-                    } else {
-                        actionSectionHtml = `
-                            <div class="mt-2.5">
-                                <input type="text" id="note-${item.id}" class="w-full bg-emerald-950 border border-gold/30 rounded-xl px-3 py-1.5 text-xs text-gold placeholder-slate-500 outline-none focus:border-gold" placeholder="${currentLang === 'th' ? 'ระบุหมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Notes e.g. no veg, less spicy...'}">
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-emerald-800/80 flex justify-end">
-                                <button onclick="addNormalItemToCart('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})" class="bg-gold/20 hover:bg-gold text-gold hover:text-emerald-950 border border-gold/50 px-4 py-2 rounded-xl text-xs font-bold font-kanit transition-all flex items-center gap-1.5 shadow">
-                                    <i class="fa-solid fa-cart-plus"></i> ใส่ตะกร้า
-                                </button>
-                            </div>
-                        `;
-                    }
-
-                    html += `
-                        <div class="bg-emerald-900 rounded-2xl p-4 mb-3 border border-emerald-800 transition-all shadow-sm">
-                            <div class="flex gap-3.5 items-start">
-                                <div class="w-20 h-20 bg-emerald-950 rounded-xl border border-gold/20 flex flex-col items-center justify-center text-[10px] text-slate-400 text-center shrink-0 p-1">
-                                    <i class="fa-solid fa-image text-gold/60 text-base mb-1"></i>
-                                    <span>Image</span>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="font-semibold text-white text-sm truncate">${itemName}</h4>
-                                    <span class="text-[11px] text-slate-400 block line-clamp-1 mt-0.5">${subName}</span>
-                                    ${badgeHtml}
-                                    <span class="text-gold font-bold text-sm mt-1.5 block font-kanit">${item.price} ฿</span>
-                                </div>
-                            </div>
-                            ${actionSectionHtml}
-                        </div>
-                    `;
-                });
-            });
-            document.getElementById('menuContainer').innerHTML = html;
-        }
-
-        function openAddonModal(id, nameTh, nameEn, price) {
-            selectedBaseItemForAddOn = { id, nameTh, nameEn, price };
-            document.getElementById('addonModalTitle').innerText = `เลือก Add-on สำหรับ: ${nameTh}`;
-            document.getElementById('modalItemNote').value = "";
-
-            let addonHtml = "";
-            addOnPoolCategories.forEach(cat => {
-                addonHtml += `<div class="text-[11px] font-bold text-gold mt-2 mb-1 font-kanit border-b border-gold/20 pb-0.5">${cat.catTh}</div>`;
-                cat.items.forEach(subItem => {
-                    addonHtml += `
-                        <div class="flex items-center justify-between bg-emerald-950/60 border border-gold/15 rounded-xl px-3 py-1.5 my-1.5">
-                            <div class="pr-2 min-w-0 flex-1">
-                                <span class="text-xs text-white block truncate">${subItem.nameTh}</span>
-                                <span class="text-[10px] text-gold font-bold">+${subItem.price} ฿</span>
-                            </div>
-                            <div class="flex items-center bg-emerald-900 border border-gold/30 rounded-lg overflow-hidden shrink-0">
-                                <button class="w-7 h-7 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="adjustModalAddOnQty('${subItem.id}', -1)">-</button>
-                                <span class="w-7 text-center text-xs font-bold text-white" id="modal-addon-qty-${subItem.id}">0</span>
-                                <button class="w-7 h-7 text-white font-bold flex items-center justify-center hover:bg-gold hover:text-emerald-950 transition-all" onclick="adjustModalAddOnQty('${subItem.id}', 1)">+</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
-
-            document.getElementById('addonListContainer').innerHTML = addonHtml;
-            window.tempAddOnCounts = {};
-            document.getElementById('addonModal').classList.remove('hidden');
-        }
-
-        function adjustModalAddOnQty(subId, delta) {
-            if(!window.tempAddOnCounts) window.tempAddOnCounts = {};
-            let current = window.tempAddOnCounts[subId] || 0;
-            let newVal = Math.max(0, current + delta);
-            window.tempAddOnCounts[subId] = newVal;
-            
-            const qtySpan = document.getElementById(`modal-addon-qty-${subId}`);
-            if(qtySpan) qtySpan.innerText = newVal;
-        }
-
-        function closeAddonModal() {
-            document.getElementById('addonModal').classList.add('hidden');
-            selectedBaseItemForAddOn = null;
-        }
-
-        function confirmAddOnToCart() {
-            if (!selectedBaseItemForAddOn) return;
-
-            let chosenAddOns = [];
-            let addOnTotalPrice = 0;
-
-            if (window.tempAddOnCounts) {
-                addOnPoolCategories.forEach(cat => {
-                    cat.items.forEach(subItem => {
-                        let qty = window.tempAddOnCounts[subItem.id] || 0;
-                        if (qty > 0) {
-                            chosenAddOns.push({
-                                id: subItem.id,
-                                nameTh: subItem.nameTh,
-                                price: subItem.price,
-                                qty: qty
-                            });
-                            addOnTotalPrice += (subItem.price * qty);
-                        }
-                    });
-                });
-            }
-
-            const noteVal = document.getElementById('modalItemNote').value.trim();
-            const finalPrice = selectedBaseItemForAddOn.price + addOnTotalPrice;
-
-            cart.push({
-                cartId: Date.now() + Math.random(),
-                id: selectedBaseItemForAddOn.id,
-                nameTh: selectedBaseItemForAddOn.nameTh,
-                nameEn: selectedBaseItemForAddOn.nameEn,
-                basePrice: selectedBaseItemForAddOn.price,
-                addOns: chosenAddOns,
-                totalPrice: finalPrice,
-                note: noteVal
-            });
-
-            closeAddonModal();
-            updateCartBadge();
-            alert(currentLang === 'th' ? "เพิ่มเมนูพร้อม Add-on ลงในตะกร้าเรียบร้อยครับ" : "Item with add-ons added to cart!");
-        }
-
-        function addNormalItemToCart(id, nameTh, nameEn, price) {
-            const noteInput = document.getElementById(`note-${id}`);
-            const noteVal = noteInput ? noteInput.value.trim() : "";
-
-            cart.push({
-                cartId: Date.now() + Math.random(),
-                id: id,
-                nameTh: nameTh,
-                nameEn: nameEn,
-                basePrice: price,
-                addOns: [],
-                totalPrice: price,
-                note: noteVal
-            });
-
-            if(noteInput) noteInput.value = "";
-            updateCartBadge();
-            alert(currentLang === 'th' ? "เพิ่มสินค้าลงในตะกร้าเรียบร้อยครับ" : "Item added to cart successfully!");
-        }
-
-        function updateCartBadge() {
-            let totalQty = cart.length;
-            document.getElementById('cartBadge').innerText = totalQty;
-            
-            let totalAmount = 0;
-            cart.forEach(item => totalAmount += item.totalPrice);
-            document.getElementById('totalPrice').innerText = totalAmount.toLocaleString();
-        }
-
-        function removeFromCart(cartId) {
-            cart = cart.filter(item => item.cartId !== cartId);
-            updateCartBadge();
-            openSummaryModal(); 
-        }
-
-        function openSummaryModal() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const hr = parseInt(document.getElementById('hour').value);
-            const ampm = document.getElementById('ampm').value;
-
-            if(!name || !phone) return alert(currentLang === 'th' ? "กรุณาระบุชื่อและเบอร์โทรศัพท์ของท่านเพื่อความสะดวกในการติดต่อครับ" : "Please provide your name and phone number.");
-            if(ampm === "PM" && hr > 6 && hr !== 12) return alert(currentLang === 'th' ? "ขออภัยครับ ทางร้านงดรับจองหลัง 18:00 น." : "Sorry, reservations are not accepted after 6:00 PM.");
-            if(cart.length === 0) return alert(currentLang === 'th' ? "ตะกร้าสินค้าว่างเปล่า กรุณาเลือกรายการอาหารอย่างน้อย 1 รายการครับ" : "Your cart is empty. Please select at least one item.");
-
-            let itemsHtml = "";
-            let grandTotal = 0;
-
-            cart.forEach((item, index) => {
-                grandTotal += item.totalPrice;
-                const itemName = currentLang === 'th' ? item.nameTh : item.nameEn;
-                
-                itemsHtml += `
-                    <div class="py-2.5 border-b border-slate-100 flex justify-between items-start">
-                        <div class="flex-1 pr-2">
-                            <div class="font-bold text-slate-800 flex items-center gap-1.5">
-                                <span>${index + 1}. ${itemName}</span>
-                                <span class="text-rose-600">${item.totalPrice.toLocaleString()}.-</span>
-                            </div>
-                `;
-                
-                if (item.addOns && item.addOns.length > 0) {
-                    itemsHtml += `<div class="text-[11px] text-emerald-700 font-medium mt-0.5">+ Add-on: `;
-                    let addonStrings = item.addOns.map(a => `${a.nameTh} x${a.qty}`);
-                    itemsHtml += addonStrings.join(', ') + `</div>`;
-                }
-
-                if(item.note) {
-                    itemsHtml += `<div class="mt-0.5 bg-amber-50 border border-amber-200 text-amber-800 text-[10px] px-2 py-0.5 rounded-lg inline-block"><b>Note:</b> ${item.note}</div>`;
-                }
-                
-                itemsHtml += `</div>
-                        <button onclick="removeFromCart(${item.cartId})" class="text-rose-500 hover:text-rose-700 p-1 text-sm"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                `;
-            });
-
-            const dateVal = document.getElementById('date').value;
-            const minVal = document.getElementById('minute').value.padStart(2,'0');
-            const guestsVal = document.getElementById('guests').value;
-
-            document.getElementById('receiptMeta').innerHTML = `
-                <p><b>${currentLang === 'th' ? 'ชื่อผู้จอง' : 'Name'}:</b> ${name}</p>
-                <p><b>${currentLang === 'th' ? 'เบอร์โทร' : 'Phone'}:</b> ${phone}</p>
-                <p><b>${currentLang === 'th' ? 'จำนวน' : 'Guests'}:</b> ${guestsVal} ${currentLang === 'th' ? 'ท่าน' : 'People'}</p>
-                <p><b>${currentLang === 'th' ? 'วันที่' : 'Date'}:</b> ${dateVal}</p>
-                <p><b>${currentLang === 'th' ? 'เวลา' : 'Time'}:</b> ${hr}:${minVal} ${ampm}</p>
-            `;
-            document.getElementById('receiptItems').innerHTML = itemsHtml;
-            document.getElementById('receiptTotalAmount').innerText = grandTotal.toLocaleString() + " ฿";
-            document.getElementById('summaryModal').classList.remove('hidden');
-        }
-
-        function closeSummaryModal() {
-            document.getElementById('summaryModal').classList.add('hidden');
-        }
-
-        function submitFinalOrder() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const time = `${document.getElementById('hour').value}:${document.getElementById('minute').value.padStart(2,'0')} ${document.getElementById('ampm').value}`;
-            
-            let itemText = "";
-            cart.forEach((item, index) => {
-                itemText += `${index + 1}. ${item.nameTh} - ${item.totalPrice.toLocaleString()}.- บาท\n`;
-                if(item.addOns && item.addOns.length > 0) {
-                    item.addOns.forEach(a => {
-                        itemText += `   + Add-on: ${a.nameTh} x${a.qty}\n`;
-                    });
-                }
-                if(item.note) itemText += `   └ หมายเหตุ: ${item.note}\n`;
-            });
-
-            const finalMsg = `🔥 [DIGITAL PRE-ORDER RECEIPT]\n----------------------------------\n👤 ชื่อผู้จอง: ${name}\n📞 เบอร์โทร: ${phone}\n👥 จำนวน: ${document.getElementById('guests').value} ท่าน\n📅 วันที่: ${document.getElementById('date').value}\n⏰ เวลา: ${time}\n----------------------------------\n📋 รายการอาหารในตะกร้า:\n${itemText}----------------------------------\n💰 ยอดรวมสุทธิ: ${document.getElementById('totalPrice').innerText} บาท\n----------------------------------\n* ทางร้านไม่มีการเก็บมัดจำการจอง\nTHANK YOU FOR YOUR RESERVATION`;
-
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-xl"></i> ${currentLang === 'th' ? 'กำลังส่งออเดอร์...' : 'Sending order...'}`;
-            btn.disabled = true;
-
-            if (liff.isInClient()) {
-                liff.sendMessages([{
-                    type: 'text',
-                    text: finalMsg
-                }]).then(() => {
-                    alert(currentLang === 'th' ? "ส่งใบเสร็จออเดอร์เข้าห้องแชท LINE OA ของร้านสำเร็จ!" : "Order sent to LINE OA successfully!");
-                    liff.closeWindow();
-                }).catch((err) => {
-                    alert("Error: " + err.message);
-                    btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE'}`;
-                    btn.disabled = false;
-                });
-            } else {
-                alert(currentLang === 'th' ? "กรุณาใช้งานผ่านเมนูใน LINE OA ของร้านครับ" : "Please open via LINE OA menu.");
-                btn.innerHTML = `<i class="fa-brands fa-line text-xl"></i> ${currentLang === 'th' ? 'ส่งออเดอร์เข้า LINE OA ร้านทันที' : 'Send Order to Official LINE'}`;
-                btn.disabled = false;
-            }
-        }
-
-        init();
-    </script>
+    init();
+  </script>
 </body>
 </html>
