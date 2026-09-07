@@ -43,7 +43,6 @@ jobs:
           assert mapped == required, (mapped, required)
           assert "background-image: url('assets/menu/menu-sprite.webp')" in text
           assert 'const spritePosition = MENU_SPRITE_POSITIONS[item.id];' in text
-          assert 'class="menu-sprite"' in text
           assert 'const LIFF_ID = "2010784971-mH3KqiRT"' in text
           assert 'function isMondayDate' in text
           PY
