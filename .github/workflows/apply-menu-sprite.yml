@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Rebuild approved image sprite and patch preorder UI
+      - name: Install approved menu images
         shell: bash
         run: |
           set -euo pipefail
@@ -28,17 +28,25 @@ jobs:
           test "$(wc -c < assets/menu/menu-sprite.webp)" -eq 19412
           python3 - <<'PY'
           from pathlib import Path
-          data = Path('assets/menu/menu-sprite.webp').read_bytes()
-          assert data[:4] == b'RIFF', data[:4]
-          assert data[8:12] == b'WEBP', data[8:12]
+          import re
+
+          image = Path('assets/menu/menu-sprite.webp').read_bytes()
+          assert image[:4] == b'RIFF', image[:4]
+          assert image[8:12] == b'WEBP', image[8:12]
+
+          text = Path('index.html').read_text(encoding='utf-8')
+          required = ['s1','s2','s3','s4','s5','s6','m1','m2','m4','m9','m10','m11','m12','m13','m14','v1','e5','a2','a3','a4','d1','d3']
+          start = text.index('const MENU_SPRITE_POSITIONS = {')
+          end = text.index('};', start)
+          block = text[start:end]
+          mapped = re.findall(r"'([^']+)'\s*:\s*'[^']+'", block)
+          assert mapped == required, (mapped, required)
+          assert "background-image: url('assets/menu/menu-sprite.webp')" in text
+          assert 'const spritePosition = MENU_SPRITE_POSITIONS[item.id];' in text
+          assert 'class="menu-sprite"' in text
+          assert 'const LIFF_ID = "2010784971-mH3KqiRT"' in text
+          assert 'function isMondayDate' in text
           PY
-
-          python3 .github/scripts/apply_menu_sprite.py
-
-          grep -q 'const LIFF_ID = "2010784971-mH3KqiRT"' index.html
-          grep -q 'function isMondayDate' index.html
-          grep -q 'class="menu-sprite"' index.html
-          test "$(grep -o 'spriteIndex:' index.html | wc -l)" -eq 22
 
           rm -f assets/menu/*.b64tmp
           rm -f assets/menu/menu-sprite.webp.b64
