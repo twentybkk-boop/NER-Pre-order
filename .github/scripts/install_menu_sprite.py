@@ -58,9 +58,10 @@ photo_css = '''
     }
 '''
 if '.menu-photo-sprite {' not in text:
-    if '</style>' not in text:
+    style_marker = '  </style>'
+    if style_marker not in text:
         raise RuntimeError('Style closing tag not found')
-    text = text.replace('</style>', photo_css + '  </style>', 1)
+    text = text.replace(style_marker, photo_css + style_marker, 1)
 
 if text.count('const MENU_SPRITE_POSITIONS') != 1:
     raise RuntimeError('Unexpected sprite mapping count')
