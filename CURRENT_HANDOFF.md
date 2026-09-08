@@ -6,3 +6,8 @@
 - Fix: remapped a3->100% 80%, a4->0% 100%, d1->33.333% 100%, d3->66.667% 100%; kept a1->33.333% 80%; left a2 and d2 unmapped placeholders.
 - Added sprite cache-buster so LIFF/Safari cannot keep the stale binary.
 - Regression checks: m9/m10/m11, Monday guard, LIFF sendMessages, placeholder rules, and git diff --check.
+
+## 2026-09-08 12:17 ICT
+- Restored per-menu +/- quantity controls.
+- Fixed malformed LINE receipt by joining explicit message lines with newline characters.
+- Preserved add-on flow, Monday guard, prices, cart totals, and LIFF sendMessages.
