@@ -10,17 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 .github/scripts/fix_order_ux.py
+      - run: python3 scripts/apply_quantity_confirm_cart.py
       - run: |
-          grep -q 'decrementMenuItem' index.html
-          grep -q 'menu-qty-' index.html
+          grep -q 'adjustPendingMenuQty' index.html
+          grep -q 'addSelectedNormalItems' index.html
+          grep -q 'openSelectedAddonModal' index.html
+          grep -q 'menu-cart-btn' index.html
           grep -q 'liff.sendMessages' index.html
           grep -q 'isMondayDate' index.html
+          grep -q "lines.join('\\n')" index.html
           git diff --check
       - run: |
-          printf '\n## 2026-09-08 12:17 ICT\n- Restored per-menu +/- quantity controls.\n- Fixed malformed LINE receipt by joining explicit message lines with newline characters.\n- Preserved add-on flow, Monday guard, prices, cart totals, and LIFF sendMessages.\n' >> CURRENT_HANDOFF.md
+          printf '\n## 2026-09-08 12:31 ICT\n- Changed menu quantity UX to two-step selection: +/- adjusts pending quantity only; Add to cart commits it.\n- Normal items add selected copies together; add-on items keep the existing add-on modal and commit selected copies after confirmation.\n- Pending quantity resets after successful add; cart totals and LINE receipt use committed cart entries only.\n- Preserved Monday guard, LIFF sendMessages, menu prices, and formatted LINE receipt.\n' >> CURRENT_HANDOFF.md
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html CURRENT_HANDOFF.md
-          git commit -m 'Restore quantity controls and format LINE receipt'
+          git commit -m 'Add quantity then cart confirmation'
           git push
