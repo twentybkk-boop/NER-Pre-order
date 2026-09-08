@@ -1,0 +1,100 @@
+from pathlib import Path
+
+p = Path('index.html')
+s = p.read_text()
+
+old = """          const plusAction = item.allowAddOn ? `openAddonModal('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})` : `addNormalItemToCart('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price}, true)`;
+          const noteHtml = item.allowAddOn ? '' : `<input type=\"text\" id=\"note-${item.id}\" class=\"item-note\" placeholder=\"${currentLang === 'th' ? 'หมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Note e.g. no veg, less spicy...'}\">`;
+          actionSectionHtml = `${noteHtml}<div class=\"card-action menu-qty-action\"><div class=\"qty-control menu-qty-control\"><button type=\"button\" class=\"qty-btn\" onclick=\"decrementMenuItem('${item.id}')\">−</button><span class=\"qty-val\" id=\"menu-qty-${item.id}\">${getItemCartQty(item.id)}</span><button type=\"button\" class=\"qty-btn\" onclick=\"${plusAction}\">+</button></div>${item.allowAddOn ? `<span class=\"menu-qty-hint\">${currentLang === 'th' ? '+ เพื่อเลือก Add-on' : '+ for add-ons'}</span>` : ''}</div>`;
+"""
+new = """          const noteHtml = item.allowAddOn ? '' : `<input type=\"text\" id=\"note-${item.id}\" class=\"item-note\" placeholder=\"${currentLang === 'th' ? 'หมายเหตุ เช่น ไม่เอาผัก, เผ็ดน้อย...' : 'Note e.g. no veg, less spicy...'}\">`;
+          const cartAction = item.allowAddOn
+            ? `openSelectedAddonModal('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})`
+            : `addSelectedNormalItems('${item.id}', '${item.nameTh}', '${item.nameEn}', ${item.price})`;
+          actionSectionHtml = `${noteHtml}<div class=\"card-action menu-qty-action\"><div class=\"qty-control menu-qty-control\"><button type=\"button\" class=\"qty-btn\" onclick=\"adjustPendingMenuQty('${item.id}', -1)\">−</button><span class=\"qty-val\" id=\"menu-qty-${item.id}\">${getPendingMenuQty(item.id)}</span><button type=\"button\" class=\"qty-btn\" onclick=\"adjustPendingMenuQty('${item.id}', 1)\">+</button></div><button type=\"button\" class=\"btn btn-secondary menu-cart-btn\" onclick=\"${cartAction}\">${currentLang === 'th' ? 'ใส่ตะกร้า' : 'Add to cart'}</button></div>`;
+"""
+if old not in s:
+    raise SystemExit('render quantity block not found')
+s = s.replace(old, new, 1)
+
+old_helpers = """    function getItemCartQty(id) { return cart.filter(item => item.id === id).length; }
+    function updateMenuQtyDisplays() {
+      document.querySelectorAll('[id^=\"menu-qty-\"]').forEach(el => { const id = el.id.replace('menu-qty-', ''); el.innerText = getItemCartQty(id); });
+    }
+    function decrementMenuItem(id) {
+      for (let i = cart.length - 1; i >= 0; i--) if (cart[i].id === id) { cart.splice(i, 1); updateCartBadge(); return; }
+    }
+    function addNormalItemToCart(id, nameTh, nameEn, price, silent = false) {
+      const noteInput = document.getElementById(`note-${id}`);
+      const noteVal = noteInput ? noteInput.value.trim() : \"\";
+      cart.push({ cartId: Date.now() + Math.random(), id: id, nameTh: nameTh, nameEn: nameEn, basePrice: price, addOns: [], totalPrice: price, note: noteVal });
+      if(noteInput) noteInput.value = \"\";
+      updateCartBadge();
+      if(!silent) alert(currentLang === 'th' ? \"เพิ่มสินค้าลงในตะกร้าเรียบร้อยครับ\" : \"Item added to cart successfully!\");
+    }
+"""
+new_helpers = """    window.pendingMenuQty = window.pendingMenuQty || {};
+    function getPendingMenuQty(id) { return window.pendingMenuQty[id] || 0; }
+    function updateMenuQtyDisplay(id) {
+      const el = document.getElementById(`menu-qty-${id}`);
+      if(el) el.innerText = getPendingMenuQty(id);
+    }
+    function adjustPendingMenuQty(id, delta) {
+      window.pendingMenuQty[id] = Math.max(0, getPendingMenuQty(id) + delta);
+      updateMenuQtyDisplay(id);
+    }
+    function updateMenuQtyDisplays() {
+      document.querySelectorAll('[id^=\"menu-qty-\"]').forEach(el => { const id = el.id.replace('menu-qty-', ''); el.innerText = getPendingMenuQty(id); });
+    }
+    function addSelectedNormalItems(id, nameTh, nameEn, price) {
+      const qty = getPendingMenuQty(id);
+      if(qty < 1) return alert(currentLang === 'th' ? \"กรุณาเลือกจำนวนก่อนใส่ตะกร้า\" : \"Please select a quantity first.\");
+      const noteInput = document.getElementById(`note-${id}`);
+      const noteVal = noteInput ? noteInput.value.trim() : \"\";
+      for(let i = 0; i < qty; i++) cart.push({ cartId: Date.now() + Math.random() + i, id, nameTh, nameEn, basePrice: price, addOns: [], totalPrice: price, note: noteVal });
+      window.pendingMenuQty[id] = 0;
+      if(noteInput) noteInput.value = \"\";
+      updateCartBadge();
+      updateMenuQtyDisplay(id);
+      alert(currentLang === 'th' ? `เพิ่ม ${qty} รายการลงในตะกร้าเรียบร้อยครับ` : `Added ${qty} item(s) to cart.`);
+    }
+    function openSelectedAddonModal(id, nameTh, nameEn, price) {
+      const qty = getPendingMenuQty(id);
+      if(qty < 1) return alert(currentLang === 'th' ? \"กรุณาเลือกจำนวนก่อนใส่ตะกร้า\" : \"Please select a quantity first.\");
+      openAddonModal(id, nameTh, nameEn, price);
+      selectedBaseItemForAddOn.qty = qty;
+    }
+"""
+if old_helpers not in s:
+    raise SystemExit('quantity helper block not found')
+s = s.replace(old_helpers, new_helpers, 1)
+
+old_confirm = """      const noteVal = document.getElementById('modalItemNote').value.trim();
+      const finalPrice = selectedBaseItemForAddOn.price + addOnTotalPrice;
+      cart.push({ cartId: Date.now() + Math.random(), id: selectedBaseItemForAddOn.id, nameTh: selectedBaseItemForAddOn.nameTh, nameEn: selectedBaseItemForAddOn.nameEn, basePrice: selectedBaseItemForAddOn.price, addOns: chosenAddOns, totalPrice: finalPrice, note: noteVal });
+      closeAddonModal();
+      updateCartBadge();
+      alert(currentLang === 'th' ? \"เพิ่มเมนูพร้อม Add-on ลงในตะกร้าเรียบร้อยครับ\" : \"Item with add-ons added to cart!\");
+"""
+new_confirm = """      const noteVal = document.getElementById('modalItemNote').value.trim();
+      const finalPrice = selectedBaseItemForAddOn.price + addOnTotalPrice;
+      const selectedId = selectedBaseItemForAddOn.id;
+      const qty = selectedBaseItemForAddOn.qty || 1;
+      for(let i = 0; i < qty; i++) cart.push({ cartId: Date.now() + Math.random() + i, id: selectedBaseItemForAddOn.id, nameTh: selectedBaseItemForAddOn.nameTh, nameEn: selectedBaseItemForAddOn.nameEn, basePrice: selectedBaseItemForAddOn.price, addOns: chosenAddOns.map(a => ({...a})), totalPrice: finalPrice, note: noteVal });
+      window.pendingMenuQty[selectedId] = 0;
+      closeAddonModal();
+      updateCartBadge();
+      updateMenuQtyDisplay(selectedId);
+      alert(currentLang === 'th' ? `เพิ่ม ${qty} รายการพร้อม Add-on ลงในตะกร้าเรียบร้อยครับ` : `Added ${qty} item(s) with add-ons to cart.`);
+"""
+if old_confirm not in s:
+    raise SystemExit('addon confirm block not found')
+s = s.replace(old_confirm, new_confirm, 1)
+
+css_anchor = "    .menu-qty-hint { color:var(--muted-2); font-size:9px; }\n"
+css_new = css_anchor + "    .menu-qty-action { flex-wrap: wrap; }\n    .menu-cart-btn { min-height: 40px; padding: 0 14px; white-space: nowrap; }\n"
+if css_anchor not in s:
+    raise SystemExit('quantity css anchor not found')
+s = s.replace(css_anchor, css_new, 1)
+
+p.write_text(s)
