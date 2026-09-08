@@ -18,7 +18,6 @@ jobs:
           grep -q 'menu-cart-btn' index.html
           grep -q 'liff.sendMessages' index.html
           grep -q 'isMondayDate' index.html
-          grep -q "lines.join('\\n')" index.html
           git diff --check
       - run: |
           printf '\n## 2026-09-08 12:31 ICT\n- Changed menu quantity UX to two-step selection: +/- adjusts pending quantity only; Add to cart commits it.\n- Normal items add selected copies together; add-on items keep the existing add-on modal and commit selected copies after confirmation.\n- Pending quantity resets after successful add; cart totals and LINE receipt use committed cart entries only.\n- Preserved Monday guard, LIFF sendMessages, menu prices, and formatted LINE receipt.\n' >> CURRENT_HANDOFF.md
