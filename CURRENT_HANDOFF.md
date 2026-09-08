@@ -11,3 +11,9 @@
 - Restored per-menu +/- quantity controls.
 - Fixed malformed LINE receipt by joining explicit message lines with newline characters.
 - Preserved add-on flow, Monday guard, prices, cart totals, and LIFF sendMessages.
+
+## 2026-09-08 12:31 ICT
+- Changed menu quantity UX to two-step selection: +/- adjusts pending quantity only; Add to cart commits it.
+- Normal items add selected copies together; add-on items keep the existing add-on modal and commit selected copies after confirmation.
+- Pending quantity resets after successful add; cart totals and LINE receipt use committed cart entries only.
+- Preserved Monday guard, LIFF sendMessages, menu prices, and formatted LINE receipt.
